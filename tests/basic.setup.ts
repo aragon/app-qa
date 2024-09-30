@@ -5,7 +5,7 @@ import {
 } from "@synthetixio/synpress";
 import "dotenv/config";
 
-export const LOCALHOST_URL = "http://localhost:5173";
+export const LOCALHOST_URL = "http://localhost:3000";
 
 const SEED_PHRASE = process.env.METAMASK_SEED_PHRASE!;
 const PASSWORD = process.env.METAMASK_PASSWORD!;
@@ -18,5 +18,4 @@ export default defineWalletSetup(PASSWORD, async (context, walletPage) => {
   const metamask = new MetaMask(context, walletPage, PASSWORD, extensionId);
 
   await metamask.importWallet(SEED_PHRASE);
-  eeee;
 });
