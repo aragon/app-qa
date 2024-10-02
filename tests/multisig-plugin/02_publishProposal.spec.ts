@@ -11,7 +11,7 @@ test("Publish signaling Proposal", async ({
   metamask,
 }) => {
   await page.goto(
-    "http://localhost:3000/dao/ethereum-sepolia-0x92e6eAD54D1d1115EFBdDc33D757e766D693dfb6/"
+    "http://localhost:3000/dao/ethereum-sepolia-0xAC592AbEEee8812C23375fff6621540e8b861328/dashboard"
   );
   await page.getByRole("button", { name: "Connect" }).click();
   await page.getByRole("button", { name: "Connect" }).click();
