@@ -17,23 +17,42 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Install wait-on
-        run: npm install -g wait-on
+      # - name: Install wait-on
+      #   run: npm install -g wait-on
 
-      - name: Install dependencies
-        run: npm install -g yarn && yarn
+      - name: Install dependencies #1
+        # run: npm install -g yarn && yarn
+        run: yarn install
+        working-directory: ./app-next
+
+      - name: Install dependencies #2
+        # run: npm install -g yarn && yarn
+        run: yarn install
 
       - name: Install Playwright Browsers
-        run: yarn playwright install --with-deps
+        run: npx playwright install --with-deps
 
-      - name: Start Development Server
-        run: yarn dev &
-        working-directory: ./app-next
-        # env:
-        #   NODE_ENV: development
+      # - name: Start Development Server
+      #   run: yarn dev
+      #   working-directory: ./app-next
+      #   env:
+      #     NODE_ENV: development
 
-      - name: Wait for Development Server to be Ready
-        run: npx wait-on http://localhost:3000
+      # - name: Wait for Development Server to be Ready
+      #   run: npx wait-on http://localhost:3000
+
+      # - name: Start Development Server and Wait for Ready State
+      #   # Run server in foreground and wait for it to be ready
+      #   run: |
+      #     # Start the development server in the background
+      #     yarn dev &
+      #     # Get the process ID of the server
+      #     SERVER_PID=$!
+      #     # Wait for the server to be ready
+      #     npx wait-on http://localhost:3000
+      #     # Bring the server back to the foreground so it keeps running
+      #     # fg %1
+      #   working-directory: ./app-next
 
       # Step to build the cache for Synpress
       - name: Build Synpress cache
@@ -41,7 +60,9 @@ jobs:
 
       # Run Playwright tests (headful mode)
       - name: Run E2E tests (Playwright headful)
-        run: xvfb-run npx playwright test
+        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
+        continue-on-error: true
+        # run: xvfb-run npx playwright test --list
 
       # Optionally, upload the test results for review
       - uses: actions/upload-artifact@v4

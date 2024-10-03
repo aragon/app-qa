@@ -1,8 +1,0 @@
-2024/09/19-13:06:12.886 9e03 Creating DB /Users/barukimang/dev/aragon/app-next/e2e-tests/.cache-synpress/82962718bb55abb6e4d7/Default/Local Extension Settings/dpkajfcbgfcongdgplaaphkkmfppphab since it was missing.
-2024/09/19-13:06:12.899 9e03 Reusing MANIFEST /Users/barukimang/dev/aragon/app-next/e2e-tests/.cache-synpress/82962718bb55abb6e4d7/Default/Local Extension Settings/dpkajfcbgfcongdgplaaphkkmfppphab/MANIFEST-000001
-2024/09/19-13:06:19.835 9e03 Level-0 table #5: started
-2024/09/19-13:06:19.855 9e03 Level-0 table #5: 2193452 bytes OK
-2024/09/19-13:06:19.866 9e03 Delete type=0 #3
-2024/09/19-13:06:22.182 9e03 Level-0 table #7: started
-2024/09/19-13:06:22.200 9e03 Level-0 table #7: 2193691 bytes OK
-2024/09/19-13:06:22.209 9e03 Delete type=0 #4
