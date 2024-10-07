@@ -1,13 +1,8 @@
-name: Playwright and Synpress Tests for PRs and Pushes
+name: Playwright and Synpress Tests on Schedule
 
 on:
-  pull_request:
-    branches:
-      - develop
-    types: [opened, synchronize, reopened]
-  push:
-    branches:
-      - develop
+  schedule:
+    - cron: "*/5 * * * *" # This cron expression triggers the workflow every 5 minutes
 
 jobs:
   test:
@@ -20,9 +15,8 @@ jobs:
         with:
           # Points to the external repository
           repository: aragon/app-next
-          # Use the pull request head ref for PR events, otherwise use the push ref
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
-          token: ${{ secrets.GITHUB_TOKEN }} # Not required for public repos, but recommended for dispatch events
+          # Use the latest code in the develop branch
+          ref: develop
 
       - name: Setup Node
         uses: actions/setup-node@v4
