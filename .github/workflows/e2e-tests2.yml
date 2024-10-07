@@ -1,44 +1,45 @@
-name: Playwright and Synpress Tests on Schedule
+name: Playwright and Synpress Tests
 
 on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
   schedule:
-    - cron: "*/5 * * * *" # This cron expression triggers the workflow every 5 minutes
+    - cron: "*/5 * * * *" # Triggers the workflow every 5 minutes
 
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout App-Next Repository
-        uses: actions/checkout@v4
-        with:
-          # Points to the external repository
-          repository: aragon/app-next
-          # Use the latest code in the develop branch
-          ref: develop
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: lts/*
 
-      - name: Install dependencies for App-Next
+      - name: Install dependencies #1
         run: yarn install
+        working-directory: ./app-next
 
-      - name: Install dependencies for E2E
+      - name: Install dependencies #2
         run: yarn install
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      # Step to build the cache for Synpress
       - name: Build Synpress cache
         run: xvfb-run npx synpress ./tests/
 
+      # Run Playwright tests (headful mode)
       - name: Run E2E tests (Playwright headful)
         run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
         continue-on-error: true
+        # run: xvfb-run npx playwright test --list
 
+      # Optionally, upload the test results for review
       - uses: actions/upload-artifact@v4
         if: always()
         with:
