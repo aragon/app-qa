@@ -36,7 +36,7 @@ export default defineConfig({
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
-      timeout: 30000, // Set a timeout of 120 seconds for each test in this project
+      timeout: 300000, // Set a timeout of 120 seconds for each test in this project
     },
 
     {

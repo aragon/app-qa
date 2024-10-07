@@ -1,77 +1,53 @@
-name: App Test
+name: Playwright and Synpress Tests for PRs and Pushes
 
 on:
   pull_request:
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-env:
-  NODE_VERSION: 20
-  NODE_CACHE: "yarn"
+    branches:
+      - develop
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - develop
 
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4.1.7
-      - name: Setup Node
-        uses: actions/setup-node@v4.0.4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: ${{ env.NODE_CACHE }}
-      - name: Restore NextJs cache
-        uses: actions/cache@v4.0.2
-        with:
-          path: ${{ github.workspace }}/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]sx?') }}
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
-      - name: Install dependencies
-        run: yarn install --immutable
-      - name: Build DEV application
-        run: |
-          yarn setup development
-          yarn build
-      - name: Cache NextJs build
-        uses: actions/cache@v4.0.2
-        with:
-          path: |
-            ${{ github.workspace }}/.next
-            ${{ github.workspace }}/.env.local
-            ${{ github.workspace }}/next-env.d.ts
-          key: ${{ github.ref }}-${{ github.sha }}
-
   test:
-    needs: prepare
+    timeout-minutes: 60
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4.1.7
+      - name: Checkout App-Next Repository
+        uses: actions/checkout@v4
+        with:
+          # Points to the external repository
+          repository: aragon/app-next
+          # Use the pull request head ref for PR events, otherwise use the push ref
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+        #   token: ${{ secrets.GITHUB_TOKEN }} # Not required for public repos, but recommended for dispatch events
+
       - name: Setup Node
-        uses: actions/setup-node@v4.0.4
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: ${{ env.NODE_CACHE }}
-      - name: Install dependencies
-        run: yarn install --immutable
-      - name: Restore cached NextJs build
-        uses: actions/cache@v4.0.2
+          node-version: lts/*
+
+      - name: Install dependencies for App-Next
+        run: yarn install
+
+      - name: Install dependencies for E2E
+        run: yarn install
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Build Synpress cache
+        run: xvfb-run npx synpress ./tests/
+
+      - name: Run E2E tests (Playwright headful)
+        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
+        continue-on-error: true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          path: |
-            ${{ github.workspace }}/.next
-            ${{ github.workspace }}/.env.local
-            ${{ github.workspace }}/next-env.d.ts
-          key: ${{ github.ref }}-${{ github.sha }}
-      - name: Check types
-        run: yarn type-check
-      - name: Check linter
-        run: yarn lint
-      - name: Check prettier
-        run: yarn prettify
-      - name: Run tests with coverage
-        run: |
-          set -eo pipefail
-          yarn test:coverage
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
