@@ -22,7 +22,8 @@ jobs:
           repository: aragon/app-next
           # Use the pull request head ref for PR events, otherwise use the push ref
           ref: ${{ github.event.pull_request.head.ref || github.ref }}
-          token: ${{ secrets.GITHUB_TOKEN }} # Not required for public repos, but recommended for dispatch events
+          token: ${{ secrets.APP_NEXT_ACCESS_TOKEN }}
+        #   token: ${{ secrets.GITHUB_TOKEN }} # Not required for public repos, but recommended for dispatch events
 
       - name: Setup Node
         uses: actions/setup-node@v4
