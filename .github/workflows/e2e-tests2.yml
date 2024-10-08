@@ -1,9 +1,63 @@
+# name: Playwright and Synpress Tests Scheduled
+
+# on:
+#   schedule:
+#     # - cron: "*/5 * * * *" # Triggers the workflow every 5 minutes
+#     - cron: "0 * * * *" # Triggers the workflow every 60 minutes
+
+# jobs:
+#   test:
+#     timeout-minutes: 60
+#     runs-on: ubuntu-latest
+
+#     strategy:
+#       matrix:
+#         branch: [develop, main] # Specify branches to run the tests on
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#         with:
+#           ref: ${{ matrix.branch }} # Check out the specified branch
+
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: lts/*
+
+#       - name: Install dependencies for App-Next
+#         run: yarn install
+#         working-directory: ./app-next
+
+#       - name: Install dependencies for E2E Tests
+#         run: yarn install
+
+#       - name: Install Playwright Browsers
+#         run: npx playwright install --with-deps
+
+#       # Step to build the cache for Synpress
+#       - name: Build Synpress cache
+#         run: xvfb-run npx synpress ./tests/
+
+#       # Run Playwright tests (headful mode)
+#       - name: Run E2E tests (Playwright headful)
+#         run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
+#         continue-on-error: true
+#         # run: xvfb-run npx playwright test --list
+
+#       # Optionally, upload the test results for review
+#       - uses: actions/upload-artifact@v4
+#         if: always()
+#         with:
+#           name: playwright-report-${{ matrix.branch }}
+#           path: playwright-report/
+#           retention-days: 30
+
 name: Playwright and Synpress Tests Scheduled
 
 on:
   schedule:
-    # - cron: "*/5 * * * *" # Triggers the workflow every 5 minutes
-    - cron: "0 * * * *" # Triggers the workflow every 60 minutes
+    - cron: "*/5 * * * *" # Triggers the workflow every 5 minutes
+    # - cron: "0 * * * *" # Triggers the workflow every 60 minutes
 
 jobs:
   test:
@@ -42,12 +96,45 @@ jobs:
       - name: Run E2E tests (Playwright headful)
         run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
         continue-on-error: true
-        # run: xvfb-run npx playwright test --list
 
-      # Optionally, upload the test results for review
-      - uses: actions/upload-artifact@v4
+      # Upload the test results for review
+      - name: Upload Playwright Report
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-report-${{ matrix.branch }}
           path: playwright-report/
           retention-days: 30
+
+      # Generate the link to the Playwright report
+      - name: Create Playwright Report Link
+        id: upload-report
+        run: echo "report_url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
+
+      # Discord Notification on Failure
+      - name: Send Discord Notification on Failure
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d "{\"content\": \":x: E2E Tests Failed in repository **${{ github.repository }}** on branch **${{ github.ref }}**. Commit: ${{ github.sha }}. [View Playwright Report](${{ env.report_url }})\"}" \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      # Send Email Notification on Failure
+    #   - name: Send Email Notification on Failure
+    #     if: failure()
+    #     uses: dawidd6/action-send-mail@v3
+    #     with:
+    #       server_address: smtp.gmail.com
+    #       server_port: 465
+    #       username: ${{ secrets.EMAIL_USERNAME }}
+    #       password: ${{ secrets.EMAIL_PASSWORD }}
+    #       subject: "E2E Test Failure in ${{ github.repository }} on branch ${{ matrix.branch }}"
+    #       body: |
+    #         The E2E tests have failed!
+    #         - Repository: ${{ github.repository }}
+    #         - Branch: ${{ matrix.branch }}
+    #         - Commit: ${{ github.sha }}
+    #         - [View Playwright Report](${{ env.report_url }})
+    #         - [View Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+    #       to: dev@example.com
+    #       from: ${{ secrets.EMAIL_USERNAME }}
