@@ -113,7 +113,7 @@ jobs:
 
       # Discord Notification on Failure
       - name: Send Discord Notification on Failure
-        if: failure()
+        # if: failure()
         run: |
           curl -H "Content-Type: application/json" \
             -d "{\"content\": \":x: E2E Tests Failed in repository **${{ github.repository }}** on branch **${{ github.ref }}**. Commit: ${{ github.sha }}. [View Playwright Report](${{ env.report_url }})\"}" \
