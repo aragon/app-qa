@@ -1,8 +1,8 @@
 name: Playwright and Synpress Tests
 
 on:
-  push:
-    branches: [develop]
+  # push:
+  #   branches: [develop]
   pull_request:
     branches: [develop]
 

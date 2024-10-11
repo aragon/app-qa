@@ -44,6 +44,7 @@ jobs:
           repository: aragon/app-next
           ref: ${{ github.event.pull_request.head.ref || github.ref }}
           token: ${{ secrets.APP_NEXT_ACCESS_TOKEN }}
+          path: ./app-next
 
       # Step 7: Setup Node.js for the App-Next Working Directory
       # This step ensures Node.js is configured correctly for the app-next directory.
@@ -52,6 +53,12 @@ jobs:
         with:
           node-version: lts/*
           working-directory: ./app-next
+
+      - name: List Root Directory
+        run: ls -la
+
+      - name: List Root Directory with More Details
+        run: tree -L 2 # List the root directory and its first level of subdirectories (if available)
 
       # Step 4: Install dependencies for the App-Next repository
       - name: Install dependencies for App-Next

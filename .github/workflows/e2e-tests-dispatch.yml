@@ -1,13 +1,13 @@
 name: Playwright and Synpress Tests for PRs and Pushes
 
 on:
-  pull_request:
-    branches:
-      - develop
-    types: [opened, synchronize, reopened]
-  push:
-    branches:
-      - develop
+  # pull_request:
+  #   branches:
+  #     - develop
+  #   types: [opened, synchronize, reopened]
+  # push:
+  #   branches:
+  #     - develop
   repository_dispatch:
     types:
       - app-next-develop-push
