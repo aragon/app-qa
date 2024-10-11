@@ -1,0 +1,73 @@
+name: Playwright and Synpress Tests for PRs, Pushes, and Dispatch Events
+
+on:
+  # pull_request:
+  #   branches:
+  #     - develop
+  #   types: [opened, synchronize, reopened]
+  # push:
+  #   branches:
+  #     - develop
+  repository_dispatch:
+    types:
+      - app-next-develop-push
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the e2e-tests Repository (this repository)
+      - name: Checkout e2e-tests Repository
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      # Step 2: Install dependencies for the e2e-tests repository
+      - name: Install e2e-tests dependencies
+        run: yarn install
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      # Step to build the cache for Synpress
+      - name: Build Synpress cache
+        run: xvfb-run npx synpress ./tests/
+
+      # Step 3: Checkout the develop branch of the app-next Repository
+      - name: Checkout App-Next Repository
+        uses: actions/checkout@v4
+        with:
+          repository: aragon/app-next
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          token: ${{ secrets.APP_NEXT_ACCESS_TOKEN }}
+
+      # Step 7: Setup Node.js for the App-Next Working Directory
+      # This step ensures Node.js is configured correctly for the app-next directory.
+      - name: Setup Node.js for App-Next
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          working-directory: ./app-next
+
+      # Step 4: Install dependencies for the App-Next repository
+      - name: Install dependencies for App-Next
+        working-directory: ./app-next
+        run: yarn install
+
+      # Step 5: Run E2E Tests with Playwright (including server startup)
+      - name: Run E2E tests (Playwright with server)
+        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
+        continue-on-error: true
+
+      # Step 6: Upload Playwright Report as Artifact
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
