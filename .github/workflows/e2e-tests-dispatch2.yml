@@ -202,6 +202,9 @@ jobs:
       # Step 13: Run E2E Tests with Playwright (including server startup)
       - name: Run E2E tests (Playwright with server)
         run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium --debug --trace on
+        env:
+          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
+          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
         continue-on-error: true
 
       # Step 14: Upload Playwright Report as Artifact
