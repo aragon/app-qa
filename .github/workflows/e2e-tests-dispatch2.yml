@@ -82,6 +82,7 @@
 name: Playwright and Synpress Tests for PRs, Pushes, and Dispatch Events
 
 on:
+  workflow_dispatch:
   repository_dispatch:
     types:
       - app-next-develop-push

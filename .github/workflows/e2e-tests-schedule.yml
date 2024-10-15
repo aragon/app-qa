@@ -59,6 +59,7 @@ on:
     # - cron: "*/5 * * * *" # Triggers the workflow every 5 minutes
     # - cron: "0 */6 * * *" # Triggers the workflow every 6 hours
     - cron: "0 0 * * *" # Triggers the workflow every day at midnight
+  workflow_dispatch:
 
 jobs:
   test:
