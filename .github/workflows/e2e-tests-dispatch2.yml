@@ -180,6 +180,9 @@ jobs:
       # Step 12: Build Synpress cache (if needed)
       - name: Build Synpress cache
         run: xvfb-run npx synpress ./tests/
+        env:
+          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
+          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
 
       # Step 11: Start Server in ./app-next and Run E2E Tests in Root
       # - name: Start Server and Run E2E Tests
