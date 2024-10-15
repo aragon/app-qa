@@ -1,0 +1,150 @@
+name: Playwright and Synpress Tests
+
+on:
+  # push:
+  #   branches: [develop]
+  pull_request:
+    branches: [develop]
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the app-next Repository
+      - name: Checkout App-Next Repository
+        uses: actions/checkout@v4
+        with:
+          repository: aragon/app-next
+          # ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          ref: develop # Use 'develop', 'main', or the branch you're sure exists
+          token: ${{ secrets.APP_NEXT_ACCESS_TOKEN }}
+          path: ./app-next
+
+      # Step 2: Cache Node.js dependencies for App-Next
+      # - name: Cache Node.js modules for App-Next
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ./app-next/node_modules
+      #     key: app-next-${{ runner.os }}-${{ hashFiles('./app-next/yarn.lock') }}
+      #     restore-keys: |
+      #       app-next-${{ runner.os }}-
+
+      # Step 3: Setup Node.js for the App-Next Working Directory
+      - name: Setup Node.js for App-Next
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      # Step 4: Install dependencies for the App-Next repository
+      - name: Install dependencies for App-Next
+        working-directory: ./app-next
+        run: yarn install
+
+      # Step 5: Cache Playwright Browsers for App-Next
+      - name: Cache Playwright Browsers for App-Next
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('./app-next/playwright.config.js') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      # Step 5: Run 'yarn dev' for App-Next (Start Development Server)
+      - name: Start App-Next Development Server
+        working-directory: ./app-next
+        run: yarn dev &
+        # env:
+        #   NODE_ENV: development
+
+      # Step 6: Checkout the e2e-tests Repository (this repository)
+      - name: Checkout e2e-tests Repository
+        uses: actions/checkout@v4
+
+      # Step 7: Cache Node.js dependencies for e2e-tests
+      # - name: Cache Node.js modules for e2e-tests
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: node_modules
+      #     key: e2e-tests-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       e2e-tests-${{ runner.os }}-
+
+      # Step 8: Setup Node.js for e2e-tests
+      - name: Setup Node.js for e2e-tests
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      # Step 9: Install dependencies for the e2e-tests repository
+      - name: Install dependencies for e2e-tests
+        run: yarn install
+
+      - name: Check Synpress installation
+        run: yarn list
+
+      # Step 10: Install Playwright Browsers
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+
+      # Step 11: Cache Synpress node_modules (Optional, if Synpress is being installed separately)
+      # - name: Cache Synpress Node.js modules
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ./node_modules
+      #     key: synpress-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+      #     restore-keys: |
+      #       synpress-${{ runner.os }}-
+
+      # Step 12: Build Synpress cache (if needed)
+      - name: Build Synpress cache
+        run: xvfb-run npx synpress ./tests/
+        env:
+          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
+          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
+
+      # Step to build the cache for Synpress
+      - name: Build Synpress cache
+        run: xvfb-run npx synpress ./tests/
+
+      # Run Playwright tests (headful mode)
+      - name: Run E2E tests (Playwright headful)
+        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
+        continue-on-error: true
+        # run: xvfb-run npx playwright test --list
+
+      # Optionally, upload the test results for review
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+# name: Playwright Tests
+# on:
+#   push:
+#     branches: [main, master]
+#   pull_request:
+#     branches: [main, master]
+# jobs:
+#   test:
+#     timeout-minutes: 60
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: lts/*
+#       - name: Install dependencies
+#         run: npm install -g yarn && yarn
+#       - name: Install Playwright Browsers
+#         run: yarn playwright install --with-deps
+#       - name: Run Playwright tests
+#         run: yarn playwright test
+#       - uses: actions/upload-artifact@v4
+#         if: always()
+#         with:
+#           name: playwright-report
+#           path: playwright-report/
+#           retention-days: 30
