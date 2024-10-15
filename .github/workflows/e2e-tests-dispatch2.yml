@@ -166,7 +166,7 @@ jobs:
 
       # Step 10: Install Playwright Browsers
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: run: npx playwright install chromium --with-deps
 
       # Step 11: Cache Synpress node_modules (Optional, if Synpress is being installed separately)
       # - name: Cache Synpress Node.js modules
