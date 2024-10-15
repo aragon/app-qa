@@ -104,10 +104,9 @@ jobs:
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
 
-      # Step to build the cache for Synpress
-      - name: Build Synpress cache
-        run: xvfb-run npx synpress ./tests/
-
+      #   # Step to build the cache for Synpress
+      #   - name: Build Synpress cache
+      #     run: xvfb-run npx synpress ./tests/
       # Run Playwright tests (headful mode)
       - name: Run E2E tests (Playwright headful)
         run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
