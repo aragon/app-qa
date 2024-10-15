@@ -111,6 +111,10 @@ jobs:
       # Run Playwright tests (headful mode)
       - name: Run E2E tests (Playwright headful)
         run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
+        env:
+          DEBUG: pw:browser*
+          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
+          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
         continue-on-error: true
         # run: xvfb-run npx playwright test --list
 
