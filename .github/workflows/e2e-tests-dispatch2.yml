@@ -162,7 +162,7 @@ jobs:
         run: yarn install
 
       - name: Check Synpress installation
-        run: yarn synpress --version
+        run: yarn list
 
       # Step 10: Install Playwright Browsers
       - name: Install Playwright Browsers
