@@ -195,9 +195,9 @@ jobs:
       - name: Check if app-next directory exists
         run: ls -la ./app-next
 
-      - name: Start App-Next Development Server
-        run: yarn dev &
-        working-directory: ./app-next
+      # - name: Start App-Next Development Server
+      #   run: yarn dev &
+      #   working-directory: ./app-next
 
       # Step 13: Run E2E Tests with Playwright (including server startup)
       - name: Run E2E tests (Playwright with server)
