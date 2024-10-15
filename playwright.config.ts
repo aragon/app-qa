@@ -28,7 +28,9 @@ export default defineConfig({
     // baseURL: 'http://127.0.0.1:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    video: "on-first-retry",
     trace: "on-first-retry",
+    screenshot: "only-on-failure",
   },
 
   /* Configure projects for major browsers */
@@ -74,7 +76,8 @@ export default defineConfig({
   webServer: {
     command: "yarn dev",
     url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
+    timeout: 120 * 1000, // 2 minutes for the server to start
   },
   // webServer: {
   //   command: 'npm run start',
