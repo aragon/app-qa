@@ -106,6 +106,9 @@ jobs:
       - name: Check if app-next directory exists
         run: ls -la ./app-next
 
+      - name: Check if app-next directory exists
+        run: ls -la ./
+
       # Step 2: Cache Node.js dependencies for App-Next
       # - name: Cache Node.js modules for App-Next
       #   uses: actions/cache@v3
@@ -145,6 +148,11 @@ jobs:
       # Step 6: Checkout the e2e-tests Repository (this repository)
       - name: Checkout e2e-tests Repository
         uses: actions/checkout@v4
+        with:
+          path: ./ # Place the e2e-tests repository in the root directory
+
+      - name: Check if e2e-tests files exist in the root directory
+        run: ls -la ./
 
       # Step 7: Cache Node.js dependencies for e2e-tests
       # - name: Cache Node.js modules for e2e-tests
