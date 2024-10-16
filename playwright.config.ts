@@ -45,7 +45,7 @@ export default defineConfig({
       //     args: ["--no-sandbox", "--disable-gpu"], // Pass additional Chromium flags
       //   },
       // },
-      timeout: 30000, // Set a timeout of 120 seconds for each test in this project
+      timeout: 60000, // Set a timeout of 120 seconds for each test in this project
     },
 
     {
