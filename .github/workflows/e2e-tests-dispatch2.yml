@@ -132,12 +132,12 @@ jobs:
       #     restore-keys: |
       #       playwright-${{ runner.os }}-
       # Step 5: Run 'yarn dev' for App-Next (Start Development Server)
-      - name: Start App-Next Development Server
-        working-directory: ./app-next
-        run: yarn dev &
-        # run: yarn dev --host 0.0.0.0 &
-        # env:
-        #   NODE_ENV: development
+      # - name: Start App-Next Development Server
+      #   working-directory: ./app-next
+      #   run: yarn dev &
+      # run: yarn dev --host 0.0.0.0 &
+      # env:
+      #   NODE_ENV: development
 
       # Step 6: Checkout the e2e-tests Repository (this repository)
       - name: Checkout e2e-tests Repository
@@ -202,7 +202,8 @@ jobs:
       # Step 13: Run E2E Tests with Playwright (including server startup)
       - name: Run E2E tests (Playwright with server)
         # run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium --debug --trace on
-        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
+        # run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
+        run: npx concurrently --kill-others "cd ./app-next && yarn dev" "sleep 20 && yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium"
         env:
           DEBUG: pw:browser*
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
