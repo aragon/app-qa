@@ -22,14 +22,16 @@ jobs:
       - name: Install dependencies for e2e-tests
         run: yarn install
 
-      # Step 3: Add and initialize the app-next submodule tracking the develop branch (No secret token needed)
+        # Step 3: Add and initialize the app-next submodule tracking the develop branch (with token authentication)
       - name: Initialize app-next as a submodule (develop branch)
         run: |
-          git submodule add https://github.com/aragon/app-next ./app-next || true
+          git submodule add https://$GITHUB_ACTOR:${{ secrets.APP_NEXT_ACCESS_TOKEN }}@github.com/aragon/app-next.git ./app-next || true
           cd ./app-next
           git checkout develop
           git pull origin develop
           cd ..
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
 
       # Step 4: Install dependencies for the App-Next submodule
       - name: Install dependencies for App-Next
