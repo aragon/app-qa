@@ -58,12 +58,12 @@ jobs:
         #   NODE_ENV: development
 
       # Step 8: Wait for App-Next server to be ready
-      #   - name: Wait for App-Next server to be ready
-      #     run: |
-      #       until curl --output /dev/null --silent --head --fail http://localhost:3000; do
-      #         echo "Waiting for the server to start..."
-      #         sleep 5
-      #       done
+      - name: Wait for App-Next server to be ready
+        run: |
+          until curl --output /dev/null --silent --head --fail http://localhost:3000; do
+            echo "Waiting for the server to start..."
+            sleep 5
+          done
 
       # Step 9: Run E2E tests (Playwright with server)
       - name: Run E2E tests with Playwright

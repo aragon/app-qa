@@ -80,15 +80,15 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: "cd ./app-next && yarn dev",
-    url: "http://localhost:3000",
-    reuseExistingServer: true,
-    timeout: 120 * 1000, // 2 minutes for the server to start
-    // use: {
-    //   baseURL: "http://localhost:3000/",
-    // },
-  },
+  // webServer: {
+  //   command: "cd ./app-next && yarn dev",
+  //   url: "http://localhost:3000",
+  //   reuseExistingServer: true,
+  //   timeout: 120 * 1000, // 2 minutes for the server to start
+  //   // use: {
+  //   //   baseURL: "http://localhost:3000/",
+  //   // },
+  // },
   // webServer: {
   //   command: 'npm run start',
   //   url: 'http://127.0.0.1:3000',
