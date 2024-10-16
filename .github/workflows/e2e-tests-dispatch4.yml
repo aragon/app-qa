@@ -53,6 +53,8 @@ jobs:
       - name: Start App-Next Development Server
         working-directory: ./app-next
         run: yarn dev &
+        env:
+          NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }} # Pass the secret to app-next
         # Optional environment variables can be added here
         # env:
         #   NODE_ENV: development
