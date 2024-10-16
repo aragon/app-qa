@@ -83,7 +83,7 @@ export default defineConfig({
   webServer: {
     command: "cd ./app-next && yarn dev",
     url: "http://localhost:3000",
-    reuseExistingServer: true,
+    // reuseExistingServer: true,
     timeout: 120 * 1000, // 2 minutes for the server to start
     // use: {
     //   baseURL: "http://localhost:3000/",
