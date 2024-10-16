@@ -103,6 +103,9 @@ jobs:
           token: ${{ secrets.APP_NEXT_ACCESS_TOKEN }}
           path: ./app-next
 
+      - name: Check if app-next directory exists
+        run: ls -la ./app-next
+
       # Step 2: Cache Node.js dependencies for App-Next
       # - name: Cache Node.js modules for App-Next
       #   uses: actions/cache@v3
