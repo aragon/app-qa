@@ -38,7 +38,14 @@ export default defineConfig({
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
-      timeout: 300000, // Set a timeout of 120 seconds for each test in this project
+      // use: {
+      //   ...devices["Desktop Chrome"], // Use the predefined device configuration
+      //   browserName: "chromium",
+      //   launchOptions: {
+      //     args: ["--no-sandbox", "--disable-gpu"], // Pass additional Chromium flags
+      //   },
+      // },
+      timeout: 30000, // Set a timeout of 120 seconds for each test in this project
     },
 
     {
