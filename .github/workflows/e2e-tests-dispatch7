@@ -1,0 +1,117 @@
+name: Playwright and Synpress Tests for PRs, Pushes, and Dispatch Events
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - app-next-develop-push
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit] # Run tests on different browsers
+    steps:
+      # Step 1: Checkout the main repository and initialize submodules
+      - name: Checkout Main Repository with Submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive # Initialize submodules recursively
+
+      # Step 2: Cache Node.js modules for e2e-tests
+      - name: Cache Node.js modules for e2e-tests
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: e2e-tests-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            e2e-tests-${{ runner.os }}-
+            e2e-tests-
+            node_modules
+
+      # Step 3: Install dependencies for e2e-tests with frozen lockfile
+      - name: Install dependencies for e2e-tests
+        run: yarn install --frozen-lockfile
+
+      # Step 4: Initialize app-next as a submodule (if not done in step 1)
+      # Optional: Only necessary if submodule wasn't initialized in Step 1.
+      - name: Initialize app-next as a submodule (develop branch)
+        run: |
+          git submodule update --init --recursive
+          cd ./app-next
+          git checkout develop
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+
+      # Step 5: Cache Node.js modules for App-Next
+      - name: Cache Node.js modules for App-Next
+        uses: actions/cache@v3
+        with:
+          path: ./app-next/node_modules
+          key: app-next-${{ runner.os }}-${{ hashFiles('./app-next/yarn.lock') }}
+          restore-keys: |
+            app-next-${{ runner.os }}-
+            app-next-
+            node_modules
+
+      # Step 6: Install dependencies for App-Next with frozen lockfile
+      - name: Install dependencies for App-Next
+        working-directory: ./app-next
+        run: yarn install --frozen-lockfile
+
+      # Step 7: Cache Playwright browsers
+      - name: Cache Playwright browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('playwright.config.ts') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+            playwright-
+
+      # Step 8: Install Playwright Browsers
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      # Step 9: Start App-Next Development Server with timeout
+      - name: Start App-Next Development Server
+        working-directory: ./app-next
+        run: yarn dev &
+        timeout-minutes: 5 # Ensure server doesn't hang indefinitely
+        env:
+          NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
+
+      # Step 10: Wait for App-Next server to be ready
+      - name: Wait for App-Next server to be ready
+        run: |
+          until curl --output /dev/null --silent --head --fail http://localhost:3000; do
+            echo "Waiting for the server to start..."
+            sleep 5
+          done
+
+      # Step 11: Run E2E tests with Playwright for multiple browsers
+      - name: Run Playwright Tests on ${{ matrix.browser }}
+        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=${{ matrix.browser }} --headless
+        env:
+          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
+          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
+          NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
+
+      # Step 12: Upload Playwright Report as Artifact
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      # Step 13: Upload Playwright Artifacts for Debugging (if failure occurs)
+      - name: Upload Playwright Artifacts on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: playwright-artifacts/
