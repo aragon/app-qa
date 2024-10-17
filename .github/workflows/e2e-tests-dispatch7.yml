@@ -33,16 +33,18 @@ jobs:
       - name: Install dependencies for e2e-tests
         run: yarn install --frozen-lockfile
 
-      # Step 4: Initialize app-next as a submodule (develop branch)
+      # Step 4: Add and initialize the app-next submodule tracking the develop branch (with token authentication)
       - name: Initialize app-next as a submodule (develop branch)
         run: |
-          git submodule update --init --recursive
+          git submodule add https://$GITHUB_ACTOR:${{ secrets.APP_NEXT_ACCESS_TOKEN }}@github.com/aragon/app-next.git ./app-next || true
           cd ./app-next
           git checkout develop
+          git pull origin develop
+          cd ..
         env:
           GITHUB_ACTOR: ${{ github.actor }}
 
-      # Step 5: Cache Node.js modules for App-Next
+      # Step 5: Cache Node.js modules for App-Next (after submodule is initialized)
       - name: Cache Node.js modules for App-Next
         uses: actions/cache@v3
         with:
