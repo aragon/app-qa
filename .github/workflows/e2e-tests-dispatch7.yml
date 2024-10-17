@@ -12,11 +12,11 @@ jobs:
     timeout-minutes: 60
 
     steps:
-      # Step 1: Setup Node.js (Explicit versioning)
+      # Step 1: Setup Node.js (Explicit versioning, Node.js 20 or higher)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "16" # Specify the Node.js version you want to use (adjust as needed)
+          node-version: "20" # Upgrade to Node.js 20 to satisfy Playwright and concurrently requirements
 
       # Step 2: Checkout the e2e-tests Repository
       - name: Checkout e2e-tests Repository
@@ -29,7 +29,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: e2e-tests-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-node-${{ steps.setup-node.outputs.node-version }}
+          key: e2e-tests-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-node-20
           restore-keys: |
             e2e-tests-${{ runner.os }}-
             e2e-tests-
@@ -58,7 +58,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./app-next/node_modules
-          key: app-next-${{ runner.os }}-${{ hashFiles('./app-next/yarn.lock') }}-node-${{ steps.setup-node.outputs.node-version }}
+          key: app-next-${{ runner.os }}-${{ hashFiles('./app-next/yarn.lock') }}-node-20
           restore-keys: |
             app-next-${{ runner.os }}-
             app-next-
