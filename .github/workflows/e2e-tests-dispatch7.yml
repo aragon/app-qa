@@ -7,18 +7,16 @@ on:
       - app-next-develop-push
 
 jobs:
-  run-tests:
+  test:
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    strategy:
-      matrix:
-        browser: [chromium, firefox, webkit] # Run tests on different browsers
+
     steps:
-      # Step 1: Checkout the main repository and initialize submodules
-      - name: Checkout Main Repository with Submodules
+      # Step 1: Checkout the e2e-tests Repository
+      - name: Checkout e2e-tests Repository
         uses: actions/checkout@v4
         with:
-          submodules: recursive # Initialize submodules recursively
+          path: ./ # Place the e2e-tests repository in the root directory
 
       # Step 2: Cache Node.js modules for e2e-tests
       - name: Cache Node.js modules for e2e-tests
@@ -35,8 +33,7 @@ jobs:
       - name: Install dependencies for e2e-tests
         run: yarn install --frozen-lockfile
 
-      # Step 4: Initialize app-next as a submodule (if not done in step 1)
-      # Optional: Only necessary if submodule wasn't initialized in Step 1.
+      # Step 4: Initialize app-next as a submodule (develop branch)
       - name: Initialize app-next as a submodule (develop branch)
         run: |
           git submodule update --init --recursive
@@ -73,9 +70,16 @@ jobs:
 
       # Step 8: Install Playwright Browsers
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install chromium --with-deps
 
-      # Step 9: Start App-Next Development Server with timeout
+      # Step 9: Build Synpress cache (if needed)
+      - name: Build Synpress cache
+        run: xvfb-run npx synpress ./tests/
+        env:
+          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
+          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
+
+      # Step 10: Start App-Next Development Server with timeout
       - name: Start App-Next Development Server
         working-directory: ./app-next
         run: yarn dev &
@@ -83,7 +87,7 @@ jobs:
         env:
           NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
 
-      # Step 10: Wait for App-Next server to be ready
+      # Step 11: Wait for App-Next server to be ready
       - name: Wait for App-Next server to be ready
         run: |
           until curl --output /dev/null --silent --head --fail http://localhost:3000; do
@@ -91,15 +95,15 @@ jobs:
             sleep 5
           done
 
-      # Step 11: Run E2E tests with Playwright for multiple browsers
-      - name: Run Playwright Tests on ${{ matrix.browser }}
-        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=${{ matrix.browser }} --headless
+      # Step 12: Run E2E tests with Playwright
+      - name: Run E2E tests with Playwright
+        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium --headless
         env:
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
           NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
 
-      # Step 12: Upload Playwright Report as Artifact
+      # Step 13: Upload Playwright Report as Artifact
       - name: Upload Playwright Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -108,7 +112,7 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      # Step 13: Upload Playwright Artifacts for Debugging (if failure occurs)
+      # Step 14: Upload Playwright Artifacts for Debugging (if failure occurs)
       - name: Upload Playwright Artifacts on Failure
         if: failure()
         uses: actions/upload-artifact@v4
