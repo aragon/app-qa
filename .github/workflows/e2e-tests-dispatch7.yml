@@ -12,26 +12,28 @@ jobs:
     timeout-minutes: 60
 
     steps:
-      # Step 1: Checkout the e2e-tests Repository
+      # Step 1: Setup Node.js (Explicit versioning)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "16" # Specify the Node.js version you want to use (adjust as needed)
+
+      # Step 2: Checkout the e2e-tests Repository
       - name: Checkout e2e-tests Repository
         uses: actions/checkout@v4
         with:
           path: ./ # Place the e2e-tests repository in the root directory
 
-      # Step 2: Cache Node.js modules for e2e-tests
+      # Step 3: Cache Node.js modules for e2e-tests
       - name: Cache Node.js modules for e2e-tests
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: e2e-tests-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          key: e2e-tests-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-node-${{ steps.setup-node.outputs.node-version }}
           restore-keys: |
             e2e-tests-${{ runner.os }}-
             e2e-tests-
             node_modules
-
-      # Step 3: Install dependencies for e2e-tests with frozen lockfile
-      - name: Install dependencies for e2e-tests
-        run: yarn install --frozen-lockfile
 
       # Step 4: Add and initialize the app-next submodule tracking the develop branch (with token authentication)
       - name: Initialize app-next as a submodule (develop branch)
@@ -44,21 +46,23 @@ jobs:
         env:
           GITHUB_ACTOR: ${{ github.actor }}
 
-      # Step 5: Cache Node.js modules for App-Next (after submodule is initialized)
+      # Step 5: Parallel installation of dependencies for e2e-tests and app-next
+      - name: Install dependencies for e2e-tests and app-next in parallel
+        run: |
+          npx concurrently \
+            "yarn install --frozen-lockfile" \
+            "cd ./app-next && yarn install --frozen-lockfile"
+
+      # Step 6: Cache Node.js modules for App-Next (after submodule is initialized)
       - name: Cache Node.js modules for App-Next
         uses: actions/cache@v3
         with:
           path: ./app-next/node_modules
-          key: app-next-${{ runner.os }}-${{ hashFiles('./app-next/yarn.lock') }}
+          key: app-next-${{ runner.os }}-${{ hashFiles('./app-next/yarn.lock') }}-node-${{ steps.setup-node.outputs.node-version }}
           restore-keys: |
             app-next-${{ runner.os }}-
             app-next-
             node_modules
-
-      # Step 6: Install dependencies for App-Next with frozen lockfile
-      - name: Install dependencies for App-Next
-        working-directory: ./app-next
-        run: yarn install --frozen-lockfile
 
       # Step 7: Cache Playwright browsers
       - name: Cache Playwright browsers
@@ -70,13 +74,12 @@ jobs:
             playwright-${{ runner.os }}-
             playwright-
 
-      # Step 8: Install Playwright Browsers
-      - name: Install Playwright Browsers
-        run: npx playwright install chromium --with-deps
-
-      # Step 9: Build Synpress cache (if needed)
-      - name: Build Synpress cache
-        run: xvfb-run npx synpress ./tests/
+      # Step 8 and Step 9 combined: Install Playwright Browsers and Build Synpress Cache in Parallel
+      - name: Install Playwright Browsers and Build Synpress Cache in Parallel
+        run: |
+          npx concurrently \
+            "npx playwright install chromium --with-deps" \
+            "xvfb-run npx synpress ./tests/"
         env:
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
@@ -99,15 +102,15 @@ jobs:
 
       # Step 12: Run E2E tests with Playwright
       - name: Run E2E tests with Playwright
-        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium --headless
+        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
         env:
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
           NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
 
-      # Step 13: Upload Playwright Report as Artifact
+      # Step 13: Upload Playwright Report as Artifact (save for every run)
       - name: Upload Playwright Report
-        if: always()
+        if: always() # Save the artifact regardless of success or failure
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
@@ -121,3 +124,7 @@ jobs:
         with:
           name: playwright-artifacts
           path: playwright-artifacts/
+
+      # Step 15: Cleanup after tests
+      - name: Cleanup unnecessary files after tests
+        run: rm -rf ./app-next/node_modules ./build ./tmp # Remove unnecessary files
