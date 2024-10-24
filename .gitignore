@@ -5,6 +5,7 @@ node_modules/
 /playwright/.cache/
 /.cache-synpress/
 /.git/
+/app-next/
 .env
 .secrets
 .DS_Store
