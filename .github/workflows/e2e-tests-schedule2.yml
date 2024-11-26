@@ -3,6 +3,9 @@ name: E2E Tests on Scheduled Runs
 on:
   workflow_dispatch:
   schedule:
+    # - cron: "*/5 * * * *" # Triggers the workflow every 5 minutes
+    # - cron: "0 */6 * * *" # Triggers the workflow every 6 hours
+    # - cron: "0 0 * * *" # Triggers the workflow every day at midnight
     - cron: "0 3,15 * * *" # Triggers the workflow every day at 3:00 AM and 3:00 PM UTC
 
 jobs:
@@ -11,10 +14,10 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        environment: [local, staging, production] # Define environments
+        environment: [local, develop, staging, production] # Add all environments to the matrix
 
     steps:
-      # Step 1: Setup Node.js
+      # Step 1: Setup Node.js (Explicit versioning, Node.js 20 or higher)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -76,24 +79,48 @@ jobs:
             playwright-${{ runner.os }}-
             playwright-
 
-      # Step 8: Install Playwright Browsers
-      - name: Install Playwright Browsers
-        run: npx playwright install chromium --with-deps
+      # Step 8 and Step 9 combined: Install Playwright Browsers and Build Synpress Cache in Parallel
+      - name: Install Playwright Browsers and Build Synpress Cache in Parallel
+        run: |
+          npx concurrently \
+            "npx playwright install chromium --with-deps" \
+            "xvfb-run npx synpress ./tests/"
+        env:
+          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
+          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
 
-      # Step 9: Set Environment-Specific Variables
+      # Step 10: Set Environment Variables
       - name: Set Environment Variables
         run: echo "TEST_ENV=${{ matrix.environment }}" >> $GITHUB_ENV
 
-      # Step 10: Run E2E tests with Playwright
+      # Step 11: Start App-Next Development Server with timeout (for local only)
+      - name: Start App-Next Development Server
+        if: ${{ matrix.environment == 'local' }}
+        working-directory: ./app-next
+        run: yarn dev &
+        timeout-minutes: 5 # Ensure server doesn't hang indefinitely
+        env:
+          NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
+
+      # Step 12: Wait for App-Next server to be ready (for local only)
+      - name: Wait for App-Next server to be ready
+        if: ${{ matrix.environment == 'local' }}
+        run: |
+          until curl --output /dev/null --silent --head --fail http://localhost:3000; do
+            echo "Waiting for the server to start..."
+            sleep 5
+          done
+
+      # Step 13: Run E2E tests with Playwright
       - name: Run E2E tests with Playwright
-        run: xvfb-run yarn playwright test --project=chromium
+        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal2.spec.ts --project=chromium
         env:
           TEST_ENV: ${{ matrix.environment }}
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
           NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
 
-      # Step 11: Upload Playwright Report as Artifact (save for every run)
+      # Step 14: Upload Playwright Report as Artifact (save for every run)
       - name: Upload Playwright Report
         if: always() # Save the artifact regardless of success or failure
         uses: actions/upload-artifact@v4
@@ -102,7 +129,7 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      # Step 12: Upload Playwright Artifacts for Debugging (if failure occurs)
+      # Step 15: Upload Playwright Artifacts for Debugging (if failure occurs)
       - name: Upload Playwright Artifacts on Failure
         if: failure()
         uses: actions/upload-artifact@v4
@@ -110,6 +137,6 @@ jobs:
           name: playwright-artifacts-${{ matrix.environment }}
           path: playwright-artifacts/
 
-      # Step 13: Cleanup after tests
+      # Step 16: Cleanup after tests
       - name: Cleanup unnecessary files after tests
-        run: rm -rf ./app-next/node_modules ./build ./tmp
+        run: rm -rf ./app-next/node_modules ./build ./tmp # Remove unnecessary files
