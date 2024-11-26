@@ -89,11 +89,7 @@ jobs:
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
 
-      # Step 10: Set Environment Variables
-      - name: Set Environment Variables
-        run: echo "TEST_ENV=${{ matrix.environment }}" >> $GITHUB_ENV
-
-      # Step 11: Start App-Next Development Server with timeout (for local only)
+      # Step 10: Start App-Next Development Server (Only for Local)
       - name: Start App-Next Development Server
         if: ${{ matrix.environment == 'local' }}
         working-directory: ./app-next
@@ -102,7 +98,7 @@ jobs:
         env:
           NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
 
-      # Step 12: Wait for App-Next server to be ready (for local only)
+      # Step 11: Wait for App-Next server to be ready (Only for Local)
       - name: Wait for App-Next server to be ready
         if: ${{ matrix.environment == 'local' }}
         run: |
@@ -111,16 +107,16 @@ jobs:
             sleep 5
           done
 
-      # Step 13: Run E2E tests with Playwright
+      # Step 12: Run E2E tests with Playwright
       - name: Run E2E tests with Playwright
-        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal2.spec.ts --project=chromium
+        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
         env:
           TEST_ENV: ${{ matrix.environment }}
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
           NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
 
-      # Step 14: Upload Playwright Report as Artifact (save for every run)
+      # Step 13: Upload Playwright Report as Artifact (save for every run)
       - name: Upload Playwright Report
         if: always() # Save the artifact regardless of success or failure
         uses: actions/upload-artifact@v4
@@ -129,7 +125,7 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      # Step 15: Upload Playwright Artifacts for Debugging (if failure occurs)
+      # Step 14: Upload Playwright Artifacts for Debugging (if failure occurs)
       - name: Upload Playwright Artifacts on Failure
         if: failure()
         uses: actions/upload-artifact@v4
@@ -137,6 +133,6 @@ jobs:
           name: playwright-artifacts-${{ matrix.environment }}
           path: playwright-artifacts/
 
-      # Step 16: Cleanup after tests
+      # Step 15: Cleanup after tests
       - name: Cleanup unnecessary files after tests
         run: rm -rf ./app-next/node_modules ./build ./tmp # Remove unnecessary files
