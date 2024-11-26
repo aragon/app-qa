@@ -4,7 +4,7 @@ import { defineConfig, devices } from "@playwright/test";
 const ENV_URLS = {
   local: "http://localhost:3000",
   develop: "https://dev.app-next.aragon.org",
-  staging: "https://staging-app-next.vercel.app",
+  staging: "https://stg.app-next.aragon.org/",
   production: "https://app-next.aragon.org",
 };
 
