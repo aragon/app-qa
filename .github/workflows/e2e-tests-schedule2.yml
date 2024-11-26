@@ -3,9 +3,6 @@ name: E2E Tests on Scheduled Runs
 on:
   workflow_dispatch:
   schedule:
-    # - cron: "*/5 * * * *" # Triggers the workflow every 5 minutes
-    # - cron: "0 */6 * * *" # Triggers the workflow every 6 hours
-    # - cron: "0 0 * * *" # Triggers the workflow every day at midnight
     - cron: "0 3,15 * * *" # Triggers the workflow every day at 3:00 AM and 3:00 PM UTC
 
 jobs:
@@ -52,13 +49,14 @@ jobs:
         env:
           GITHUB_ACTOR: ${{ github.actor }}
 
-      # Step 5: Install dependencies for e2e-tests and app-next (App-Next only for Local)
-      - name: Install dependencies for e2e-tests and app-next
-        run: |
-          npx concurrently \
-            "yarn install --frozen-lockfile" \
-            "${{ matrix.environment == 'local' && 'cd ./app-next && yarn install --frozen-lockfile' || '' }}"
-          true
+      # Step 5: Install dependencies for e2e-tests
+      - name: Install dependencies for e2e-tests
+        run: yarn install --frozen-lockfile
+
+      # Step 5b: Install dependencies for app-next (Only for Local)
+      - name: Install dependencies for app-next
+        if: ${{ matrix.environment == 'local' }}
+        run: cd ./app-next && yarn install --frozen-lockfile
 
       # Step 6: Cache Node.js modules for App-Next (after submodule is initialized, Only for Local)
       - name: Cache Node.js modules for App-Next
