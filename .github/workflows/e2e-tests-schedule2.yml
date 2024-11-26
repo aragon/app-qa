@@ -40,8 +40,9 @@ jobs:
             e2e-tests-
             node_modules
 
-      # Step 4: Add and initialize the app-next submodule tracking the develop branch (with token authentication)
+      # Step 4: Add and initialize the app-next submodule (Only for Local)
       - name: Initialize app-next as a submodule (develop branch)
+        if: ${{ matrix.environment == 'local' }}
         run: |
           git submodule add https://$GITHUB_ACTOR:${{ secrets.APP_NEXT_ACCESS_TOKEN }}@github.com/aragon/app-next.git ./app-next || true
           cd ./app-next
@@ -51,15 +52,17 @@ jobs:
         env:
           GITHUB_ACTOR: ${{ github.actor }}
 
-      # Step 5: Parallel installation of dependencies for e2e-tests and app-next
-      - name: Install dependencies for e2e-tests and app-next in parallel
+      # Step 5: Install dependencies for e2e-tests and app-next (App-Next only for Local)
+      - name: Install dependencies for e2e-tests and app-next
         run: |
           npx concurrently \
             "yarn install --frozen-lockfile" \
-            "cd ./app-next && yarn install --frozen-lockfile"
+            "${{ matrix.environment == 'local' && 'cd ./app-next && yarn install --frozen-lockfile' || '' }}"
+          true
 
-      # Step 6: Cache Node.js modules for App-Next (after submodule is initialized)
+      # Step 6: Cache Node.js modules for App-Next (after submodule is initialized, Only for Local)
       - name: Cache Node.js modules for App-Next
+        if: ${{ matrix.environment == 'local' }}
         uses: actions/cache@v3
         with:
           path: ./app-next/node_modules
