@@ -125,7 +125,7 @@ jobs:
             echo "Waiting for the backend server to start on port ${PORT}..."
             sleep 5
           done
-        timeout-minutes: 5
+        # timeout-minutes: 5
         env:
           APP_NAME: ${{ secrets.APP_NAME }}
           NODE_ENV: ${{ secrets.NODE_ENV }}
