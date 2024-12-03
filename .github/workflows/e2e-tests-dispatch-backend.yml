@@ -101,13 +101,9 @@ jobs:
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
 
-      # Step y: Wait for App-Backend server to be ready
-      - name: Wait for App-Backend server to be ready
-        run: |
-          until curl --output /dev/null --silent --head --fail http://localhost:${PORT}; do
-            echo "Waiting for the backend server to start on port ${PORT}..."
-            sleep 5
-          done
+      - name: Start App-Backend Development Server
+        working-directory: ./app-backend
+        run: SERVICES_ARAGON_API_PORT=4000 npx ts-node -r dotenv/config -r tsconfig-paths/register runners/aragon-api.ts
         timeout-minutes: 5
         env:
           APP_NAME: ${{ secrets.APP_NAME }}
