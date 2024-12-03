@@ -104,7 +104,7 @@ jobs:
       - name: Start App-Backend Development Server
         working-directory: ./app-backend
         run: SERVICES_ARAGON_API_PORT=4000 npx ts-node -r dotenv/config -r tsconfig-paths/register runners/aragon-api.ts
-        timeout-minutes: 5
+        # timeout-minutes: 5
         env:
           APP_NAME: ${{ secrets.APP_NAME }}
           NODE_ENV: ${{ secrets.NODE_ENV }}
@@ -125,19 +125,7 @@ jobs:
             echo "Waiting for the backend server to start on port ${PORT}..."
             sleep 5
           done
-        # timeout-minutes: 5
-        env:
-          APP_NAME: ${{ secrets.APP_NAME }}
-          NODE_ENV: ${{ secrets.NODE_ENV }}
-          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
-          PORT: ${{ secrets.PORT }}
-          COVALENT_API_KEY: ${{ secrets.COVALENT_API_KEY }}
-          MONGO_DB_URI: ${{ secrets.MONGO_DB_URI }}
-          MONGO_DB_NAME: ${{ secrets.MONGO_DB_NAME }}
-          LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
-          LOG_LOGZIO_KEY: ${{ secrets.LOG_LOGZIO_KEY }}
-          LOG_LOGZIO_HOST: ${{ secrets.LOG_LOGZIO_HOST }}
-          LOGZIO_SERVER_NAME: ${{ secrets.LOGZIO_SERVER_NAME }}
+        timeout-minutes: 5
 
       # Step 10: Start App-Next Development Server with timeout
       - name: Start App-Next Development Server
