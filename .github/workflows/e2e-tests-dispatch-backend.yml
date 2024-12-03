@@ -109,13 +109,26 @@ jobs:
         env:
           BACKEND_API_SECRET: ${{ secrets.BACKEND_API_SECRET }} #replace this for the relevant env var
 
-        # Step y: Wait for App-Backend server to be ready
+      # Step y: Wait for App-Backend server to be ready
       - name: Wait for App-Backend server to be ready
         run: |
-          until curl --output /dev/null --silent --head --fail http://localhost:4000; do
-            echo "Waiting for the backend server to start on port 4000..."
+          until curl --output /dev/null --silent --head --fail http://localhost:${PORT}; do
+            echo "Waiting for the backend server to start on port ${PORT}..."
             sleep 5
           done
+        timeout-minutes: 5
+        env:
+          APP_NAME: ${{ secrets.APP_NAME }}
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+          PORT: ${{ secrets.PORT }}
+          COVALENT_API_KEY: ${{ secrets.COVALENT_API_KEY }}
+          MONGO_DB_URI: ${{ secrets.MONGO_DB_URI }}
+          MONGO_DB_NAME: ${{ secrets.MONGO_DB_NAME }}
+          LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
+          LOG_LOGZIO_KEY: ${{ secrets.LOG_LOGZIO_KEY }}
+          LOG_LOGZIO_HOST: ${{ secrets.LOG_LOGZIO_HOST }}
+          LOGZIO_SERVER_NAME: ${{ secrets.LOGZIO_SERVER_NAME }}
 
       # Step 10: Start App-Next Development Server with timeout
       - name: Start App-Next Development Server
