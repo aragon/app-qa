@@ -107,7 +107,7 @@ jobs:
         run: |
           SERVICES_ARAGON_API_PORT=4000 npx ts-node -r dotenv/config -r tsconfig-paths/register runners/aragon-api.ts > backend.log 2>&1 &
           echo "Development server started in the background."
-        # timeout-minutes: 5
+        timeout-minutes: 5
         env:
           APP_NAME: ${{ secrets.APP_NAME }}
           NODE_ENV: ${{ secrets.NODE_ENV }}
@@ -122,13 +122,18 @@ jobs:
           LOGZIO_SERVER_NAME: ${{ secrets.LOGZIO_SERVER_NAME }}
 
       # Step y: Wait for App-Backend server to be ready
-      - name: Wait for App-Backend server to be ready
-        run: |
-          until curl --output /dev/null --silent --head --fail http://localhost:4000; do
-            echo "Waiting for the backend server to start on port 4000..."
-            sleep 5
-          done
-        timeout-minutes: 5
+      # - name: Wait for App-Backend server to be ready
+      #   # run: |
+      #   #   until curl --output /dev/null --silent --head --fail http://localhost:4000; do
+      #   #     echo "Waiting for the backend server to start on port 4000..."
+      #   #     sleep 5
+      #   #   done
+      #   run: |
+      #     until curl --output /dev/null --silent --fail http://localhost:4000/health; do
+      #       echo "Waiting for the backend server to start on port 4000..."
+      #       sleep 5
+      #     done
+      #   timeout-minutes: 5
 
       # Step 10: Start App-Next Development Server with timeout
       - name: Start App-Next Development Server
