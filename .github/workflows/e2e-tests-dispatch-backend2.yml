@@ -50,8 +50,8 @@ jobs:
         run: |
           git submodule add https://$GITHUB_ACTOR:${{ secrets.APP_NEXT_ACCESS_TOKEN }}@github.com/aragon/app-backend.git ./app-backend || true
           cd ./app-backend
-          git fetch origin ${{ github.event.client_payload.branch || 'feature/monitor' }}
-          git checkout ${{ github.event.client_payload.branch || 'feature/monitor' }}
+          git fetch origin ${{ github.event.client_payload.branch || 'develop' }}
+          git checkout ${{ github.event.client_payload.branch || 'develop' }}
           cd ..
         env:
           GITHUB_ACTOR: ${{ github.actor }}
