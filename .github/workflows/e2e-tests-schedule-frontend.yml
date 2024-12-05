@@ -70,17 +70,17 @@ jobs:
       #       app-next-
       #       node_modules
 
-      # Step 5b: Cache Node.js modules for App-Next (Restore Cache First)
-      - name: Restore Cache for App-Next Node.js Modules
-        if: ${{ matrix.environment == 'local' }}
-        uses: actions/cache@v3
-        with:
-          path: ./app-next/node_modules
-          key: app-next-${{ runner.os }}-${{ hashFiles('./app-next/yarn.lock') }}-node-20
-          restore-keys: |
-            app-next-${{ runner.os }}-
-            app-next-
-            node_modules
+      # # Step 5b: Cache Node.js modules for App-Next (Restore Cache First)
+      # - name: Restore Cache for App-Next Node.js Modules
+      #   if: ${{ matrix.environment == 'local' }}
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ./app-next/node_modules
+      #     key: app-next-${{ runner.os }}-${{ hashFiles('./app-next/yarn.lock') }}-node-20
+      #     restore-keys: |
+      #       app-next-${{ runner.os }}-
+      #       app-next-
+      #       node_modules
 
       # Step 6: Install Dependencies for App-Next
       - name: Install dependencies for app-next
