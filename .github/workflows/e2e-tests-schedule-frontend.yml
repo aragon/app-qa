@@ -111,6 +111,9 @@ jobs:
       # Step 12: Run E2E tests with Playwright
       - name: Run E2E tests with Playwright
         run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal2.spec.ts --project=chromium
+        # run: |
+        #   mkdir -p ./user_data_${{ matrix.environment }}
+        #   xvfb-run yarn playwright test --project=chromium --config=playwright.config.ts --user-data-dir=./user_data_${{ matrix.environment }}
         env:
           TEST_ENV: ${{ matrix.environment }}
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}

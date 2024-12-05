@@ -1,24 +1,22 @@
-name: E2E Tests on Scheduled Runs
+name: E2E Tests for PRs, Pushes, and Dispatch Events (latest)
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 3,15 * * *" # Triggers the workflow every day at 3:00 AM and 3:00 PM UTC
+  repository_dispatch:
+    types:
+      - E2E_Tests_App_Next_Dispatch
 
 jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    strategy:
-      matrix:
-        environment: [local, develop, staging, production] # Add all environments to the matrix
 
     steps:
       # Step 1: Setup Node.js (Explicit versioning, Node.js 20 or higher)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20" # Upgrade to Node.js 20 to satisfy Playwright and concurrently requirements
+          node-version: "20"
 
       # Step 2: Checkout the e2e-tests Repository
       - name: Checkout e2e-tests Repository
@@ -37,30 +35,26 @@ jobs:
             e2e-tests-
             node_modules
 
-      # Step 4: Add and initialize the app-next submodule (Only for Local)
-      - name: Initialize app-next as a submodule (develop branch)
-        if: ${{ matrix.environment == 'local' }}
+      # Step 4: Add and initialize the app-next submodule tracking the correct branch or commit
+      - name: Initialize app-next as a submodule (specific branch or commit)
         run: |
           git submodule add https://$GITHUB_ACTOR:${{ secrets.APP_NEXT_ACCESS_TOKEN }}@github.com/aragon/app-next.git ./app-next || true
           cd ./app-next
-          git checkout develop
-          git pull origin develop
+          git fetch origin ${{ github.event.client_payload.branch || 'develop' }}
+          git checkout ${{ github.event.client_payload.branch || 'develop' }}
           cd ..
         env:
           GITHUB_ACTOR: ${{ github.actor }}
 
-      # Step 5: Install dependencies for e2e-tests
-      - name: Install dependencies for e2e-tests
-        run: yarn install --frozen-lockfile
+      # Step 5: Parallel installation of dependencies for e2e-tests and app-next
+      - name: Install dependencies for e2e-tests and app-next in parallel
+        run: |
+          npx concurrently \
+            "yarn install --frozen-lockfile" \
+            "cd ./app-next && yarn install --frozen-lockfile"
 
-      # Step 5b: Install dependencies for app-next (Only for Local)
-      - name: Install dependencies for app-next
-        if: ${{ matrix.environment == 'local' }}
-        run: cd ./app-next && yarn install --frozen-lockfile
-
-      # Step 6: Cache Node.js modules for App-Next (after submodule is initialized, Only for Local)
+      # Step 6: Cache Node.js modules for App-Next (after submodule is initialized)
       - name: Cache Node.js modules for App-Next
-        if: ${{ matrix.environment == 'local' }}
         uses: actions/cache@v3
         with:
           path: ./app-next/node_modules
@@ -90,18 +84,16 @@ jobs:
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
 
-      # Step 10: Start App-Next Development Server (Only for Local)
+      # Step 10: Start App-Next Development Server with timeout
       - name: Start App-Next Development Server
-        if: ${{ matrix.environment == 'local' }}
         working-directory: ./app-next
         run: yarn dev &
-        timeout-minutes: 5 # Ensure server doesn't hang indefinitely
+        timeout-minutes: 5
         env:
           NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
 
-      # Step 11: Wait for App-Next server to be ready (Only for Local)
+      # Step 11: Wait for App-Next server to be ready
       - name: Wait for App-Next server to be ready
-        if: ${{ matrix.environment == 'local' }}
         run: |
           until curl --output /dev/null --silent --head --fail http://localhost:3000; do
             echo "Waiting for the server to start..."
@@ -110,19 +102,18 @@ jobs:
 
       # Step 12: Run E2E tests with Playwright
       - name: Run E2E tests with Playwright
-        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal2.spec.ts --project=chromium
+        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal.spec.ts --project=chromium
         env:
-          TEST_ENV: ${{ matrix.environment }}
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
           NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
 
       # Step 13: Upload Playwright Report as Artifact (save for every run)
       - name: Upload Playwright Report
-        if: always() # Save the artifact regardless of success or failure
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report-${{ matrix.environment }}
+          name: playwright-report
           path: playwright-report/
           retention-days: 30
 
@@ -131,9 +122,9 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-artifacts-${{ matrix.environment }}
+          name: playwright-artifacts
           path: playwright-artifacts/
 
       # Step 15: Cleanup after tests
       - name: Cleanup unnecessary files after tests
-        run: rm -rf ./app-next/node_modules ./build ./tmp # Remove unnecessary files
+        run: rm -rf ./app-next/node_modules ./build ./tmp
