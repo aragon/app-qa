@@ -53,16 +53,16 @@ jobs:
             "yarn install --frozen-lockfile" \
             "cd ./app-next && yarn install --frozen-lockfile"
 
-      # Step 6: Cache Node.js modules for App-Next (after submodule is initialized)
-      - name: Cache Node.js modules for App-Next
-        uses: actions/cache@v3
-        with:
-          path: ./app-next/node_modules
-          key: app-next-${{ runner.os }}-${{ hashFiles('./app-next/yarn.lock') }}-node-20
-          restore-keys: |
-            app-next-${{ runner.os }}-
-            app-next-
-            node_modules
+      # # Step 6: Cache Node.js modules for App-Next (after submodule is initialized)
+      # - name: Cache Node.js modules for App-Next
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ./app-next/node_modules
+      #     key: app-next-${{ runner.os }}-${{ hashFiles('./app-next/yarn.lock') }}-node-20
+      #     restore-keys: |
+      #       app-next-${{ runner.os }}-
+      #       app-next-
+      #       node_modules
 
       # Step 7: Cache Playwright browsers
       - name: Cache Playwright browsers
