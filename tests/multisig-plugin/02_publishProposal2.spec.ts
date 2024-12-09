@@ -7,9 +7,8 @@ test("Publish signaling Proposal", async ({ page, metamask }) => {
   );
 
   await page.getByRole("button", { name: "Connect" }).click();
-  await page.waitForTimeout(1000);
   await page.getByRole("button", { name: "Connect" }).click();
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "MetaMask MetaMask" }).click();
   await metamask.connectToDapp();
 
