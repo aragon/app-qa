@@ -36,6 +36,7 @@ jobs:
             app-qa-${{ runner.os }}-
             app-qa-
             node_modules
+          retention-days: 30
 
       # Initialize app-next submodule for local environment
       - name: Initialize app-next submodule
@@ -51,13 +52,26 @@ jobs:
 
       # Install dependencies for app-qa
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
-      # Install dependencies for app-next in local environment
+      # Cache dependencies for app-next
+      - name: Cache app-next dependencies
+        id: app-next-cache
+        if: ${{ matrix.environment == 'local' }} # Only cache dependencies in local environment
+        uses: actions/cache@v3
+        with:
+          path: ./app-next/node_modules
+          key: app-next-${{ runner.os }}-${{ hashFiles('app-next/yarn.lock') }}
+          restore-keys: |
+            app-next-${{ runner.os }}-
+            app-next-
+          retention-days: 30
+
+      # Install dependencies for app-next if cache is missing
       - name: Install app-next dependencies
-        if: ${{ matrix.environment == 'local' }}
+        if: ${{ matrix.environment == 'local' && steps.app-next-cache.outputs.cache-hit != 'true' }}
         working-directory: ./app-next
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable --immutable-cache
 
       # Cache dependencies for Playwright
       - name: Cache Playwright browsers
@@ -69,6 +83,7 @@ jobs:
           restore-keys: |
             playwright-${{ runner.os }}-
             playwright-
+          retention-days: 30
 
       # Install dependencies for Playwright if cache is missing
       - name: Install Playwright Browsers
