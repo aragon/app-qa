@@ -64,7 +64,6 @@ jobs:
           restore-keys: |
             app-next-${{ runner.os }}-
             app-next-
-          retention-days: 30
 
       # Install dependencies for app-next if cache is missing
       - name: Install app-next dependencies
@@ -88,8 +87,20 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true' # Only run if cache is not found
         run: npx playwright install chromium --with-deps
 
-      # Build Synpress cache in parallel
-      - name: Build Synpress Cache
+      # Cache dependencies for Synpress
+      - name: Cache Synpress dependencies
+        id: synpress-cache
+        uses: actions/cache@v3
+        with:
+          path: .cache-synpress
+          key: synpress-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('package.json') }}
+          restore-keys: |
+            synpress-${{ runner.os }}-
+            synpress-
+
+      # Build Synpress dependencies
+      - name: Build Synpress Depencies
+        if: steps.synpress-cache.outputs.cache-hit != 'true'
         run: xvfb-run npx synpress ./tests/
         env:
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
