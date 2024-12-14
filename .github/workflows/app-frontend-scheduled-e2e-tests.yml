@@ -163,3 +163,6 @@ jobs:
       # Cleanup temporary files
       - name: Cleanup temporary files
         run: rm -rf ./app-next/node_modules ./build ./tmp
+
+      - name: Collect Workflow Telemetry
+        uses: catchpoint/workflow-telemetry-action@v2
