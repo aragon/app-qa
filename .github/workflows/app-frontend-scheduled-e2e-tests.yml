@@ -64,17 +64,24 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('playwright.config.ts') }}
+          key: playwright-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('playwright.config.ts') }}
           restore-keys: |
             playwright-${{ runner.os }}-
             playwright-
 
-      # Install Playwright browsers and build Synpress cache in parallel
-      - name: Install Playwright Browsers and Build Synpress Cache
+      # Install Playwright browsers only if the cache is not restored
+      - name: Install Playwright Browsers
         run: |
-          npx concurrently \
-            "npx playwright install chromium --with-deps" \
-            "xvfb-run npx synpress ./tests/"
+          if [ ! -d "~/.cache/ms-playwright" ] || [ -z "$(ls -A ~/.cache/ms-playwright)" ]; then
+            echo "Cache not found, installing browsers..."
+            npx playwright install chromium --with-deps
+          else
+            echo "Cache restored, skipping browser installation."
+          fi
+
+      # Build Synpress cache in parallel
+      - name: Build Synpress Cache
+        run: xvfb-run npx synpress ./tests/
         env:
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
