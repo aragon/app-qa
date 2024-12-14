@@ -158,3 +158,32 @@ jobs:
                   }' \
               $DISCORD_WEBHOOK_URL
         shell: bash
+
+      - name: Notify Discord on Failure
+        # if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -H "Content-Type: application/json" \
+               -d @- $DISCORD_WEBHOOK_URL << 'EOF'
+          {
+            "embeds": [{
+              "title": "❌ E2E Tests Succeeded",
+              "color": 15158332,
+              "fields": [
+                { "name": "Repository", "value": "${{ github.repository }}", "inline": true },
+                { "name": "Workflow", "value": "${{ github.workflow }}", "inline": true },
+                { "name": "Job", "value": "${{ github.job }}", "inline": true },
+                { "name": "Branch", "value": "${{ github.ref }}", "inline": true },
+                { "name": "Environment", "value": "${{ matrix.environment }}", "inline": true },
+                { "name": "Commit", "value": "[`${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})", "inline": false },
+                { "name": "Author", "value": "${{ github.actor }}", "inline": true },
+                { "name": "Details", "value": "[View Workflow Run](${{
+                  github.server_url
+                }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false }
+              ],
+              "timestamp": "$(date --utc +%FT%TZ)"
+            }]
+          }
+          EOF
+        shell: bash
