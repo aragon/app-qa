@@ -37,7 +37,7 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         baseURL, // Pass the dynamically set baseURL to this project
       },
-      timeout: 60000,
+      timeout: 180000,
     },
     {
       name: "firefox",

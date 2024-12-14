@@ -26,15 +26,15 @@ jobs:
         with:
           path: ./
 
-      # Cache Node.js dependencies for e2e-tests
+      # Cache Node.js dependencies for app-qa
       - name: Cache Node.js modules
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: e2e-tests-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-node-20
+          key: app-qa-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-node-20
           restore-keys: |
-            e2e-tests-${{ runner.os }}-
-            e2e-tests-
+            app-qa-${{ runner.os }}-
+            app-qa-
             node_modules
 
       # Initialize app-next submodule for local environment
@@ -59,8 +59,9 @@ jobs:
         working-directory: ./app-next
         run: yarn install --frozen-lockfile
 
-      # Cache Playwright browsers
+      # Cache dependencies for Playwright
       - name: Cache Playwright browsers
+        id: playwright-cache
         uses: actions/cache@v3
         with:
           path: ~/.cache/ms-playwright
@@ -69,15 +70,10 @@ jobs:
             playwright-${{ runner.os }}-
             playwright-
 
-      # Install Playwright browsers only if the cache is not restored
+      # Install dependencies for Playwright
       - name: Install Playwright Browsers
-        run: |
-          if [ ! -d "~/.cache/ms-playwright" ] || [ -z "$(ls -A ~/.cache/ms-playwright)" ]; then
-            echo "Cache not found, installing browsers..."
-            npx playwright install chromium --with-deps
-          else
-            echo "Cache restored, skipping browser installation."
-          fi
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install chromium --with-deps
 
       # Build Synpress cache in parallel
       - name: Build Synpress Cache
