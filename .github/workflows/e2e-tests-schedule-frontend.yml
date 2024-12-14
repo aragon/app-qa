@@ -159,7 +159,7 @@ jobs:
         shell: bash
 
         # Step 16: Notify Discord on Failure
-      - name: Notify Discord on Failure
+      - name: Notify Discord on Failures
         # if: failure() # Ensure this step runs only on failure
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
