@@ -1,9 +1,9 @@
-name: E2E Tests on Scheduled Runs
+name: App Frontend Scheduled E2E Tests
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 3,15 * * *" # Triggers the workflow every day at 3:00 AM and 3:00 PM UTC
+    - cron: "0 * * * *" # Triggers the workflow every hour
 
 jobs:
   test:
@@ -52,35 +52,6 @@ jobs:
       # Step 5: Install dependencies for e2e-tests
       - name: Install dependencies for e2e-tests
         run: yarn install --frozen-lockfile
-
-      # # Step 5b: Install dependencies for app-next (Only for Local)
-      # - name: Install dependencies for app-next
-      #   if: ${{ matrix.environment == 'local' }}
-      #   run: cd ./app-next && yarn install --frozen-lockfile
-
-      # # Step 6: Cache Node.js modules for App-Next (after submodule is initialized, Only for Local)
-      # - name: Cache Node.js modules for App-Next
-      #   if: ${{ matrix.environment == 'local' }}
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ./app-next/node_modules
-      #     key: app-next-${{ runner.os }}-${{ hashFiles('./app-next/yarn.lock') }}-node-20
-      #     restore-keys: |
-      #       app-next-${{ runner.os }}-
-      #       app-next-
-      #       node_modules
-
-      # # Step 5b: Cache Node.js modules for App-Next (Restore Cache First)
-      # - name: Restore Cache for App-Next Node.js Modules
-      #   if: ${{ matrix.environment == 'local' }}
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ./app-next/node_modules
-      #     key: app-next-${{ runner.os }}-${{ hashFiles('./app-next/yarn.lock') }}-node-20
-      #     restore-keys: |
-      #       app-next-${{ runner.os }}-
-      #       app-next-
-      #       node_modules
 
       # Step 6: Install Dependencies for App-Next
       - name: Install dependencies for app-next
@@ -158,3 +129,30 @@ jobs:
       # Step 15: Cleanup after tests
       - name: Cleanup unnecessary files after tests
         run: rm -rf ./app-next/node_modules ./build ./tmp # Remove unnecessary files
+
+      # Step 16: Notify Discord on Failure with Embed
+      - name: Notify Discord on Failure with Embed
+        if: failure()
+        uses: peter-evans/discord-webhook@v2
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          embeds: |
+            [{
+              "title": "❌ E2E Tests Failed",
+              "color": 15158332,
+              "fields": [
+                { "name": "Repository", "value": "${{ github.repository }}", "inline": true },
+                { "name": "Workflow", "value": "${{ github.workflow }}", "inline": true },
+                { "name": "Job", "value": "${{ github.job }}", "inline": true },
+                { "name": "Branch", "value": "${{ github.ref }}", "inline": true },
+                { "name": "Environment", "value": "${{ matrix.environment }}", "inline": true },
+                { "name": "Commit", "value": "[`${{ github.sha }}](${{
+                  github.server_url
+                }}/${{ github.repository }}/commit/${{ github.sha }})", "inline": false },
+                { "name": "Author", "value": "${{ github.actor }}", "inline": true },
+                { "name": "Details", "value": "[View Workflow Run](${
+                  github.server_url
+                }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false }
+              ],
+              "timestamp": "${{ github.event.head_commit.timestamp }}"
+            }]
