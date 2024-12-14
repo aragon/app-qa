@@ -3,7 +3,7 @@ name: App Frontend Scheduled E2E Tests
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *" # Triggers the workflow every hour
+    - cron: "0 * * * *" # Run every hour
 
 jobs:
   test:
@@ -11,23 +11,23 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        environment: [local, develop, staging, production] # Add all environments to the matrix
+        environment: [local, develop, staging, production] # Test in multiple environments
 
     steps:
-      # Step 1: Setup Node.js (Explicit versioning, Node.js 20 or higher)
+      # Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20" # Upgrade to Node.js 20 to satisfy Playwright and concurrently requirements
+          node-version: "20"
 
-      # Step 2: Checkout the e2e-tests Repository
-      - name: Checkout e2e-tests Repository
+      # Checkout the app-qa repository
+      - name: Checkout app-qa Repository
         uses: actions/checkout@v4
         with:
-          path: ./ # Place the e2e-tests repository in the root directory
+          path: ./
 
-      # Step 3: Cache Node.js modules for e2e-tests
-      - name: Cache Node.js modules for e2e-tests
+      # Cache Node.js dependencies for e2e-tests
+      - name: Cache Node.js modules
         uses: actions/cache@v3
         with:
           path: node_modules
@@ -37,8 +37,8 @@ jobs:
             e2e-tests-
             node_modules
 
-      # Step 4: Add and initialize the app-next submodule (Only for Local)
-      - name: Initialize app-next as a submodule (develop branch)
+      # Initialize app-next submodule for local environment
+      - name: Initialize app-next submodule
         if: ${{ matrix.environment == 'local' }}
         run: |
           git submodule add https://$GITHUB_ACTOR:${{ secrets.APP_NEXT_ACCESS_TOKEN }}@github.com/aragon/app-next.git ./app-next || true
@@ -49,17 +49,17 @@ jobs:
         env:
           GITHUB_ACTOR: ${{ github.actor }}
 
-      # Step 5: Install dependencies for e2e-tests
-      - name: Install dependencies for e2e-tests
+      # Install dependencies for app-qa
+      - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      # Step 6: Install Dependencies for App-Next
-      - name: Install dependencies for app-next
+      # Install dependencies for app-next in local environment
+      - name: Install app-next dependencies
         if: ${{ matrix.environment == 'local' }}
         working-directory: ./app-next
         run: yarn install --frozen-lockfile
 
-      # Step 7: Cache Playwright browsers
+      # Cache Playwright browsers
       - name: Cache Playwright browsers
         uses: actions/cache@v3
         with:
@@ -69,8 +69,8 @@ jobs:
             playwright-${{ runner.os }}-
             playwright-
 
-      # Step 8 and Step 9 combined: Install Playwright Browsers and Build Synpress Cache in Parallel
-      - name: Install Playwright Browsers and Build Synpress Cache in Parallel
+      # Install Playwright browsers and build Synpress cache in parallel
+      - name: Install Playwright Browsers and Build Synpress Cache
         run: |
           npx concurrently \
             "npx playwright install chromium --with-deps" \
@@ -79,17 +79,17 @@ jobs:
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
 
-      # Step 10: Start App-Next Development Server (Only for Local)
-      - name: Start App-Next Development Server
+      # Start app-next server for local environment
+      - name: Start app-next server
         if: ${{ matrix.environment == 'local' }}
         working-directory: ./app-next
         run: yarn dev &
-        timeout-minutes: 5 # Ensure server doesn't hang indefinitely
+        timeout-minutes: 5
         env:
           NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
 
-      # Step 11: Wait for App-Next server to be ready (Only for Local)
-      - name: Wait for App-Next server to be ready
+      # Wait for app-next server to be ready for local environment
+      - name: Wait for app-next server
         if: ${{ matrix.environment == 'local' }}
         run: |
           until curl --output /dev/null --silent --head --fail http://localhost:3000; do
@@ -97,8 +97,8 @@ jobs:
             sleep 5
           done
 
-      # Step 12: Run E2E tests with Playwright
-      - name: Run E2E tests with Playwright
+      # Run Playwright E2E tests
+      - name: Run E2E tests
         run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal2.spec.ts --project=chromium
         env:
           TEST_ENV: ${{ matrix.environment }}
@@ -106,9 +106,9 @@ jobs:
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
           NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
 
-      # Step 13: Upload Playwright Report as Artifact (save for every run)
+      # Upload Playwright report as artifact
       - name: Upload Playwright Report
-        if: always() # Save the artifact regardless of success or failure
+        if: always()
         id: upload_report
         uses: actions/upload-artifact@v4
         with:
@@ -116,20 +116,14 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      # Step 15: Cleanup after tests
-      - name: Cleanup unnecessary files after tests
-        run: rm -rf ./app-next/node_modules ./build ./tmp # Remove unnecessary files
-
-      # Step 16: Notification on Discord
-      - name: Notify Discord on Failure
+      # Notify Discord on failure
+      - name: Notify Discord
         if: failure()
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           ARTIFACT_URL: ${{ steps.upload_report.outputs.artifact-url }}
         run: |
           echo "Sending Discord failure notification..."
-
-          # Construct the JSON payload using a here document
           cat <<EOF > payload.json
           {
             "embeds": [{
@@ -148,9 +142,9 @@ jobs:
           }
           EOF
 
-          # Send the payload to Discord
-          curl -X POST -H "Content-Type: application/json" \
-              -d @payload.json \
-              $DISCORD_WEBHOOK_URL
+          curl -X POST -H "Content-Type: application/json" -d @payload.json $DISCORD_WEBHOOK_URL
+          echo "Discord notification sent."
 
-          echo "Discord failure notification sent."
+      # Cleanup temporary files
+      - name: Cleanup temporary files
+        run: rm -rf ./app-next/node_modules ./build ./tmp
