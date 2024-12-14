@@ -12,7 +12,8 @@ jobs:
     strategy:
       matrix:
         environment: [local, develop, staging, production] # Test in multiple environments
-        shard: [1/4, 2/4, 3/4, 4/4] # Define shards as fractions
+        # shard: [1/4, 2/4, 3/4, 4/4] # Define shards as fractions
+        shard: [1, 2, 3, 4]
 
     steps:
       # Setup Node.js
