@@ -178,10 +178,9 @@ jobs:
                         { "name": "Job", "value": "'"${{ github.job }}"'", "inline": false },
                         { "name": "Branch", "value": "'"${{ github.ref }}"'", "inline": false },
                         { "name": "Environment", "value": "'"${{ matrix.environment }}"'", "inline": false },
-                        { "name": "Artifact Download URLs", "value": "📂 [Playwright Report - Local](${PLAYWRIGHT_REPORT_BASE_URL}/playwright-report-local)\n📂 [Playwright Report - Develop](${PLAYWRIGHT_REPORT_BASE_URL}/playwright-report-develop)\n📂 [Playwright Report - Staging](${PLAYWRIGHT_REPORT_BASE_URL}/playwright-report-staging)\n📂 [Playwright Report - Production](${PLAYWRIGHT_REPORT_BASE_URL}/playwright-report-production)", "inline": false },
-                        { "name": "Details", "value": "[View Workflow Run](${{
-                          github.server_url
-                        }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false }
+                        { "name": "Artifact Download URLs", "value": "📂 [Playwright Report - Local]('${PLAYWRIGHT_REPORT_BASE_URL}/playwright-report-local')\n📂 [Playwright Report - Develop]('${PLAYWRIGHT_REPORT_BASE_URL}/playwright-report-develop')\n📂 [Playwright Report - Staging]('${PLAYWRIGHT_REPORT_BASE_URL}/playwright-report-staging')\n📂 [Playwright Report - Production]('${PLAYWRIGHT_REPORT_BASE_URL}/playwright-report-production')", "inline": false },
+                        { "name": "Details", "value": "[View Workflow Run]('${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false }
+                       ],
                       ],
                       "timestamp": "'"$(date --utc +%FT%TZ)"'"
                     }]
