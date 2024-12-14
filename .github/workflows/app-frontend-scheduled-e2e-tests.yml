@@ -57,7 +57,7 @@ jobs:
       - name: Install app-next dependencies
         if: ${{ matrix.environment == 'local' }}
         working-directory: ./app-next
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       # Cache dependencies for Playwright
       - name: Cache Playwright browsers
