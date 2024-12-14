@@ -127,6 +127,12 @@ jobs:
           name: playwright-artifacts-${{ matrix.environment }}
           path: playwright-artifacts/
 
+      - name: Log Upload Report Outputs
+        if: failure()
+        run: |
+          echo "Artifact ID: ${{ steps.upload_report.outputs.artifact-id }}"
+          echo "Artifact URL: ${{ steps.upload_report.outputs.artifact-url }}"
+
       # Step 15: Cleanup after tests
       - name: Cleanup unnecessary files after tests
         run: rm -rf ./app-next/node_modules ./build ./tmp # Remove unnecessary files
