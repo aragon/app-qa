@@ -134,7 +134,7 @@ jobs:
 
       # Step 16: Notification on Discord
       - name: Notify Discord on Failure
-        # if: failure()
+        if: failure()
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           ARTIFACT_URL: ${{ steps.upload_report.outputs.artifact-url }}
@@ -145,7 +145,7 @@ jobs:
           cat <<EOF > payload.json
           {
             "embeds": [{
-              "title": "❌ E2E Tests Failed3",
+              "title": "❌ E2E Tests Failed",
               "color": 15158332,
               "fields": [
                 { "name": "Repository", "value": "${{ github.repository }}", "inline": false },
