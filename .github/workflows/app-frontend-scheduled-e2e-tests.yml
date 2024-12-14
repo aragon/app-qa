@@ -70,9 +70,9 @@ jobs:
             playwright-${{ runner.os }}-
             playwright-
 
-      # Install dependencies for Playwright
+      # Install dependencies for Playwright if cache is missing
       - name: Install Playwright Browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        if: steps.playwright-cache.outputs.cache-hit != 'true' # Only run if cache is not found
         run: npx playwright install chromium --with-deps
 
       # Build Synpress cache in parallel
