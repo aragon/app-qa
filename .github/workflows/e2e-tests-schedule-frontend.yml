@@ -267,7 +267,7 @@ jobs:
       #     echo "Discord failure notification sent."
 
       - name: Notify Discord on Failure
-        if: failure()
+        # if: failure()
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           ARTIFACT_URL: ${{ steps.upload_report.outputs.artifact-url }}
