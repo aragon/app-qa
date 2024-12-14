@@ -128,7 +128,7 @@ jobs:
           path: playwright-artifacts/
 
       - name: Log Upload Report Outputs
-        if: failure()
+        # if: failure()
         run: |
           echo "Artifact ID: ${{ steps.upload_report.outputs.artifact-id }}"
           echo "Artifact URL: ${{ steps.upload_report.outputs.artifact-url }}"
