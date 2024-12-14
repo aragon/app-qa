@@ -12,7 +12,6 @@ jobs:
     strategy:
       matrix:
         environment: [local, develop, staging, production] # Test in multiple environments
-        shard_index: [0, 1, 2, 3] # Four shards
 
     steps:
       # Setup Node.js
@@ -115,8 +114,7 @@ jobs:
 
       # Run Playwright E2E tests
       - name: Run E2E tests
-        # run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal2.spec.ts --project=chromium
-        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal2.spec.ts --project=chromium --shard=${{ matrix.shard }}
+        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal2.spec.ts --project=chromium
         env:
           TEST_ENV: ${{ matrix.environment }}
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
