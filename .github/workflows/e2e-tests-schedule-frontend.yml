@@ -121,6 +121,7 @@ jobs:
       # Step 14: Upload Playwright Artifacts for Debugging (if failure occurs)
       - name: Upload Playwright Artifacts on Failure
         if: failure()
+        id: upload_report
         uses: actions/upload-artifact@v4
         with:
           name: playwright-artifacts-${{ matrix.environment }}
@@ -222,3 +223,31 @@ jobs:
           curl -X POST -H "Content-Type: application/json" \
                -d @payload.json \
                $DISCORD_WEBHOOK_URL
+
+      - name: Notify Discord on Failure
+        # if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          ARTIFACT_URL: ${{ steps.upload_report.outputs.artifact-url }}
+        run: |
+          echo "Sending Discord failure notification..."
+
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{
+                  "embeds": [{
+                    "title": "❌ E2E Tests Failed2",
+                    "color": 15158332,
+                    "fields": [
+                      { "name": "Repository", "value": "'"${{ github.repository }}"'", "inline": false },
+                      { "name": "Workflow", "value": "'"${{ github.workflow }}"'", "inline": false },
+                      { "name": "Job", "value": "'"${{ github.job }}"'", "inline": false },
+                      { "name": "Branch", "value": "'"${{ github.ref }}"'", "inline": false },
+                      { "name": "Environment", "value": "'"${{ matrix.environment }}"'", "inline": false },
+                      { "name": "Artifact Download URL", "value": "[Download Playwright Report]('"$ARTIFACT_URL"')", "inline": false },
+                      { "name": "Details", "value": "[View Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false }
+                    ],
+                    "timestamp": "'"$(date --utc +%FT%TZ)"'"
+                  }]
+                }' \
+            $DISCORD_WEBHOOK_URL
+          echo "Discord failure notification sent."
