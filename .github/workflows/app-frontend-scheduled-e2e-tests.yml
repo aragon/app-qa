@@ -53,21 +53,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      # Cache dependencies for app-next
-      - name: Cache app-next dependencies
-        id: app-next-cache
-        if: ${{ matrix.environment == 'local' }} # Only cache dependencies in local environment
-        uses: actions/cache@v3
-        with:
-          path: ./app-next/node_modules
-          key: app-next-${{ runner.os }}-${{ hashFiles('app-next/yarn.lock') }}
-          restore-keys: |
-            app-next-${{ runner.os }}-
-            app-next-
-
       # Install dependencies for app-next if cache is missing
       - name: Install app-next dependencies
-        if: ${{ steps.app-next-cache.outputs.cache-hit == 'true' && ! (matrix.environment == 'local') }}
         working-directory: ./app-next
         run: yarn install --frozen-lockfile
 
