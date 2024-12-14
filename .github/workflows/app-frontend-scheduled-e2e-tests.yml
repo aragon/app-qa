@@ -57,7 +57,7 @@ jobs:
       - name: Install app-next dependencies
         if: ${{ matrix.environment == 'local' }}
         working-directory: ./app-next
-        run: yarn install --immutable
+        run: yarn install --frozen-lockfile
 
       # Cache dependencies for Playwright
       - name: Cache Playwright browsers
@@ -163,6 +163,3 @@ jobs:
       # Cleanup temporary files
       - name: Cleanup temporary files
         run: rm -rf ./app-next/node_modules ./build ./tmp
-
-      - name: Collect Workflow Telemetry
-        uses: catchpoint/workflow-telemetry-action@v2
