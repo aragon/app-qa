@@ -160,7 +160,7 @@ jobs:
 
       # Step 16: Notify Discord on Failure
       - name: Notify Discord on Failure
-        if: failure() # Ensure this step runs only on failure
+        # if: failure() # Ensure this step runs only on failure
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           PLAYWRIGHT_REPORT_BASE_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts"
