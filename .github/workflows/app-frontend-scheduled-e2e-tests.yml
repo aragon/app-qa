@@ -55,6 +55,7 @@ jobs:
 
       # Install dependencies for app-next if cache is missing
       - name: Install app-next dependencies
+        if: ${{ matrix.environment == 'local' }}
         working-directory: ./app-next
         run: yarn install --frozen-lockfile
 
