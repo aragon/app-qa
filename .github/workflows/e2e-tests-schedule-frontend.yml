@@ -130,33 +130,33 @@ jobs:
       - name: Cleanup unnecessary files after tests
         run: rm -rf ./app-next/node_modules ./build ./tmp # Remove unnecessary files
 
-      # Step 16: Notify Discord on Failure
-      - name: Notify Discord on Failure
-        # if: failure()
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: |
-          curl -H "Content-Type: application/json" \
-              -d '{
-                    "embeds": [{
-                      "title": "❌ E2E Tests Failed",
-                      "color": 15158332,
-                      "fields": [
-                        { "name": "Repository", "value": "'"${{ github.repository }}"'", "inline": false },
-                        { "name": "Workflow", "value": "'"${{ github.workflow }}"'", "inline": false },
-                        { "name": "Job", "value": "'"${{ github.job }}"'", "inline": false },
-                        { "name": "Branch", "value": "'"${{ github.ref }}"'", "inline": false },
-                        { "name": "Environment", "value": "'"${{ matrix.environment }}"'", "inline": false },
-                        { "name": "Details", "value": "[View Workflow Run](${{
-                          github.server_url
-                        { "name": "Artifact Download URL", "value": "[Download Artifact](${{ steps.get_artifact.outputs.download_url }})", "inline": false },
-                        }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false }
-                      ],
-                      "timestamp": "'"$(date --utc +%FT%TZ)"'"
-                    }]
-                  }' \
-              $DISCORD_WEBHOOK_URL
-        shell: bash
+      # # Step 16: Notify Discord on Failure
+      # - name: Notify Discord on Failure
+      #   # if: failure()
+      #   env:
+      #     DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      #   run: |
+      #     curl -H "Content-Type: application/json" \
+      #         -d '{
+      #               "embeds": [{
+      #                 "title": "❌ E2E Tests Failed",
+      #                 "color": 15158332,
+      #                 "fields": [
+      #                   { "name": "Repository", "value": "'"${{ github.repository }}"'", "inline": false },
+      #                   { "name": "Workflow", "value": "'"${{ github.workflow }}"'", "inline": false },
+      #                   { "name": "Job", "value": "'"${{ github.job }}"'", "inline": false },
+      #                   { "name": "Branch", "value": "'"${{ github.ref }}"'", "inline": false },
+      #                   { "name": "Environment", "value": "'"${{ matrix.environment }}"'", "inline": false },
+      #                   { "name": "Details", "value": "[View Workflow Run](${{
+      #                     github.server_url
+      #                   { "name": "Artifact Download URL", "value": "[Download Artifact](${{ steps.get_artifact.outputs.download_url }})", "inline": false },
+      #                   }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false }
+      #                 ],
+      #                 "timestamp": "'"$(date --utc +%FT%TZ)"'"
+      #               }]
+      #             }' \
+      #         $DISCORD_WEBHOOK_URL
+      #   shell: bash
 
       # Step 16: Notify Discord on Failure
       - name: Notify Discord on Failure
