@@ -187,3 +187,38 @@ jobs:
                   }' \
               $DISCORD_WEBHOOK_URL
           echo "Discord failure notification sent."
+
+      # Step 16: Notify Discord on Failure
+      - name: Notify Discord on Failure
+        # if: failure() # Ensure this step runs only on failure
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          PLAYWRIGHT_REPORT_BASE_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts"
+          WORKFLOW_RUN_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        run: |
+          echo "Sending Discord failure notification..."
+
+          # Prepare the JSON payload
+          cat <<EOF > payload.json
+          {
+            "embeds": [{
+              "title": "❌ E2E Tests Succeeded",
+              "color": 15158332,
+              "fields": [
+                { "name": "Repository", "value": "${{ github.repository }}", "inline": false },
+                { "name": "Workflow", "value": "${{ github.workflow }}", "inline": false },
+                { "name": "Job", "value": "${{ github.job }}", "inline": false },
+                { "name": "Branch", "value": "${{ github.ref }}", "inline": false },
+                { "name": "Environment", "value": "${{ matrix.environment }}", "inline": false },
+                { "name": "Artifact Download URLs", "value": "📂 [Playwright Report - Local](${PLAYWRIGHT_REPORT_BASE_URL}/playwright-report-local)\n📂 [Playwright Report - Develop](${PLAYWRIGHT_REPORT_BASE_URL}/playwright-report-develop)\n📂 [Playwright Report - Staging](${PLAYWRIGHT_REPORT_BASE_URL}/playwright-report-staging)\n📂 [Playwright Report - Production](${PLAYWRIGHT_REPORT_BASE_URL}/playwright-report-production)", "inline": false },
+                { "name": "Details", "value": "[View Workflow Run](${WORKFLOW_RUN_URL})", "inline": false }
+              ],
+              "timestamp": "$(date --utc +%FT%TZ)"
+            }]
+          }
+          EOF
+
+          # Send the notification
+          curl -X POST -H "Content-Type: application/json" \
+               -d @payload.json \
+               $DISCORD_WEBHOOK_URL
