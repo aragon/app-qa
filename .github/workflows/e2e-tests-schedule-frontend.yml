@@ -130,29 +130,31 @@ jobs:
       - name: Cleanup unnecessary files after tests
         run: rm -rf ./app-next/node_modules ./build ./tmp # Remove unnecessary files
 
-      # Step 16: Notify Discord on Failure with Embed
-      - name: Notify Discord on Failure with Embed
+      # Step 16: Notify Discord on Failure
+      - name: Notify Discord on Failure
         if: failure()
-        uses: peter-evans/discord-webhook@v2
-        with:
-          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          embeds: |
-            [{
-              "title": "❌ E2E Tests Failed",
-              "color": 15158332,
-              "fields": [
-                { "name": "Repository", "value": "${{ github.repository }}", "inline": true },
-                { "name": "Workflow", "value": "${{ github.workflow }}", "inline": true },
-                { "name": "Job", "value": "${{ github.job }}", "inline": true },
-                { "name": "Branch", "value": "${{ github.ref }}", "inline": true },
-                { "name": "Environment", "value": "${{ matrix.environment }}", "inline": true },
-                { "name": "Commit", "value": "[`${{ github.sha }}](${{
-                  github.server_url
-                }}/${{ github.repository }}/commit/${{ github.sha }})", "inline": false },
-                { "name": "Author", "value": "${{ github.actor }}", "inline": true },
-                { "name": "Details", "value": "[View Workflow Run](${
-                  github.server_url
-                }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false }
-              ],
-              "timestamp": "${{ github.event.head_commit.timestamp }}"
-            }]
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -H "Content-Type: application/json" \
+              -d '{
+                    "embeds": [{
+                      "title": "❌ E2E Tests Failed",
+                      "color": 15158332,
+                      "fields": [
+                        { "name": "Repository", "value": "'"${{ github.repository }}"'", "inline": true },
+                        { "name": "Workflow", "value": "'"${{ github.workflow }}"'", "inline": true },
+                        { "name": "Job", "value": "'"${{ github.job }}"'", "inline": true },
+                        { "name": "Branch", "value": "'"${{ github.ref }}"'", "inline": true },
+                        { "name": "Environment", "value": "'"${{ matrix.environment }}"'", "inline": true },
+                        { "name": "Commit", "value": "[`${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})", "inline": false },
+                        { "name": "Author", "value": "'"${{ github.actor }}"'", "inline": true },
+                        { "name": "Details", "value": "[View Workflow Run](${{
+                          github.server_url
+                        }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false }
+                      ],
+                      "timestamp": "'"$(date --utc +%FT%TZ)"'"
+                    }]
+                  }' \
+              $DISCORD_WEBHOOK_URL
+        shell: bash
