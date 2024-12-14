@@ -112,6 +112,7 @@ jobs:
       # Step 13: Upload Playwright Report as Artifact (save for every run)
       - name: Upload Playwright Report
         if: always() # Save the artifact regardless of success or failure
+        id: upload_report
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-${{ matrix.environment }}
@@ -121,7 +122,7 @@ jobs:
       # Step 14: Upload Playwright Artifacts for Debugging (if failure occurs)
       - name: Upload Playwright Artifacts on Failure
         if: failure()
-        id: upload_report
+        # id: upload_report
         uses: actions/upload-artifact@v4
         with:
           name: playwright-artifacts-${{ matrix.environment }}
