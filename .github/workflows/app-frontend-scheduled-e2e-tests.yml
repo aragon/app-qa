@@ -67,6 +67,17 @@ jobs:
 
       # Install dependencies for app-next if cache is missing
       - name: Install app-next dependencies
+        if: ${{ matrix.environment == 'local' }}
+        working-directory: ./app-next
+        run: |
+          if [ "${{ steps.app-next-cache.outputs.cache-hit }}" != 'true' ]; then
+            yarn install --frozen-lockfile
+          else
+            echo "Dependencies are cached; skipping installation."
+          fi
+
+      # Install dependencies for app-next if cache is missing
+      - name: Install app-next dependencies
         if: ${{ matrix.environment == 'local' && steps.app-next-cache.outputs.cache-hit == 'false' }}
         working-directory: ./app-next
         run: yarn install --frozen-lockfile
