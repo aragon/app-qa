@@ -231,37 +231,78 @@ jobs:
                -d @payload.json \
                $DISCORD_WEBHOOK_URL
 
+      # - name: Notify Discord on Failure
+      #   # if: failure()
+      #   env:
+      #     DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      #     ARTIFACT_URL: ${{ steps.upload_report.outputs.artifact-url }}
+      #   run: |
+      #     echo "Sending Discord failure notification..."
+
+      #     # Construct the JSON payload using a here document
+      #     read -r -d '' PAYLOAD <<EOF
+      #     {
+      #       "embeds": [{
+      #         "title": "❌ E2E Tests Failed2",
+      #         "color": 15158332,
+      #         "fields": [
+      #           { "name": "Repository", "value": "${{ github.repository }}", "inline": false },
+      #           { "name": "Workflow", "value": "${{ github.workflow }}", "inline": false },
+      #           { "name": "Job", "value": "${{ github.job }}", "inline": false },
+      #           { "name": "Branch", "value": "${{ github.ref }}", "inline": false },
+      #           { "name": "Environment", "value": "${{ matrix.environment }}", "inline": false },
+      #           { "name": "Artifact Download URL", "value": "[Download Playwright Report](${ARTIFACT_URL})", "inline": false },
+      #           { "name": "Details", "value": "[View Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false }
+      #         ],
+      #         "timestamp": "$(date --utc +%FT%TZ)"
+      #       }]
+      #     }
+      #     EOF
+
+      #     # Send the payload to Discord
+      #     curl -X POST -H "Content-Type: application/json" \
+      #         -d "$PAYLOAD" \
+      #         $DISCORD_WEBHOOK_URL
+
+      #     echo "Discord failure notification sent."
+
       - name: Notify Discord on Failure
-        # if: failure()
+        if: failure()
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           ARTIFACT_URL: ${{ steps.upload_report.outputs.artifact-url }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          GITHUB_JOB: ${{ github.job }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_SERVER_URL: ${{ github.server_url }}
+          MATRIX_ENVIRONMENT: ${{ matrix.environment }}
         run: |
           echo "Sending Discord failure notification..."
-
-          # Construct the JSON payload using a here document
-          read -r -d '' PAYLOAD <<EOF
+          read -r -d '' PAYLOAD <<-EOF
           {
             "embeds": [{
-              "title": "❌ E2E Tests Failed2",
+              "title": "❌ E2E Tests Failed3",
               "color": 15158332,
               "fields": [
-                { "name": "Repository", "value": "${{ github.repository }}", "inline": false },
-                { "name": "Workflow", "value": "${{ github.workflow }}", "inline": false },
-                { "name": "Job", "value": "${{ github.job }}", "inline": false },
-                { "name": "Branch", "value": "${{ github.ref }}", "inline": false },
-                { "name": "Environment", "value": "${{ matrix.environment }}", "inline": false },
+                { "name": "Repository", "value": "$GITHUB_REPOSITORY", "inline": false },
+                { "name": "Workflow", "value": "$GITHUB_WORKFLOW", "inline": false },
+                { "name": "Job", "value": "$GITHUB_JOB", "inline": false },
+                { "name": "Branch", "value": "$GITHUB_REF", "inline": false },
+                { "name": "Environment", "value": "${MATRIX_ENVIRONMENT:-not specified}", "inline": false },
                 { "name": "Artifact Download URL", "value": "[Download Playwright Report](${ARTIFACT_URL})", "inline": false },
-                { "name": "Details", "value": "[View Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false }
+                { "name": "Details", "value": "[View Workflow Run](${GITHUB_SERVER_URL}/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)", "inline": false }
               ],
               "timestamp": "$(date --utc +%FT%TZ)"
             }]
           }
           EOF
 
-          # Send the payload to Discord
+          echo "PAYLOAD: $PAYLOAD"
+          echo "Sending payload to Discord..."
           curl -X POST -H "Content-Type: application/json" \
               -d "$PAYLOAD" \
-              $DISCORD_WEBHOOK_URL
+              "$DISCORD_WEBHOOK_URL"
 
           echo "Discord failure notification sent."
