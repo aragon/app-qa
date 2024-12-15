@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        environment: [loca] # Test in multiple environments
+        environment: [local] # Test in multiple environments
 
     services:
       rabbitmq:
