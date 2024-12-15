@@ -1,4 +1,4 @@
-name: E2E Tests for PRs, Pushes, and Dispatch Events Backend2
+name: App Backend Dispatched E2E Tests
 
 on:
   workflow_dispatch:
@@ -140,6 +140,7 @@ jobs:
         timeout-minutes: 5
         env:
           NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
+          NEXT_PUBLIC_ARAGAGON_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_ARAGAGON_BACKEND_URL }}
 
       # Step 13: Wait for App-Next server to be ready
       - name: Wait for App-Next server to be ready

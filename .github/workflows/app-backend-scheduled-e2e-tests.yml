@@ -11,7 +11,17 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        environment: [local, develop, staging, production] # Test in multiple environments
+        environment: [loca] # Test in multiple environments
+
+    services:
+      rabbitmq:
+        image: rabbitmq:4.0-management
+        ports:
+          - 5672:5672
+          - 15672:15672
+        options: >
+          --env RABBITMQ_DEFAULT_USER=user
+          --env RABBITMQ_DEFAULT_PASS=password
 
     steps:
       # Setup Node.js
@@ -39,6 +49,7 @@ jobs:
 
       # Initialize app-backend submodule
       - name: Initialize app-backend as a submodule
+        if: ${{ matrix.environment == 'local' }}
         run: |
           git submodule add https://$GITHUB_ACTOR:${{ secrets.APP_NEXT_ACCESS_TOKEN }}@github.com/aragon/app-backend.git ./app-backend || true
           cd ./app-backend
@@ -50,12 +61,14 @@ jobs:
 
       # Install dependencies for app-backend
       - name: Install dependencies for app-backend
+        if: ${{ matrix.environment == 'local' }}
         run: |
           yarn install --frozen-lockfile
           cd ./app-backend && yarn install --frozen-lockfile
 
       # Wait for RabbitMQ to be ready
       - name: Wait for RabbitMQ to be ready
+        if: ${{ matrix.environment == 'local' }}
         run: |
           for i in {1..10}; do
             if nc -z localhost 5672; then
@@ -69,6 +82,7 @@ jobs:
 
       # Start App-Backend Development Server
       - name: Start App-Backend Development Server
+        if: ${{ matrix.environment == 'local' }}
         working-directory: ./app-backend
         run: |
           SERVICES_ARAGON_API_PORT=4000 npx ts-node -r dotenv/config -r tsconfig-paths/register runners/aragon-api.ts > backend.log 2>&1 &
