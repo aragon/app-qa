@@ -166,6 +166,7 @@ jobs:
         timeout-minutes: 5
         env:
           NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
+          NEXT_PUBLIC_ARAGAGON_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_ARAGAGON_BACKEND_URL }}
 
       # Wait for app-next server to be ready for local environment
       - name: Wait for app-next server
