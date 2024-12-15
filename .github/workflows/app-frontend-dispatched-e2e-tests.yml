@@ -1,10 +1,9 @@
-name: App Backend Dispatched E2E Tests
-
+name: App Frontend Dispatched E2E Tests
 on:
   workflow_dispatch:
   repository_dispatch:
     types:
-      - E2E_Tests_App_Next_Dispatch_Backend
+      - E2E_Tests_App_Next_Dispatch
 
 jobs:
   test:
@@ -13,16 +12,6 @@ jobs:
     strategy:
       matrix:
         environment: [local] # Test in multiple environments
-
-    services:
-      rabbitmq:
-        image: rabbitmq:4.0-management
-        ports:
-          - 5672:5672
-          - 15672:15672
-        options: >
-          --env RABBITMQ_DEFAULT_USER=user
-          --env RABBITMQ_DEFAULT_PASS=password
 
     steps:
       # Setup Node.js
@@ -47,60 +36,6 @@ jobs:
             app-qa-${{ runner.os }}-
             app-qa-
             node_modules
-
-      # Initialize app-backend submodule
-      - name: Initialize app-backend as a submodule
-        if: ${{ matrix.environment == 'local' }}
-        run: |
-          git submodule add https://$GITHUB_ACTOR:${{ secrets.APP_NEXT_ACCESS_TOKEN }}@github.com/aragon/app-backend.git ./app-backend || true
-          cd ./app-backend
-          git fetch origin ${{ github.event.client_payload.branch || 'develop' }}
-          git checkout ${{ github.event.client_payload.branch || 'develop' }}
-          cd ..
-        env:
-          GITHUB_ACTOR: ${{ github.actor }}
-
-      # Install dependencies for app-backend
-      - name: Install dependencies for app-backend
-        if: ${{ matrix.environment == 'local' }}
-        run: |
-          yarn install --frozen-lockfile
-          cd ./app-backend && yarn install --frozen-lockfile
-
-      # Wait for RabbitMQ to be ready
-      - name: Wait for RabbitMQ to be ready
-        if: ${{ matrix.environment == 'local' }}
-        run: |
-          for i in {1..10}; do
-            if nc -z localhost 5672; then
-              echo "RabbitMQ is up!";
-              break;
-            fi
-            echo "Waiting for RabbitMQ to start...";
-            sleep 5;
-          done
-        timeout-minutes: 5
-
-      # Start App-Backend Development Server
-      - name: Start App-Backend Development Server
-        if: ${{ matrix.environment == 'local' }}
-        working-directory: ./app-backend
-        run: |
-          SERVICES_ARAGON_API_PORT=4000 npx ts-node -r dotenv/config -r tsconfig-paths/register runners/aragon-api.ts > backend.log 2>&1 &
-          echo "Development server started in the background."
-        timeout-minutes: 5
-        env:
-          APP_NAME: ${{ secrets.APP_NAME }}
-          NODE_ENV: ${{ secrets.NODE_ENV }}
-          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
-          PORT: ${{ secrets.PORT }}
-          COVALENT_API_KEY: ${{ secrets.COVALENT_API_KEY }}
-          MONGO_DB_URI: ${{ secrets.MONGO_DB_URI }}
-          MONGO_DB_NAME: ${{ secrets.MONGO_DB_NAME }}
-          LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
-          LOG_LOGZIO_KEY: ${{ secrets.LOG_LOGZIO_KEY }}
-          LOG_LOGZIO_HOST: ${{ secrets.LOG_LOGZIO_HOST }}
-          LOGZIO_SERVER_NAME: ${{ secrets.LOGZIO_SERVER_NAME }}
 
       # Initialize app-next submodule for local environment
       - name: Initialize app-next submodule
@@ -167,7 +102,6 @@ jobs:
         timeout-minutes: 5
         env:
           NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
-          NEXT_PUBLIC_ARAGAGON_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_ARAGAGON_BACKEND_URL }}
 
       # Wait for app-next server to be ready for local environment
       - name: Wait for app-next server
