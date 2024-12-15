@@ -10,7 +10,10 @@ test("Publish signaling Proposal", async ({ page, metamask }) => {
   await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "Connect" }).click();
   // await page.waitForTimeout(3000);
-  await page.getByRole("button", { name: "MetaMask MetaMask" }).click();
+  // await page.getByRole("button", { name: "MetaMask MetaMask" }).click();
+  await page
+    .getByRole("button", { name: "MetaMask MetaMask" })
+    .click({ timeout: 5000 });
   await metamask.connectToDapp();
 
   await page.getByRole("link", { name: "Proposals" }).click();
