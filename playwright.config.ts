@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+// import { synpressFixtures } from "@synthetixio/synpress/synpress";
 
 // Define environment-specific base URLs
 const ENV_URLS = {
