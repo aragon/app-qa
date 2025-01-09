@@ -78,13 +78,13 @@ export default defineWalletSetup(PASSWORD, async (context, walletPage) => {
   await metamask.importWallet(SEED_PHRASE);
 
   // await metamask.addNetwork("Arbitrum");
-  await metamask.addNetwork({
-    name: "Arbitrum One",
-    rpcUrl: "https://arb1.arbitrum.io/rpc",
-    chainId: 42161,
-    symbol: "ETH",
-    blockExplorerUrl: "https://arbiscan.io",
-  });
+  // await metamask.addNetwork({
+  //   name: "Arbitrum One",
+  //   rpcUrl: "https://arb1.arbitrum.io/rpc",
+  //   chainId: 42161,
+  //   symbol: "ETH",
+  //   blockExplorerUrl: "https://arbiscan.io",
+  // });
 
   await metamask.switchNetwork("Sepolia", true);
 });

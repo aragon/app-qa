@@ -54,6 +54,8 @@ test("Publish signaling Proposal", async ({ page, metamask }) => {
     .locator("slot")
     .click();
   await metamask.connectToDapp();
+  await metamask.approveNewNetwork();
+  await metamask.approveSwitchNetwork();
 
   await page.getByRole("link", { name: "Proposals" }).click();
   await page.getByRole("link", { name: "Proposal", exact: true }).click();
