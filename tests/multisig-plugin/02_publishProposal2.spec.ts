@@ -40,8 +40,19 @@ test("Publish signaling Proposal", async ({ page, metamask }) => {
   await page.getByRole("button", { name: "Publish proposal" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();
   await metamask.confirmTransaction();
-  await page.waitForTimeout(30000);
-  await page.getByRole("link", { name: "View proposal" }).click();
+  // await page.waitForTimeout(30000);
+  // await page.waitForSelector('a[role="link"]', { timeout: 30000 });
+  // await page.waitForSelector('a[role="link"][name="View proposal"]', {
+  //   timeout: 30000,
+  // });
+  // await page
+  //   .getByRole("link", { name: "View proposal" })
+  //   .waitFor({ state: "visible", timeout: 30000 });
+  const link = page.getByRole("link", { name: "View proposal" });
+  await link.waitFor({ state: "visible", timeout: 40000 });
+  await link.click();
+  // await page.getByRole("link", { name: "View proposal" }).click();
+
   // await page.waitForTimeout(3000);
   // await page
   //   .getByRole("link", { name: "View proposal" })
