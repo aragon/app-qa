@@ -31,6 +31,7 @@ test("Publish signaling Proposal", async ({ page, metamask }) => {
   await metamask.switchNetwork("Sepolia", true);
 
   await page.getByRole("link", { name: "Proposals" }).click();
+  await page.waitForTimeout(20000);
   await page.getByRole("button", { name: "Proposal" }).click();
   await page.getByRole("button", { name: "Create" }).click();
   await page.getByPlaceholder("Type a title").click();
