@@ -3,7 +3,8 @@ name: App Backend Scheduled E2E Tests
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *" # Run every hour
+    # - cron: "0 * * * *" # Run every hour
+    - cron: "0 0,12 * * *" # Runs at 12:00 AM and 12:00 PM
 
 jobs:
   test:
