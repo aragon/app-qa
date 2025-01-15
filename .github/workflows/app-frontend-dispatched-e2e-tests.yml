@@ -38,13 +38,12 @@ jobs:
             node_modules
 
       # Initialize app-next submodule for local environment
-      - name: Initialize app-next submodule
-        if: ${{ matrix.environment == 'local' }}
+      - name: Initialize app-next as a submodule (specific branch or commit)
         run: |
           git submodule add https://$GITHUB_ACTOR:${{ secrets.APP_NEXT_ACCESS_TOKEN }}@github.com/aragon/app-next.git ./app-next || true
           cd ./app-next
-          git checkout develop
-          git pull origin develop
+          git fetch origin ${{ github.event.client_payload.branch || 'develop' }}
+          git checkout ${{ github.event.client_payload.branch || 'develop' }}
           cd ..
         env:
           GITHUB_ACTOR: ${{ github.actor }}
