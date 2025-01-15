@@ -56,8 +56,8 @@ test("Publish signaling Proposal", async ({ page, metamask }) => {
   //   .getByRole("link", { name: "View proposal" })
   //   .waitFor({ state: "visible", timeout: 30000 });
   const link = page.getByRole("link", { name: "View proposal" });
-  await link.waitFor({ state: "visible", timeout: 40000 });
-  await page.waitForTimeout(10000);
+  await link.waitFor({ state: "visible", timeout: 120000 });
+  // await page.waitForTimeout(10000);
   await link.click();
   await page.waitForTimeout(10000);
   // await page.getByRole("link", { name: "View proposal" }).click();
