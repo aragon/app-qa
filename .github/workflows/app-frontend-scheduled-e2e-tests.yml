@@ -12,7 +12,7 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        environment: [local, develop, staging, production] # Test in multiple environments
+        environment: [develop, staging, production] # Test in multiple environments
 
     steps:
       # Setup Node.js
