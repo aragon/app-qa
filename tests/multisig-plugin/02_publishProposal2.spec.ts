@@ -9,6 +9,10 @@ const { expect } = test;
 
 test("Publish signaling Proposal", async ({ page, metamask }) => {
   // Use a relative URL. The baseURL will be automatically prepended.
+  await page.goto(
+    // "/dao/ethereum-sepolia-0xAC592AbEEee8812C23375fff6621540e8b861328/dashboard" //multisig dao
+    "/dao/ethereum-sepolia-0xB161EA70583f066cA00f62E9A749a9eBC1c807A8/dashboard" //spp dao
+  );
 
   await page.getByRole("button", { name: "Connect" }).click();
   await page.waitForTimeout(3000);
@@ -21,17 +25,13 @@ test("Publish signaling Proposal", async ({ page, metamask }) => {
     .locator("slot")
     .click();
   await metamask.connectToDapp();
-  await metamask.approveNewNetwork();
+  // await metamask.approveNewNetwork();
   await metamask.approveSwitchNetwork();
   // await metamask.approveSwitchNetwork();
-  await metamask.switchNetwork("Sepolia", true);
-  await page.goto(
-    // "/dao/ethereum-sepolia-0xAC592AbEEee8812C23375fff6621540e8b861328/dashboard" //multisig dao
-    "/dao/ethereum-sepolia-0xB161EA70583f066cA00f62E9A749a9eBC1c807A8/dashboard" //spp dao
-  );
+  // await metamask.switchNetwork("Sepolia", true);
 
   await page.getByRole("link", { name: "Proposals" }).click();
-  await page.waitForTimeout(30000);
+  await page.waitForTimeout(10000);
   // await page.getByRole("button", { name: "Proposal" }).click();
   // await page.getByRole("link", { name: "Proposal", exact: true }).click();
   try {
@@ -46,6 +46,7 @@ test("Publish signaling Proposal", async ({ page, metamask }) => {
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Publish proposal" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();
+  await metamask.approveSwitchNetwork();
   await metamask.confirmTransaction();
   // await page.waitForTimeout(10000);
   // await page.waitForSelector('a[role="link"]', { timeout: 30000 });
