@@ -46,9 +46,8 @@ test("Publish signaling Proposal", async ({ page, metamask }) => {
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Publish proposal" }).click();
-  await page
-    .getByRole("button", { name: "Approve transaction" })
-    .click({ timeout: 10000 });
+  await page.waitForTimeout(10000);
+  await page.getByRole("button", { name: "Approve transaction" }).click();
   await page.waitForTimeout(10000);
   // await metamask.approveSwitchNetwork();
   await metamask.confirmTransaction();
