@@ -28,7 +28,8 @@ test("Publish signaling Proposal", async ({ page, metamask }) => {
   // await metamask.approveNewNetwork();
   await metamask.approveSwitchNetwork();
   // await metamask.approveSwitchNetwork();
-  // await metamask.switchNetwork("Sepolia", true);
+  await page.waitForTimeout(10000);
+  await metamask.switchNetwork("Sepolia", true);
 
   await page.getByRole("link", { name: "Proposals" }).click();
   await page.waitForTimeout(10000);
@@ -46,7 +47,7 @@ test("Publish signaling Proposal", async ({ page, metamask }) => {
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Publish proposal" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();
-  await metamask.approveSwitchNetwork();
+  // await metamask.approveSwitchNetwork();
   await metamask.confirmTransaction();
   // await page.waitForTimeout(10000);
   // await page.waitForSelector('a[role="link"]', { timeout: 30000 });
@@ -56,12 +57,16 @@ test("Publish signaling Proposal", async ({ page, metamask }) => {
   // await page
   //   .getByRole("link", { name: "View proposal" })
   //   .waitFor({ state: "visible", timeout: 30000 });
-  const link = page.getByRole("link", { name: "View proposal" });
-  await link.waitFor({ state: "visible", timeout: 120000 });
-  // await page.waitForTimeout(10000);
-  await link.click();
+  // const link = page.getByRole("link", { name: "View proposal" });
+  // await link.waitFor({ state: "visible", timeout: 120000 });
+  // // await page.waitForTimeout(10000);
+  // await link.click();
   await page.waitForTimeout(10000);
-  // await page.getByRole("link", { name: "View proposal" }).click();
+  // await page.getByRole("button", { name: "View proposal" }).click();
+  await page
+    .getByRole("link", { name: "View proposal" })
+    .click({ timeout: 10000 });
+  await page.waitForTimeout(10000);
 
   // await page.waitForTimeout(3000);
   // await page
