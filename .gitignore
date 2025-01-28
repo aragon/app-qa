@@ -5,6 +5,7 @@ node_modules/
 /playwright/.cache/
 /.cache-synpress/
 /.git/
+/.yarn/
 /app-next/
 .env
 .secrets
