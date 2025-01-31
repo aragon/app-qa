@@ -3,6 +3,7 @@ import { defineConfig, devices } from "@playwright/test";
 // Define environment-specific base URLs
 const ENV_URLS = {
   local: "http://localhost:3000",
+  preview: process.env.PREVIEW_URL,
   develop: "https://dev.app-next.aragon.org",
   staging: "https://stg.app-next.aragon.org/",
   production: "https://app-next.aragon.org",
