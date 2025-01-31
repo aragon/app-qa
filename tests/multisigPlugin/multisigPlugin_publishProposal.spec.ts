@@ -4,7 +4,7 @@ import basicSetup from "../basic.setup";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
-test("Publish signaling proposal", async ({ page, metamask }) => {
+test("Publish Signaling Proposal", async ({ page, metamask }) => {
   await page.getByRole("button", { name: "Connect" }).click();
   await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "Connect" }).click();
