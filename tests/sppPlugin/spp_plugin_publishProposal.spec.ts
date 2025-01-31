@@ -1,6 +1,5 @@
-// import { testWithMetaMask as test } from "../testWithMetaMask";
 import { testWithSynpress } from "@synthetixio/synpress";
-import { MetaMask, metaMaskFixtures } from "@synthetixio/synpress/playwright";
+import { metaMaskFixtures } from "@synthetixio/synpress/playwright";
 import basicSetup from "../basic.setup";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
@@ -8,9 +7,7 @@ const test = testWithSynpress(metaMaskFixtures(basicSetup));
 const { expect } = test;
 
 test("Publish signaling Proposal", async ({ page, metamask }) => {
-  // Use a relative URL. The baseURL will be automatically prepended.
   await page.goto(
-    // "/dao/ethereum-sepolia-0xAC592AbEEee8812C23375fff6621540e8b861328/dashboard" //multisig dao
     "/dao/ethereum-sepolia-0xB161EA70583f066cA00f62E9A749a9eBC1c807A8/dashboard" //spp dao
   );
 

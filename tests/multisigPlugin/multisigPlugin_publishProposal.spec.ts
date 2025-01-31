@@ -1,14 +1,10 @@
 import { testWithSynpress } from "@synthetixio/synpress";
-import { MetaMask, metaMaskFixtures } from "@synthetixio/synpress/playwright";
+import { metaMaskFixtures } from "@synthetixio/synpress/playwright";
 import basicSetup from "../basic.setup";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
-const { expect } = test;
-
-test("Publish signaling Proposal", async ({ page, metamask }) => {
-  // Use a relative URL. The baseURL will be automatically prepended.
-
+test("Publish signaling proposal", async ({ page, metamask }) => {
   await page.getByRole("button", { name: "Connect" }).click();
   await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "Connect" }).click();
@@ -22,17 +18,10 @@ test("Publish signaling Proposal", async ({ page, metamask }) => {
   await page.waitForTimeout(10000);
   await metamask.switchNetwork("Sepolia", true);
   await page.goto(
-    // "/dao/ethereum-sepolia-0xAC592AbEEee8812C23375fff6621540e8b861328/dashboard" //multisig dao
-    "/dao/ethereum-sepolia-0xB161EA70583f066cA00f62E9A749a9eBC1c807A8/dashboard" //spp dao
+    "/dao/ethereum-sepolia-0x2dd2cbe4578186c4e94d631b93140b8d958859fe/dashboard" //multisigPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
-  await page.waitForTimeout(10000);
-  try {
-    await page.getByRole("button", { name: "Proposal" }).click();
-  } catch (e) {
-    await page.getByRole("link", { name: "Proposal", exact: true }).click();
-  }
-  await page.getByRole("button", { name: "Create" }).click();
+  await page.getByRole("button", { name: "Proposal", exact: true }).click();
   await page.getByPlaceholder("Type a title").click();
   await page.getByPlaceholder("Type a title").fill("Create proposal");
   await page.getByRole("button", { name: "Next" }).click();
