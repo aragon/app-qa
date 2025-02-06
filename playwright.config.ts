@@ -10,7 +10,7 @@ const ENV_URLS = {
 };
 
 // Get the environment variable, default to "local"
-const ENV = process.env.TEST_ENV || "local";
+const ENV = process.env.TEST_ENV || "staging";
 const baseURL = ENV_URLS[ENV];
 
 if (!baseURL) {
@@ -22,7 +22,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : 1,
   reporter: "html",
   use: {
     baseURL, // Dynamically set the baseURL based on the environment

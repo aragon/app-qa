@@ -4,7 +4,7 @@ import basicSetup from "../basic.setup";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
-test("Publish Signaling Proposal", async ({ page, metamask }) => {
+test("Token Plugin - Publish Proposal", async ({ page, metamask }) => {
   await page.getByRole("button", { name: "Connect" }).click();
   await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "Connect" }).click();
@@ -21,7 +21,8 @@ test("Publish Signaling Proposal", async ({ page, metamask }) => {
     "/dao/ethereum-sepolia-0x71f0d013564499431d3b58e6cc97d041a6e31595/dashboard" //tokenPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
-  await page.getByRole("button", { name: "Proposal", exact: true }).click();
+  // await page.getByRole("button", { name: "Proposal", exact: true }).click();
+  await page.getByRole("link", { name: "Proposal", exact: true }).click();
   await page.getByPlaceholder("Type a title").click();
   await page.getByPlaceholder("Type a title").fill("Create proposal");
   await page.getByRole("button", { name: "Next" }).click();
@@ -34,5 +35,4 @@ test("Publish Signaling Proposal", async ({ page, metamask }) => {
   await page
     .getByRole("link", { name: "View proposal" })
     .click({ timeout: 10000 });
-  await page.waitForTimeout(10000);
 });

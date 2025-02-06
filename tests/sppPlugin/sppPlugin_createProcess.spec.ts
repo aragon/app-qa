@@ -6,7 +6,7 @@ const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
 const { expect } = test;
 
-test("Create Governance Process", async ({ page, metamask }) => {
+test("Spp Plugin - Create Governance Process", async ({ page, metamask }) => {
   await page.getByRole("button", { name: "Connect" }).click();
   await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "Connect" }).click();
@@ -20,10 +20,10 @@ test("Create Governance Process", async ({ page, metamask }) => {
   await page.waitForTimeout(10000);
   await metamask.switchNetwork("Sepolia", true);
   await page.goto(
-    "/dao/ethereum-sepolia-0x08c69bADB0E2A175CE1553133d293f07C60DD0E1/dashboard" //spp dao
+    "/dao/ethereum-sepolia-0x9b42704949b98CE4C3b7484D3Fe2694807768942/dashboard" //spp dao
   );
   await page.getByRole("button", { name: "Add Governance" }).click();
-  await page.getByRole("button", { name: "Get Started" }).click();
+  await page.getByRole("link", { name: "Get started" }).click();
   await page.getByPlaceholder("Type a name").click();
   await page.getByPlaceholder("Type a name").fill("End To End");
   await page.getByPlaceholder("Type an key").click();
