@@ -1,6 +1,6 @@
 import { testWithSynpress } from "@synthetixio/synpress";
 import { metaMaskFixtures } from "@synthetixio/synpress/playwright";
-import basicSetup from "../basic.setup";
+import basicSetup from "../../basic.setup";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 

@@ -113,7 +113,7 @@ jobs:
 
       # Run Playwright E2E tests
       - name: Run E2E tests
-        run: xvfb-run yarn playwright test ./tests/multisig-plugin/02_publishProposal2.spec.ts --project=chromium
+        run: xvfb-run yarn playwright test --project=chromium
         env:
           TEST_ENV: ${{ matrix.environment }}
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}

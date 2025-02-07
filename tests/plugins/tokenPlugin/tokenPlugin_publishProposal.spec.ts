@@ -1,10 +1,10 @@
 import { testWithSynpress } from "@synthetixio/synpress";
 import { metaMaskFixtures } from "@synthetixio/synpress/playwright";
-import basicSetup from "../basic.setup";
+import basicSetup from "../../basic.setup";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
-test("Spp Plugin - Publish Proposal", async ({ page, metamask }) => {
+test("Token Plugin - Publish Proposal", async ({ page, metamask }) => {
   await page.getByRole("button", { name: "Connect" }).click();
   await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "Connect" }).click();
@@ -18,12 +18,10 @@ test("Spp Plugin - Publish Proposal", async ({ page, metamask }) => {
   await page.waitForTimeout(3000);
   await metamask.switchNetwork("Sepolia", true);
   await page.goto(
-    "/dao/ethereum-sepolia-0x9b42704949b98CE4C3b7484D3Fe2694807768942/dashboard" //sppPlugin DAO
+    "/dao/ethereum-sepolia-0x71f0d013564499431d3b58e6cc97d041a6e31595/dashboard" //tokenPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
-  await page.getByRole("button", { name: "Proposal", exact: true }).click();
-  await page.getByRole("button", { name: "End To End ETE" }).nth(0).click();
-  await page.getByRole("button", { name: "Create" }).click();
+  await page.getByRole("link", { name: "Proposal", exact: true }).click();
   await page.getByPlaceholder("Type a title").click();
   await page.getByPlaceholder("Type a title").fill("Create proposal");
   await page.getByRole("button", { name: "Next" }).click();

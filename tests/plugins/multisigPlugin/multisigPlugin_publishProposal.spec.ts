@@ -1,10 +1,10 @@
 import { testWithSynpress } from "@synthetixio/synpress";
 import { metaMaskFixtures } from "@synthetixio/synpress/playwright";
-import basicSetup from "../basic.setup";
+import basicSetup from "../../basic.setup";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
-test("Token Plugin - Publish Proposal", async ({ page, metamask }) => {
+test("Multisig Plugin - Publish Proposal", async ({ page, metamask }) => {
   await page.getByRole("button", { name: "Connect" }).click();
   await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "Connect" }).click();
@@ -18,7 +18,7 @@ test("Token Plugin - Publish Proposal", async ({ page, metamask }) => {
   await page.waitForTimeout(3000);
   await metamask.switchNetwork("Sepolia", true);
   await page.goto(
-    "/dao/ethereum-sepolia-0x71f0d013564499431d3b58e6cc97d041a6e31595/dashboard" //tokenPlugin DAO
+    "/dao/ethereum-sepolia-0x2dd2cbe4578186c4e94d631b93140b8d958859fe/dashboard" //multisigPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
   await page.getByRole("link", { name: "Proposal", exact: true }).click();
