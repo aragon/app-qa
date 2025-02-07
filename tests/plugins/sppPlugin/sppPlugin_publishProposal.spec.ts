@@ -27,7 +27,6 @@ test("Spp Plugin - Publish Proposal", async ({ page, metamask }) => {
   await page.getByPlaceholder("Type a title").click();
   await page.getByPlaceholder("Type a title").fill("Create proposal");
   await page.getByRole("button", { name: "Next" }).click();
-  await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Publish proposal" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();
