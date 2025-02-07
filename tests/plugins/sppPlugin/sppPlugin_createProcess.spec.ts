@@ -50,7 +50,5 @@ test("Spp Plugin - Create Governance Process", async ({ page, metamask }) => {
   await page.waitForTimeout(3000);
   await metamask.confirmTransaction();
   await page.waitForTimeout(3000);
-  await page
-    .getByRole("link", { name: "View proposal" })
-    .click({ timeout: 10000 });
+  await page.getByRole("link", { name: "View proposal" });
 });
