@@ -18,7 +18,7 @@ test("Spp Plugin - Publish Proposal", async ({ page, metamask }) => {
   await page.waitForTimeout(3000);
   await metamask.switchNetwork("Sepolia", true);
   await page.goto(
-    "/dao/ethereum-sepolia-0x9b42704949b98CE4C3b7484D3Fe2694807768942/dashboard" //sppPlugin DAO
+    "/dao/ethereum-sepolia-0x283f14c88d3b6eCab4903BE06AA18d7d2aDECD3a/dashboard" //sppPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
   await page.getByRole("button", { name: "Proposal", exact: true }).click();
@@ -27,6 +27,7 @@ test("Spp Plugin - Publish Proposal", async ({ page, metamask }) => {
   await page.getByPlaceholder("Type a title").click();
   await page.getByPlaceholder("Type a title").fill("Create proposal");
   await page.getByRole("button", { name: "Next" }).click();
+  await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Publish proposal" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();
