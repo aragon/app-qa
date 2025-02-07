@@ -17,7 +17,7 @@ test("Spp Plugin - Create Governance Process", async ({ page, metamask }) => {
     .click();
   await metamask.connectToDapp();
   await metamask.approveSwitchNetwork();
-  await page.waitForTimeout(10000);
+  await page.waitForTimeout(3000);
   await metamask.switchNetwork("Sepolia", true);
   await page.goto(
     "/dao/ethereum-sepolia-0x9b42704949b98CE4C3b7484D3Fe2694807768942/dashboard" //spp dao
@@ -42,16 +42,15 @@ test("Spp Plugin - Create Governance Process", async ({ page, metamask }) => {
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Publish process" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();
-  await page.waitForTimeout(10000);
+  await page.waitForTimeout(3000);
   await metamask.confirmTransaction();
-  await page.waitForTimeout(10000);
+  await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "Finalize installation" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();
-  await page.waitForTimeout(10000);
+  await page.waitForTimeout(3000);
   await metamask.confirmTransaction();
-  await page.waitForTimeout(20000);
+  await page.waitForTimeout(3000);
   await page
     .getByRole("link", { name: "View proposal" })
     .click({ timeout: 10000 });
-  await page.waitForTimeout(10000);
 });

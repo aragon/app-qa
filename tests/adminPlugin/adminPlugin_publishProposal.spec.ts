@@ -15,7 +15,7 @@ test("Admin Plugin - Publish Proposal", async ({ page, metamask }) => {
     .click();
   await metamask.connectToDapp();
   await metamask.approveSwitchNetwork();
-  await page.waitForTimeout(10000);
+  await page.waitForTimeout(3000);
   await metamask.switchNetwork("Sepolia", true);
   await page.goto(
     "/dao/ethereum-sepolia-0x1EBc713b156e4eF97e77291dbe9dF9F762D73404/dashboard" //sppPlugin DAO
@@ -28,10 +28,8 @@ test("Admin Plugin - Publish Proposal", async ({ page, metamask }) => {
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Publish proposal" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();
-  await page.waitForTimeout(10000);
+  await page.waitForTimeout(3000);
   await metamask.confirmTransaction();
-  await page.waitForTimeout(10000);
-  await page
-    .getByRole("link", { name: "View proposal" })
-    .click({ timeout: 10000 });
+  await page.waitForTimeout(3000);
+  await page.getByRole("link", { name: "View proposal" });
 });
