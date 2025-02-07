@@ -21,7 +21,7 @@ export default defineConfig({
   testDir: "./tests",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 0 : 0,
   workers: process.env.CI ? 1 : 1,
   reporter: "html",
   use: {
@@ -38,7 +38,7 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         baseURL, // Pass the dynamically set baseURL to this project
       },
-      timeout: 120000, // 2 minutes
+      timeout: 90000, // 2 minutes
     },
     {
       name: "firefox",
