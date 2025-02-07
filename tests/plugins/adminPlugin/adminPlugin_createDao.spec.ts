@@ -33,5 +33,5 @@ test("Admin Plugin - Create DAO", async ({ page, metamask }) => {
   await page.waitForTimeout(3000);
   await metamask.confirmTransaction();
   await page.waitForTimeout(3000);
-  await page.getByRole("link", { name: "View DAO" }).click({ timeout: 10000 });
+  await page.getByRole("link", { name: "View DAO" });
 });
