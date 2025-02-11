@@ -7,9 +7,9 @@ const test = testWithSynpress(metaMaskFixtures(basicSetup));
 const { expect } = test;
 
 test("Admin Plugin - Create DAO", async ({ page, metamask }) => {
-  await page.getByRole("button", { name: "Connect" }).click();
+  // await page.getByRole("button", { name: "Connect" }).click();
   await page.waitForTimeout(3000);
-  await page.getByRole("button", { name: "Connect" }).click();
+  // await page.getByRole("button", { name: "Connect" }).click();
   await page
     .locator("wui-text")
     .filter({ hasText: "MetaMask" })
