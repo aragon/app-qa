@@ -91,7 +91,7 @@ jobs:
       # Build Synpress dependencies
       - name: Build Synpress Depencies
         if: steps.synpress-cache.outputs.cache-hit != 'true'
-        run: xvfb-run npx synpress ./tests/
+        run: xvfb-run npx synpress ./tests/helpers/
         env:
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
