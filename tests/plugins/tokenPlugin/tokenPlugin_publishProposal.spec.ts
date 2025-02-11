@@ -1,22 +1,12 @@
 import { testWithSynpress } from "@synthetixio/synpress";
 import { metaMaskFixtures } from "@synthetixio/synpress/playwright";
 import basicSetup from "../../helpers/helpers_wallet.setup";
+import { connectWallet } from "../../helpers/helpers_connectWallet";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
 test("Token Plugin - Publish Proposal", async ({ page, metamask }) => {
-  await page.getByRole("button", { name: "Connect" }).click();
-  await page.waitForTimeout(3000);
-  await page.getByRole("button", { name: "Connect" }).click();
-  await page
-    .locator("wui-text")
-    .filter({ hasText: "MetaMask" })
-    .locator("slot")
-    .click();
-  await metamask.connectToDapp();
-  await metamask.approveSwitchNetwork();
-  await page.waitForTimeout(3000);
-  await metamask.switchNetwork("Sepolia", true);
+  await connectWallet(page, metamask);
   await page.goto(
     "/dao/ethereum-sepolia-0x71f0d013564499431d3b58e6cc97d041a6e31595/dashboard" //tokenPlugin DAO
   );

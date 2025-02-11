@@ -1,26 +1,12 @@
 import { testWithSynpress } from "@synthetixio/synpress";
 import { metaMaskFixtures } from "@synthetixio/synpress/playwright";
 import basicSetup from "../../helpers/helpers_wallet.setup";
-import { setupMetamaskAndConnect } from "../../helpers/helpers_connectWallet";
+import { connectWallet } from "../../helpers/helpers_connectWallet";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
-const { expect } = test;
-
 test("Admin Plugin - Create DAO", async ({ page, metamask }) => {
-  await setupMetamaskAndConnect(page, metamask);
-  // await page.getByRole("button", { name: "Connect" }).click();
-  // await page.waitForTimeout(3000);
-  // await page.getByRole("button", { name: "Connect" }).click();
-  // await page
-  //   .locator("wui-text")
-  //   .filter({ hasText: "MetaMask" })
-  //   .locator("slot")
-  //   .click();
-  // await metamask.connectToDapp();
-  // await metamask.approveSwitchNetwork();
-  // await page.waitForTimeout(3000);
-  // await metamask.switchNetwork("Sepolia", true);
+  await connectWallet(page, metamask);
   await page.getByRole("button", { name: "DAO" }).click();
   await page.getByRole("link", { name: "Get started" }).click();
   await page.getByLabel("Ethereum Sepolia").click();

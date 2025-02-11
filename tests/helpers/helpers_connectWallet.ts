@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
 import { MetaMask } from "@synthetixio/synpress/playwright";
 
-export async function setupMetamaskAndConnect(page: Page, metamask: MetaMask) {
+export async function connectWallet(page: Page, metamask: MetaMask) {
   await page.getByRole("button", { name: "Connect" }).click();
   await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "Connect" }).click();
