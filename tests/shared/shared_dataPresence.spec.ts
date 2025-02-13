@@ -12,5 +12,11 @@ test("Shared - Check Data Presence", async ({ page, metamask }) => {
     "/dao/ethereum-mainnet-0xB2EcFF866C75c640F335AFbE5b09D5B03d464362/dashboard" // ethereum-mainnet DAO
   );
   //   await expect(page.locator("text=DAO Dashboard")).toBeVisible();
-  await expect(page.locator("text=Latest proposals")).toBeVisible();
+  await page.getByRole("banner").getByText("Proposals").click();
+  await page.getByText("15", { exact: true }).click();
+  await page.getByRole("banner").getByText("Members").click();
+  await page.getByText("5", { exact: true }).click();
+  await page.getByRole("banner").getByText("Treasury value").click();
+  await page.getByText("$1.76M", { exact: true }).click();
+  //   await expect(page.locator("text=Latest proposals")).toBeVisible();
 });
