@@ -5,7 +5,10 @@ import { connectWallet } from "../../helpers/helpers_connectWallet";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
-test("Spp Plugin - Create Governance Process", async ({ page, metamask }) => {
+test("Spp Plugin Test - Create Governance Process", async ({
+  page,
+  metamask,
+}) => {
   await connectWallet(page, metamask);
   await page.goto(
     "/dao/ethereum-sepolia-0x9b42704949b98CE4C3b7484D3Fe2694807768942/dashboard" //spp dao

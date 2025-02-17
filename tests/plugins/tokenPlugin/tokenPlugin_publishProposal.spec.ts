@@ -5,7 +5,7 @@ import { connectWallet } from "../../helpers/helpers_connectWallet";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
-test("Token Plugin - Publish Proposal", async ({ page, metamask }) => {
+test("Token Plugin Test - Publish Proposal", async ({ page, metamask }) => {
   await connectWallet(page, metamask);
   await page.goto(
     "/dao/ethereum-sepolia-0x71f0d013564499431d3b58e6cc97d041a6e31595/dashboard" //tokenPlugin DAO

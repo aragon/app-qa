@@ -5,7 +5,7 @@ import { connectWallet } from "../../helpers/helpers_connectWallet";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
-test("Admin Plugin - Create DAO", async ({ page, metamask }) => {
+test("Admin Plugin Test - Create DAO", async ({ page, metamask }) => {
   await connectWallet(page, metamask);
   await page.getByRole("button", { name: "DAO" }).click();
   await page.getByRole("link", { name: "Get started" }).click();

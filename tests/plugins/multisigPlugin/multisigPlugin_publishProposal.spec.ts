@@ -5,7 +5,7 @@ import { connectWallet } from "../../helpers/helpers_connectWallet";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
-test("Multisig Plugin - Publish Proposal", async ({ page, metamask }) => {
+test("Multisig Plugin Test - Publish Proposal", async ({ page, metamask }) => {
   await connectWallet(page, metamask);
   await page.goto(
     "/dao/ethereum-sepolia-0x2dd2cbe4578186c4e94d631b93140b8d958859fe/dashboard" //multisigPlugin DAO
