@@ -12,7 +12,10 @@ test("Admin Plugin Test - Publish Proposal", async ({ page, metamask }) => {
   );
   await page.getByRole("link", { name: "Proposals" }).click();
   await page.waitForTimeout(3000);
-  await page.getByRole("link", { name: "Proposal", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Proposal", exact: true })
+    .or(page.getByRole("link", { name: "Proposal", exact: true }))
+    .click();
   await page.getByPlaceholder("Type a title").click();
   await page.getByPlaceholder("Type a title").fill("Create proposal");
   await page.getByRole("button", { name: "Next" }).click();

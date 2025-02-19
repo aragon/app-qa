@@ -11,7 +11,10 @@ test("Multisig Plugin Test - Publish Proposal", async ({ page, metamask }) => {
     "/dao/ethereum-sepolia-0x2dd2cbe4578186c4e94d631b93140b8d958859fe/dashboard" //multisigPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
-  await page.getByRole("link", { name: "Proposal", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Proposal", exact: true })
+    .or(page.getByRole("link", { name: "Proposal", exact: true }))
+    .click();
   await page.getByPlaceholder("Type a title").click();
   await page.getByPlaceholder("Type a title").fill("Create proposal");
   await page.getByRole("button", { name: "Next" }).click();

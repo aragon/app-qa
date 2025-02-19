@@ -10,7 +10,7 @@ const ENV_URLS = {
 };
 
 // Get the environment variable, default to "local"
-const ENV = process.env.TEST_ENV || "staging";
+const ENV = process.env.TEST_ENV || "develop";
 const baseURL = ENV_URLS[ENV];
 
 if (!baseURL) {
