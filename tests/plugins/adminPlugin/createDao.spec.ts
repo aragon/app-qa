@@ -1,7 +1,7 @@
 import { testWithSynpress } from "@synthetixio/synpress";
 import { metaMaskFixtures } from "@synthetixio/synpress/playwright";
-import basicSetup from "../../helpers/helpers_wallet.setup";
-import { connectWallet } from "../../helpers/helpers_connectWallet";
+import basicSetup from "../../helpers/wallet.setup";
+import { connectWallet } from "../../helpers/connectWallet";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
