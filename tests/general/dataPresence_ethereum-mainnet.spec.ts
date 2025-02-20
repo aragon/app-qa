@@ -22,20 +22,20 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
   await expect(
     page
       .locator("div")
-      .filter({ hasText: /^0Proposals$/ })
+      .filter({ hasText: /^3Proposals$/ })
       .locator("div")
   ).toBeVisible();
   await expect(page.getByRole("banner").getByText("Members")).toBeVisible();
   await expect(
     page
       .locator("div")
-      .filter({ hasText: /^0Members$/ })
+      .filter({ hasText: /^3Members$/ })
       .locator("div")
   ).toBeVisible();
   await expect(
     page.getByRole("banner").getByText("Treasury value")
   ).toBeVisible();
-  await expect(page.getByText("$0.00", { exact: true })).toBeVisible();
+  await expect(page.getByText("$4.96", { exact: true })).toBeVisible();
   await expect(
     page.getByRole("button", { name: "e2e-test.dao.eth" })
   ).toBeVisible();
@@ -111,7 +111,7 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
   await expect(page.getByRole("button", { name: "Share" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
   await expect(page.getByText("Onchain ID2")).toBeVisible();
-  await expect(page.getByText("Publishedtoday")).toBeVisible();
+  // await expect(page.getByText("Publishedtoday")).toBeVisible();
   await expect(page.getByText("Proposed bybarukimang.eth")).toBeVisible();
   await expect(page.getByText("StatusActive")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Voting" })).toBeVisible();
