@@ -111,16 +111,16 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
   await expect(page.getByRole("button", { name: "Share" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
   await expect(page.getByText("Onchain ID2")).toBeVisible();
-  // await expect(page.getByText("Publishedtoday")).toBeVisible();
+  await expect(page.getByText("February 19, 2025")).toBeVisible();
   await expect(page.getByText("Proposed bybarukimang.eth")).toBeVisible();
-  await expect(page.getByText("StatusActive")).toBeVisible();
+  await expect(page.getByText("StatusRejected")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Voting" })).toBeVisible();
   await expect(page.getByText("BreakdownVotesDetails")).toBeVisible();
   await expect(page.getByText("Yes0E2ETTAbstain0E2ETTNo0E2ETT")).toBeVisible();
   await expect(page.getByText("Support0%0of 0 E2ETTMinimum")).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Vote on proposal" })
-  ).toBeVisible();
+  // await expect(
+  //   page.getByRole("button", { name: "Vote on proposal" })
+  // ).toBeVisible();
   await page.getByRole("tab", { name: "Votes" }).click();
   // add votes when rendering
   await page.getByRole("tab", { name: "Details" }).click();

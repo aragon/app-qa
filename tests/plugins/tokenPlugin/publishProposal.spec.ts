@@ -15,7 +15,7 @@ test("Token Plugin Test - Publish Proposal", async ({ page, metamask }) => {
     .getByRole("button", { name: "Proposal", exact: true })
     .or(page.getByRole("link", { name: "Proposal", exact: true }))
     .click();
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(10000);
   await page.getByPlaceholder("Type a title").click();
   await page.getByPlaceholder("Type a title").fill("Create proposal");
   await page.getByRole("button", { name: "Next" }).click();

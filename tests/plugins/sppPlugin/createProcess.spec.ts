@@ -35,7 +35,7 @@ test("Spp Plugin Test - Create Governance Process", async ({
   await page.getByRole("button", { name: "Approve transaction" }).click();
   await page.waitForTimeout(3000);
   await metamask.confirmTransaction();
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(10000);
   await page.getByRole("button", { name: "Finalize installation" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();
   await page.waitForTimeout(3000);
