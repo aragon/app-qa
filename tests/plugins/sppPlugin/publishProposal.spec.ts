@@ -11,6 +11,7 @@ test("Spp Plugin Test - Publish Proposal", async ({ page, metamask }) => {
     "/dao/ethereum-sepolia-0x283f14c88d3b6eCab4903BE06AA18d7d2aDECD3a/dashboard" //sppPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
+  await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "Proposal", exact: true }).click();
   await page
     .getByRole("button", { name: "Proposal", exact: true })

@@ -82,7 +82,7 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
   ).toBeVisible();
   await expect(page.getByText("More3 of 3 Proposals")).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Token Voting - TOKENVOTING" })
+    page.getByRole("heading", { name: "Token Voting (TOKENVOTING)" })
   ).toBeVisible();
   await expect(page.getByRole("tab", { name: "Contract" })).toBeVisible();
   await expect(page.getByText("PluginToken Voting v1.20x86…")).toBeVisible();
