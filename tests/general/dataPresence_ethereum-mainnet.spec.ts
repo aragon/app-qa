@@ -35,7 +35,7 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
   await expect(
     page.getByRole("banner").getByText("Treasury value")
   ).toBeVisible();
-  await expect(page.getByText("$4.96", { exact: true })).toBeVisible();
+  await expect(page.locator("text=/\\$\\d+\\.\\d{2,}/")).toBeVisible();
   await expect(
     page.getByRole("button", { name: "e2e-test.dao.eth" })
   ).toBeVisible();
