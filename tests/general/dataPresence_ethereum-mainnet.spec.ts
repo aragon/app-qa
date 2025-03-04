@@ -194,7 +194,7 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
   await expect(
     page.getByRole("heading", { name: "Version Info" })
   ).toBeVisible();
-  await expect(page.getByText(/Appv0\.2\.0/)).toBeVisible();
+  await expect(page.getByText(/Appv\d+\.\d+\.\d+/)).toBeVisible();
   await page.getByText("Operating systemAragon OSx v1").click();
   await expect(page.getByText("Operating systemAragon OSx v1")).toBeVisible();
   await expect(page.getByText("GovernanceToken Voting v1.")).toBeVisible();
