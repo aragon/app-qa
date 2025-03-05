@@ -1,0 +1,127 @@
+name: App E2E Tests - Dispatched
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "The environment to run the E2E tests for"
+        required: true
+        type: string
+        default: "development"
+        options:
+          - "development"
+          - "staging"
+          - "production"
+  repository_dispatch:
+    types: ["app_e2e_tests_dispatched"]
+
+env:
+  ENVIRONMENT: ${{ github.event.inputs.environment || github.event.client_payload.environment || 'development' }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Checkout app-qa repository
+        uses: actions/checkout@v4
+        with:
+          path: ./
+
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: app-qa-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-node-20
+          restore-keys: |
+            app-qa-${{ runner.os }}-
+            app-qa-
+            node_modules
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('playwright.config.ts') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+            playwright-
+
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true' # Only run if cache is not found
+        run: npx playwright install chromium --with-deps
+
+      - name: Cache Synpress dependencies
+        id: synpress-cache
+        uses: actions/cache@v3
+        with:
+          path: .cache-synpress
+          key: synpress-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('package.json') }}
+          restore-keys: |
+            synpress-${{ runner.os }}-
+            synpress-
+
+      - name: Build Synpress dependencies
+        if: steps.synpress-cache.outputs.cache-hit != 'true'
+        run: xvfb-run npx synpress ./tests/helpers/
+        env:
+          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
+          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
+
+      - name: Run E2E tests
+        run: xvfb-run yarn playwright test --project=chromium
+        env:
+          TEST_ENV: ${{ env.ENVIRONMENT }}
+          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
+          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
+          NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
+
+      - name: Upload Playwright report
+        if: always()
+        id: upload_report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ env.ENVIRONMENT }}
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Notify Discord
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          ARTIFACT_URL: ${{ steps.upload_report.outputs.artifact-url }}
+        run: |
+          echo "Sending Discord failure notification..."
+          cat <<EOF > payload.json
+          {
+            "embeds": [{
+              "title": "❌ E2E Tests Failed",
+              "color": 15158332,
+              "fields": [
+                { "name": "Repository", "value": "${{ github.repository }}", "inline": false },
+                { "name": "Workflow", "value": "${{ github.workflow }}", "inline": false },
+                { "name": "Branch", "value": "${{ github.ref }}", "inline": false },
+                { "name": "Environment", "value": "${{ env.ENVIRONMENT }}", "inline": false },
+                { "name": "Artifact Download URL", "value": "[Download Playwright Report]($ARTIFACT_URL)", "inline": false },
+                { "name": "Details", "value": "[View Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false }
+              ],
+              "timestamp": "$(date --utc +%FT%TZ)"
+            }]
+          }
+          EOF
+
+          curl -X POST -H "Content-Type: application/json" -d @payload.json $DISCORD_WEBHOOK_URL
+          echo "Discord notification sent."
+
+      - name: Cleanup temporary files
+        run: rm -rf ./app-next/node_modules ./build ./tmp

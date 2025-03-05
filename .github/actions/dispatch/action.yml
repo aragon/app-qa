@@ -1,0 +1,28 @@
+name: "Dispatch"
+description: "This action triggers the E2E tests on the defined environment"
+
+inputs:
+  environment:
+    description: "The environment to run the E2E tests for"
+    required: true
+  token:
+    description: "GitHub token used for authentication"
+    required: false
+    default: ${{ github.token }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Trigger E2E tests
+      shell: bash
+      run: |
+        event_type="app_e2e_tests_dispatched"
+        token="${{ inputs.token }}"
+        environment="${{ inputs.environment }}"
+
+        curl \
+          -X POST \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: Bearer $token" \
+          https://api.github.com/repos/aragon/app-qa/dispatches \
+          -d "{\"event_type\": \"$event_type\", \"client_payload\": {\"environment\": \"$environment\"}}"
