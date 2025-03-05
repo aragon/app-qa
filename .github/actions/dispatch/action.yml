@@ -5,19 +5,27 @@ inputs:
   environment:
     description: "The environment to run the E2E tests for"
     required: true
-  token:
-    description: "GitHub token used for authentication"
-    required: false
-    default: ${{ github.token }}
+  opToken:
+    description: "1Password token used to retrieve the required secrets"
+    required: true
 
 runs:
   using: "composite"
   steps:
+    - name: Load secrets
+      id: load-secrets
+      uses: 1password/load-secrets-action@v2.0.0
+      with:
+        export-env: false
+      env:
+        OP_SERVICE_ACCOUNT_TOKEN: ${{ inputs.opToken }}
+        GH_APP_QA: op://apikeys_production/gh-app-qa/credential
+
     - name: Trigger E2E tests
       shell: bash
       run: |
         event_type="app_e2e_tests_dispatched"
-        token="${{ inputs.token }}"
+        token="${{ steps.load-secrets.outputs.GH_APP_QA }}"
         environment="${{ inputs.environment }}"
 
         curl \
