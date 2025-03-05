@@ -4,7 +4,7 @@ import { defineConfig, devices } from "@playwright/test";
 const ENV_URLS = {
   local: "http://localhost:3000",
   preview: process.env.PREVIEW_URL,
-  develop: "https://dev.app-next.aragon.org",
+  development: "https://dev.app-next.aragon.org",
   dev: "https://dev.app-next.aragon.org",
   staging: "https://stg.app-next.aragon.org/",
   stg: "https://stg.app-next.aragon.org/",
