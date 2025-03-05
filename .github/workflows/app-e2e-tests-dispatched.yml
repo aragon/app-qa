@@ -7,7 +7,6 @@ on:
         description: "The environment to run the E2E tests for"
         required: true
         type: string
-        default: "development"
         options:
           - "development"
           - "staging"
