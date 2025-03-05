@@ -9,8 +9,11 @@ on:
         type: choice
         options:
           - "development"
+          - "dev"
           - "staging"
+          - "stg"
           - "production"
+          - "prod"
   repository_dispatch:
     types: ["app_e2e_tests_dispatched"]
 
