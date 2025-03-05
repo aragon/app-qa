@@ -32,5 +32,5 @@ runs:
           -X POST \
           -H "Accept: application/vnd.github.v3+json" \
           -H "Authorization: token $token" \
-          https://api.github.com/repos/aragon/app-qa/dispatches \
-          -d '{"event_type": "$event_type", "client_payload": {"environment": "$environment"}}'
+          -d '{"event_type": "'"$event_type"'", "client_payload": {"environment": "'"$environment"'"}}' \
+          https://api.github.com/repos/aragon/app-qa/dispatches
