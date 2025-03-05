@@ -5,9 +5,14 @@ const ENV_URLS = {
   local: "http://localhost:3000",
   preview: process.env.PREVIEW_URL,
   develop: "https://dev.app-next.aragon.org",
+  dev: "https://dev.app-next.aragon.org",
   staging: "https://stg.app-next.aragon.org/",
+  stg: "https://stg.app-next.aragon.org/",
   production: "https://app-next.aragon.org",
+  prd: "https://app-next.aragon.org",
 };
+
+ENV_URLS.dev = ENV_URLS.develop;
 
 // Get the environment variable, default to "local"
 const ENV = process.env.TEST_ENV || "production";
