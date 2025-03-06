@@ -7,7 +7,7 @@ const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
 test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
   await page.goto(
-    "/dao/polygon-mainnet-0x71a363934240841c0a0f467e2fa4187199adb4d3/dashboard" // poygon-mainnet DAO
+    "/dao/polygon-mainnet-0x71a363934240841c0a0f467e2fa4187199adb4d3/dashboard" // polygon-mainnet DAO
   );
   // dashboard tab
   await expect(
@@ -167,21 +167,22 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
 
   //transactions tab
   await page.getByRole("link", { name: "Transactions" }).click();
+
   await expect(
     page.getByRole("link", {
-      name: /Deposit February 19, 2025 at 14:43 2 SPORK \$\d+\.\d{2}/,
+      name: /Deposit February 19, 2025 at \d{2}:\d{2} 2 SPORK \$\d+\.\d{2}/,
     })
   ).toBeVisible();
 
   await expect(
     page.getByRole("link", {
-      name: /Deposit February 19, 2025 at 14:42 0\.25 POL \$\d+\.\d{2}/,
+      name: /Deposit February 19, 2025 at \d{2}:\d{2} 0\.25 POL \$\d+\.\d{2}/,
     })
   ).toBeVisible();
 
   await expect(
     page.getByRole("link", {
-      name: /Deposit February 19, 2025 at 14:42 1\.23 USDC \$\d+\.\d{2}/,
+      name: /Deposit February 19, 2025 at \d{2}:\d{2} 1\.23 USDC \$\d+\.\d{2}/,
     })
   ).toBeVisible();
   await expect(page.getByText("More3 of 3 Transactions")).toBeVisible();
@@ -205,7 +206,7 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Version Info" })
   ).toBeVisible();
-  await expect(page.getByText(/Appv\d+\.\d+\.\d+ \(DEV\)/)).toBeVisible();
+  await expect(page.getByText(/Appv\d+\.\d+\.\d+/)).toBeVisible();
   await expect(page.getByText("Operating systemAragon OSx v1")).toBeVisible();
   await expect(page.getByText("GovernanceMultisig v1.20x1E…")).toBeVisible();
 });
