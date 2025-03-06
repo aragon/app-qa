@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        environment: [develop, production] # Test in multiple environments
+        environment: [development, production] # Test in multiple environments
       fail-fast: false
 
     steps:
