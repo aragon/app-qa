@@ -56,7 +56,17 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
     page.getByRole("link", { name: /Withdraw funds/i })
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Top assets" })).toBeVisible();
-  //include these when rendering
+  await expect(
+    page.getByRole("link", { name: /avatar Ether \$\d+\.\d{2} \d+\.\d{2} ETH/ })
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", {
+      name: /avatar Uniswap \$\d+\.\d{2} \d+\.\d{2} UNI/,
+    })
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /avatar Rocket Pool ETH \$\d+\.\d{2}/ })
+  ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Members" })).toBeVisible();
   await expect(
     page.getByRole("link", { name: "avatar barukimang.eth 1M" })
@@ -118,11 +128,7 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
   await expect(page.getByText("BreakdownVotesDetails")).toBeVisible();
   await expect(page.getByText("Yes0E2ETTAbstain0E2ETTNo0E2ETT")).toBeVisible();
   await expect(page.getByText("Support0%0of 0 E2ETTMinimum")).toBeVisible();
-  // await expect(
-  //   page.getByRole("button", { name: "Vote on proposal" })
-  // ).toBeVisible();
   await page.getByRole("tab", { name: "Votes" }).click();
-  // add votes when rendering
   await page.getByRole("tab", { name: "Details" }).click();
   await expect(page.getByText("Approval threshold> 50%")).toBeVisible();
   await expect(page.getByText("Minimum participation≥ 15")).toBeVisible();
@@ -158,7 +164,18 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
 
   //assets tab
   await page.getByRole("link", { name: "Assets" }).click();
-  //add assets when rendering
+  await expect(
+    page.getByRole("link", { name: /avatar Ether \$\d+\.\d{2} \d+\.\d{2} ETH/ })
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", {
+      name: /avatar Uniswap \$\d+\.\d{2} \d+\.\d{2} UNI/,
+    })
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /avatar Rocket Pool ETH \$\d+\.\d{2}/ })
+  ).toBeVisible();
+  await expect(page.getByText("More3 of 3 Assets")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Vault" })).toBeVisible();
   await expect(page.getByText("BlockchainEthereum")).toBeVisible();
   await expect(page.getByText("Vault address0x18…E92a")).toBeVisible();
@@ -166,6 +183,25 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
 
   //transactions tab
   await page.getByRole("link", { name: "Transactions" }).click();
+  await expect(
+    page.getByRole("link", { name: /Withdraw February 19, 2025 at/ })
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", {
+      name: /Deposit February 19, 2025 at \d{2}:\d{2} 0\.00 RETH \$\d+\.\d{2}/,
+    })
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", {
+      name: /Deposit February 19, 2025 at \d{2}:\d{2} 0\.15 UNI \$\d+\.\d{2}/,
+    })
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", {
+      name: /Deposit February 19, 2025 at \d{2}:\d{2} 0\.00 ETH \$\d+\.\d{2}/,
+    })
+  ).toBeVisible();
+  await expect(page.getByText("More4 of 4 Transactions")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Vault" })).toBeVisible();
   await expect(page.getByText("BlockchainEthereum")).toBeVisible();
   await expect(page.getByText("Vault address0x18…E92a")).toBeVisible();
