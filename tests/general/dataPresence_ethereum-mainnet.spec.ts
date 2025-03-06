@@ -9,7 +9,7 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
   page,
 }) => {
   await page.goto(
-    "/dao/ethereum-mainnet-0x18d5ea03c4a84F04aC9BabEeAC0DeF2a3362E92a/dashboard" // ethereum-mainnet DAO
+    "/dao/ethereum-mainnet-0x18d5ea03c4a84F04aC9BabEeAC0DeF2a3362E92a/dashboard" // ethereum-mainnet DAO using tokenPlugin
   );
   // dashboard tab
   await expect(
