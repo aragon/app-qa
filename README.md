@@ -76,7 +76,7 @@ Ensure your MetaMask wallet has sufficient funds before running tests.
   TEST_ENV=development yarn e2e
   ```
 
-- **View more options in the Playwright configuration file:** [`playwright.config.js`](./playwright.config.js)
+- **View more options in the Playwright configuration file:** [`playwright.config.js`](./playwright.config.ts)
 
 ## Documentation
 
@@ -86,7 +86,7 @@ The E2E testing framework utilizes the following tools:
 - [Synpress](https://synpress.io/)
 - [MetaMask](https://metamask.io/)
 
-For more details, refer to the [Playwright Documentation](https://playwright.dev/docs/intro) and [Synpress Documentation](https://synpress.io/).
+For more details, refer to the [Playwright Documentation](https://playwright.dev/docs/intro) and [Synpress Documentation](https://docs.synpress.io/docs/introduction).
 
 ## Contributing
 
@@ -95,6 +95,13 @@ Contributions are welcome! If you plan to make significant changes, please open 
 ## Security
 
 If you discover any security issues, please report them to the security contact at `sirt@aragon.org`. Do not use the issue tracker for security concerns.
+
+## Learn More
+
+For more information about Aragon and its ecosystem, please visit the [Aragon website](https://aragon.org/) and explore
+our [Developer Portal](https://devs.aragon.org/). Join our
+[Developer Community](https://aragonproject.typeform.com/to/LngekEhU) to stay updated and contribute to the growth of
+decentralized governance.
 
 ## License
 
