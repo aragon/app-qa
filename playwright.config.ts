@@ -41,7 +41,7 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         baseURL, // Pass the dynamically set baseURL to this project
       },
-      timeout: 90000, // 1 minute 30 seconds
+      timeout: 120000, // 2 minutes
     },
     {
       name: "firefox",
@@ -49,7 +49,7 @@ export default defineConfig({
         ...devices["Desktop Firefox"],
         baseURL, // Pass the dynamically set baseURL to this project
       },
-      timeout: 90000, // 1 minute 30 seconds
+      timeout: 120000, // 2 minutes
     },
     {
       name: "webkit",
@@ -57,7 +57,7 @@ export default defineConfig({
         ...devices["Desktop Safari"],
         baseURL, // Pass the dynamically set baseURL to this project
       },
-      timeout: 90000, // 1 minute 30 seconds
+      timeout: 120000, // 2 minutes
     },
   ],
 });

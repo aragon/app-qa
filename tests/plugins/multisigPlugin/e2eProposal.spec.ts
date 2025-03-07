@@ -5,13 +5,13 @@ import { connectWallet } from "../../helpers/connectWallet";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
-test("Admin Plugin Test - Publish, and Execute Proposal", async ({
+test("Multisig Plugin Test - Publish, Approve, and Execute Proposal", async ({
   page,
   metamask,
 }) => {
   await connectWallet(page, metamask);
   await page.goto(
-    "/dao/ethereum-sepolia-0x8D0FE64D5f18c99f6aa309d5e503dCc298784865/dashboard" //adminPlugin DAO
+    "/dao/ethereum-sepolia-0x2dd2cbe4578186c4e94d631b93140b8d958859fe/dashboard" //multisigPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
   await page.waitForTimeout(3000);
@@ -22,7 +22,7 @@ test("Admin Plugin Test - Publish, and Execute Proposal", async ({
   await page.getByPlaceholder("Type a title").click();
   await page
     .getByPlaceholder("Type a title")
-    .fill("Publish and Execute Proposal");
+    .fill("Publish, Approve, and Execute Proposal");
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Action" }).click();
   await page.getByRole("option", { name: "Transfer" }).click();
@@ -35,9 +35,28 @@ test("Admin Plugin Test - Publish, and Execute Proposal", async ({
   await page.getByRole("button", { name: /USDC/ }).click();
   await page.getByPlaceholder("0", { exact: true }).click();
   await page.getByPlaceholder("0", { exact: true }).fill("1.234");
+  await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Publish proposal" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();
   await page.waitForTimeout(3000);
   await metamask.confirmTransaction();
+  await page.waitForTimeout(3000);
   await page.getByRole("link", { name: "View proposal" }).click();
+  await page.waitForTimeout(10000);
+  await page
+    .getByRole("link", { name: /Publish, Approve, and Execute Proposal/ })
+    .first()
+    .click();
+  await page.waitForTimeout(3000);
+  await page.getByRole("button", { name: "Approve proposal" }).click();
+  await page.getByRole("button", { name: "Approve transaction" }).click();
+  await page.waitForTimeout(3000);
+  await metamask.confirmTransaction();
+  await page.getByRole("button", { name: "View proposal" }).click();
+  await page.waitForTimeout(3000);
+  await page.getByRole("button", { name: "Execute" }).click();
+  await page.getByRole("button", { name: "Approve transaction" }).click();
+  await page.waitForTimeout(3000);
+  await metamask.confirmTransaction();
+  await page.getByRole("button", { name: "View proposal" }).click();
 });
