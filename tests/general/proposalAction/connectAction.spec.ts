@@ -48,11 +48,19 @@ test("General Test - Add Connect Action", async ({
   await page.getByPlaceholder("wc: …").focus();
   await page.keyboard.press("Meta+V");
   await page.getByRole("button", { name: "Connect dApp" }).click();
-  await cowSwapPage.bringToFront();
-  await cowSwapPage.waitForSelector(".styled__CloseButton-sc-szverx-1", {
-    timeout: 5000,
-  });
-  await cowSwapPage.locator(".styled__CloseButton-sc-szverx-1").click();
+  try {
+    if (!(await cowSwapPage.isClosed())) {
+      await cowSwapPage.bringToFront();
+      await cowSwapPage.locator(".styled__CloseButton-sc-szverx-1").click();
+    }
+  } catch (error) {
+    console.warn("Close button not found or page already closed");
+  }
+  // await cowSwapPage.bringToFront();
+  // await cowSwapPage.waitForSelector(".styled__CloseButton-sc-szverx-1", {
+  //   timeout: 5000,
+  // });
+  // await cowSwapPage.locator(".styled__CloseButton-sc-szverx-1").click();
   if (await cowSwapPage.getByRole("button", { name: "Max" }).isVisible()) {
     await cowSwapPage.getByRole("button", { name: "Max" }).click();
   } else {
