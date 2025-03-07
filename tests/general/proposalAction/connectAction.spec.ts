@@ -63,7 +63,15 @@ test("General Test - Add Connect Action", async ({
       .fill("0.01");
   }
   await cowSwapPage.getByRole("button", { name: "Swap with WETH" }).click();
-  await cowSwapPage.getByRole("button", { name: "Approve WETH" }).click();
+  // await cowSwapPage.getByRole("button", { name: "Wrap ETH" }).click();
+
+  // await cowSwapPage.getByRole("button", { name: "Approve WETH" }).click();
+  await cowSwapPage.getByRole("button", { name: "Swap" }).click();
+  await page.waitForTimeout(3000);
+  await cowSwapPage.getByRole("button", { name: "Accept" }).click();
+  // await page.waitForTimeout(3000);
+  await cowSwapPage.getByRole("button", { name: "Confirm Swap" }).click();
+  // await page.waitForTimeout(3000);
   await page.bringToFront();
   await page.getByRole("button", { name: "Add 1 actions" }).click();
   await page.getByRole("button", { name: "Publish proposal" }).click();

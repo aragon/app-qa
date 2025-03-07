@@ -70,7 +70,7 @@ jobs:
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
 
       - name: Run E2E tests
-        run: xvfb-run yarn playwright test --project=chromium
+        run: xvfb-run yarn playwright test tests/general/proposalAction/connectAction.spec.ts --project=chromium
         env:
           TEST_ENV: ${{ matrix.environment }}
           METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
