@@ -51,11 +51,11 @@ test("General Test - Add Connect Action", async ({
   await page.bringToFront();
   await page.getByPlaceholder("wc: …").focus();
   await page.getByPlaceholder("wc: …").fill(walletUri);
-  const clipboardData = await page.evaluate(() =>
-    navigator.clipboard.readText()
-  );
-  console.log("Clipboard contains:", clipboardData);
-  await page.keyboard.press("Meta+V");
+  // const clipboardData = await page.evaluate(() =>
+  //   navigator.clipboard.readText()
+  // );
+  // console.log("Clipboard contains:", clipboardData);
+  // await page.keyboard.press("Meta+V");
   await page.getByRole("button", { name: "Connect dApp" }).click();
   try {
     if (!(await cowSwapPage.isClosed())) {
