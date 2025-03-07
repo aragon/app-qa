@@ -51,11 +51,6 @@ test("General Test - Add Connect Action", async ({
   await page.bringToFront();
   await page.getByPlaceholder("wc: …").focus();
   await page.getByPlaceholder("wc: …").fill(walletUri);
-  // const clipboardData = await page.evaluate(() =>
-  //   navigator.clipboard.readText()
-  // );
-  // console.log("Clipboard contains:", clipboardData);
-  // await page.keyboard.press("Meta+V");
   await page.getByRole("button", { name: "Connect dApp" }).click();
   try {
     if (!(await cowSwapPage.isClosed())) {
@@ -65,11 +60,6 @@ test("General Test - Add Connect Action", async ({
   } catch (error) {
     console.warn("Close button not found or page already closed");
   }
-  // await cowSwapPage.bringToFront();
-  // await cowSwapPage.waitForSelector(".styled__CloseButton-sc-szverx-1", {
-  //   timeout: 5000,
-  // });
-  // await cowSwapPage.locator(".styled__CloseButton-sc-szverx-1").click();
   if (await cowSwapPage.getByRole("button", { name: "Max" }).isVisible()) {
     await cowSwapPage.getByRole("button", { name: "Max" }).click();
   } else {
@@ -83,15 +73,10 @@ test("General Test - Add Connect Action", async ({
       .fill("0.01");
   }
   await cowSwapPage.getByRole("button", { name: "Swap with WETH" }).click();
-  // await cowSwapPage.getByRole("button", { name: "Wrap ETH" }).click();
-
-  // await cowSwapPage.getByRole("button", { name: "Approve WETH" }).click();
   await cowSwapPage.getByRole("button", { name: "Swap" }).click();
   await page.waitForTimeout(3000);
   await cowSwapPage.getByRole("button", { name: "Accept" }).click();
-  // await page.waitForTimeout(3000);
   await cowSwapPage.getByRole("button", { name: "Confirm Swap" }).click();
-  // await page.waitForTimeout(3000);
   await page.bringToFront();
   await page.getByRole("button", { name: "Add 1 actions" }).click();
   await page.getByRole("button", { name: "Publish proposal" }).click();
