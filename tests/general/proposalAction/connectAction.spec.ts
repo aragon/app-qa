@@ -44,8 +44,13 @@ test("General Test - Add Connect Action", async ({
     .getByTitle("Connect your wallet")
     .getByRole("button")
     .click();
+  const walletUri = await cowSwapPage.evaluate(() =>
+    navigator.clipboard.readText()
+  );
+  console.log("Extracted WalletConnect URI from clipboard:", walletUri);
   await page.bringToFront();
   await page.getByPlaceholder("wc: …").focus();
+  await page.getByPlaceholder("wc: …").fill(walletUri);
   const clipboardData = await page.evaluate(() =>
     navigator.clipboard.readText()
   );
