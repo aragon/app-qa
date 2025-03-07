@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-// Define environment-specific base URLs
+// Environment-specific base URLs
 const ENV_URLS = {
   local: "http://localhost:3000",
   preview: process.env.PREVIEW_URL,
@@ -12,7 +12,7 @@ const ENV_URLS = {
   prd: "https://app-next.aragon.org",
 };
 
-// Get the environment variable, default to "local"
+// Define or get environment variable
 const ENV = process.env.TEST_ENV || "production";
 const baseURL = ENV_URLS[ENV];
 
