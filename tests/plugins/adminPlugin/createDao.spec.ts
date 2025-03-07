@@ -7,7 +7,7 @@ const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
 test("Admin Plugin Test - Create DAO", async ({ page, metamask }) => {
   await connectWallet(page, metamask);
-  await page.getByRole("button", { name: "DAO" }).click();
+  await page.getByRole("button", { name: "Create a DAO" }).first().click();
   await page.getByRole("link", { name: "Get started" }).click();
   await page.getByLabel("Ethereum Sepolia").click();
   await page.getByRole("button", { name: "Next" }).click();
