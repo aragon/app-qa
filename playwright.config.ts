@@ -12,10 +12,8 @@ const ENV_URLS = {
   prd: "https://app-next.aragon.org",
 };
 
-ENV_URLS.dev = ENV_URLS.develop;
-
 // Get the environment variable, default to "local"
-const ENV = process.env.TEST_ENV || "development";
+const ENV = process.env.TEST_ENV || "production";
 const baseURL = ENV_URLS[ENV];
 
 if (!baseURL) {
@@ -43,7 +41,7 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         baseURL, // Pass the dynamically set baseURL to this project
       },
-      timeout: 90000, // 2 minutes
+      timeout: 90000, // 1 minute 30 seconds
     },
     {
       name: "firefox",
@@ -51,7 +49,7 @@ export default defineConfig({
         ...devices["Desktop Firefox"],
         baseURL, // Pass the dynamically set baseURL to this project
       },
-      timeout: 180000, // 3 minutes
+      timeout: 90000, // 1 minute 30 seconds
     },
     {
       name: "webkit",
@@ -59,7 +57,7 @@ export default defineConfig({
         ...devices["Desktop Safari"],
         baseURL, // Pass the dynamically set baseURL to this project
       },
-      timeout: 180000, // 3 minutes
+      timeout: 90000, // 1 minute 30 seconds
     },
   ],
 });

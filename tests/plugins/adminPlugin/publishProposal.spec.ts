@@ -24,5 +24,5 @@ test("Admin Plugin Test - Publish Proposal", async ({ page, metamask }) => {
   await page.waitForTimeout(3000);
   await metamask.confirmTransaction();
   await page.waitForTimeout(3000);
-  await page.getByRole("link", { name: "View proposal" });
+  await page.getByRole("link", { name: "View proposal" }).click();
 });
