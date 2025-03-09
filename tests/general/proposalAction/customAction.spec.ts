@@ -5,7 +5,10 @@ import { connectWallet } from "../../helpers/connectWallet";
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
-test("General Test - Add Custom Action", async ({ page, metamask }) => {
+test("General Test - Add Custom Proposal Action", async ({
+  page,
+  metamask,
+}) => {
   await connectWallet(page, metamask);
   await page.goto(
     "/dao/ethereum-sepolia-0x1EBc713b156e4eF97e77291dbe9dF9F762D73404/dashboard" //adminPlugin DAO
