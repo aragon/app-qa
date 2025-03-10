@@ -32,9 +32,7 @@ test("General Test - Check Data Presence Ethereum Sepolia", async ({
       .filter({ hasText: /^3Members$/ })
       .locator("div")
   ).toBeVisible();
-  await expect(
-    page.getByRole("banner").getByText("Treasury value")
-  ).toBeVisible();
+  await expect(page.getByRole("banner").getByText("Treasury")).toBeVisible();
   await expect(page.getByRole("banner").getByText("$")).toBeVisible();
   await expect(page.getByText("BlockchainEthereum Sepolia")).toBeVisible();
   await expect(page.getByText("Contract address0xdf…71De")).toBeVisible();

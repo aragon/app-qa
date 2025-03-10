@@ -32,17 +32,15 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
       .filter({ hasText: /^3Members$/ })
       .locator("div")
   ).toBeVisible();
-  await expect(
-    page.getByRole("banner").getByText("Treasury value")
-  ).toBeVisible();
+  await expect(page.getByRole("banner").getByText("Treasury")).toBeVisible();
   await expect(page.locator("text=/\\$\\d+\\.\\d{2,}/")).toBeVisible();
   await expect(
     page.getByRole("button", { name: "e2e-test.dao.eth" })
   ).toBeVisible();
-  await expect(page.getByText("BlockchainEthereum")).toBeVisible();
-  await expect(page.getByText("Contract address0x18…E92a")).toBeVisible();
-  await expect(page.getByText("ENS namee2e-test.dao.eth")).toBeVisible();
-  await expect(page.getByText("Launched atFebruary")).toBeVisible();
+  await expect(page.getByText("ChainEthereum")).toBeVisible();
+  await expect(page.getByText("DAO address0x18…E92a")).toBeVisible();
+  await expect(page.getByText("ENSe2e-test.dao.eth")).toBeVisible();
+  await expect(page.getByText("LaunchedFebruary")).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Latest proposals" })
   ).toBeVisible();
@@ -55,7 +53,7 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
   await expect(
     page.getByRole("link", { name: /Withdraw funds/i })
   ).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Top assets" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Assets" })).toBeVisible();
   await expect(
     page.getByRole("link", { name: /avatar Ether \$\d+\.\d{2} \d+\.\d{2} ETH/ })
   ).toBeVisible();
@@ -95,7 +93,7 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
     page.getByRole("heading", { name: "Token Voting (TOKENVOTING)" })
   ).toBeVisible();
   await expect(page.getByRole("tab", { name: "Contract" })).toBeVisible();
-  await expect(page.getByText("PluginToken Voting v1.20x86…")).toBeVisible();
+  await expect(page.getByText("Plugin addressToken Voting v1")).toBeVisible();
   await expect(page.getByText("LaunchedFebruary")).toBeVisible();
   await expect(page.getByRole("tab", { name: "Settings" })).toBeVisible();
   await page.getByRole("tab", { name: "Settings" }).click();
@@ -154,7 +152,7 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
     page.getByRole("heading", { name: "Token Voting" })
   ).toBeVisible();
   await expect(page.getByRole("tab", { name: "Contract" })).toBeVisible();
-  await expect(page.getByText("PluginToken Voting v1.20x86…")).toBeVisible();
+  await expect(page.getByText("Plugin addressToken Voting v1")).toBeVisible();
   await expect(page.getByText("LaunchedFebruary")).toBeVisible();
   await page.getByRole("tab", { name: "Settings" }).click();
   await expect(page.getByText("Eligible votersToken holders")).toBeVisible();
@@ -177,7 +175,7 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
   ).toBeVisible();
   await expect(page.getByText("More3 of 3 Assets")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Vault" })).toBeVisible();
-  await expect(page.getByText("BlockchainEthereum")).toBeVisible();
+  await expect(page.getByText("ChainEthereum")).toBeVisible();
   await expect(page.getByText("Vault address0x18…E92a")).toBeVisible();
   await expect(page.getByText("Vault ENSe2e-test.dao.eth")).toBeVisible();
 
@@ -203,7 +201,7 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
   ).toBeVisible();
   await expect(page.getByText("More4 of 4 Transactions")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Vault" })).toBeVisible();
-  await expect(page.getByText("BlockchainEthereum")).toBeVisible();
+  await expect(page.getByText("ChainEthereum")).toBeVisible();
   await expect(page.getByText("Vault address0x18…E92a")).toBeVisible();
   await expect(page.getByText("Vault ENSe2e-test.dao.eth")).toBeVisible();
 
@@ -212,9 +210,9 @@ test("General Test - Check Data Presence Ethereum Mainnet", async ({
   await expect(page.getByRole("heading", { name: "Settings" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "DAO" })).toBeVisible();
   await expect(page.getByText("NameE2E Test DAO (Ethereum)ET")).toBeVisible();
-  await expect(page.getByText("BlockchainEthereumNot")).toBeVisible();
+  await expect(page.getByText("ChainEthereumNot")).toBeVisible();
   await expect(page.getByText("ENS namee2e-test.dao.eth0x18…")).toBeVisible();
-  await expect(page.getByText("SummaryDAO generated for")).toBeVisible();
+  await expect(page.getByText("DescriptionDAO generated for")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Governance" })).toBeVisible();
   await expect(page.getByText("Approval threshold> 50%")).toBeVisible();
   await expect(page.getByText("Minimum participation≥ 15")).toBeVisible();

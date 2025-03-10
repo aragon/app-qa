@@ -30,9 +30,7 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
       .filter({ hasText: /^3Members$/ })
       .locator("div")
   ).toBeVisible();
-  await expect(
-    page.getByRole("banner").getByText("Treasury value")
-  ).toBeVisible();
+  await expect(page.getByRole("banner").getByText("Treasury")).toBeVisible();
   await expect(page.locator("text=/\\$\\d+\\.\\d{2,}/")).toBeVisible();
   await expect(page.getByRole("button", { name: "0x71…B4D3" })).toBeVisible();
   await expect(page.getByText("BlockchainPolygon")).toBeVisible();
