@@ -34,7 +34,7 @@ test("Multisig Plugin Test - Publish, Approve, and Execute Proposal", async ({
   await page.getByRole("button", { name: "Select" }).click({ force: true });
   await page.getByRole("button", { name: /USDC/ }).click();
   await page.getByPlaceholder("0", { exact: true }).click();
-  await page.getByPlaceholder("0", { exact: true }).fill("1.234");
+  await page.getByPlaceholder("0", { exact: true }).fill("0.1234");
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Publish proposal" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();

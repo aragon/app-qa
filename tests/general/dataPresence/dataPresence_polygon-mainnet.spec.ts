@@ -20,7 +20,7 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
   await expect(
     page
       .locator("div")
-      .filter({ hasText: /^1Proposals$/ }) //bug, should be 3
+      .filter({ hasText: /^3Proposals$/ })
       .locator("div")
   ).toBeVisible();
   await expect(page.getByRole("banner").getByText("Members")).toBeVisible();
@@ -110,7 +110,7 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
   await expect(page.getByText("Onchain ID2")).toBeVisible();
   await page.getByText("IDMULTISIG-").click();
-  // await expect(page.getByText("March 5, 2025")).toBeVisible();
+  await expect(page.getByText("March 5, 2025")).toBeVisible();
   await expect(page.getByText("Proposed bybarukimang.eth")).toBeVisible();
   // await expect(page.getByText("StatusRejected")).toBeVisible();
   await expect(
