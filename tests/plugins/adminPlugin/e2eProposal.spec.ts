@@ -19,16 +19,12 @@ test("Admin Plugin Test - Publish, and Execute Proposal", async ({
     .getByRole("button", { name: "Proposal", exact: true })
     .or(page.getByRole("link", { name: "Proposal", exact: true }))
     .click();
-  await page.getByPlaceholder("Type a title").click();
-  await page
-    .getByPlaceholder("Type a title")
-    .fill("Publish and Execute Proposal");
+  await page.getByLabel("Proposal title").fill("Publish and Execute Proposal");
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Action" }).click();
   await page.getByRole("option", { name: "Transfer" }).click();
-  await page.getByPlaceholder("ENS or 0x …").click();
   await page
-    .getByPlaceholder("ENS or 0x …")
+    .getByLabel("Recipient")
     .fill("0x8D0FE64D5f18c99f6aa309d5e503dCc298784865");
   await page.getByRole("button", { name: "Select" }).click();
   await page.getByRole("button", { name: "Select" }).click({ force: true });

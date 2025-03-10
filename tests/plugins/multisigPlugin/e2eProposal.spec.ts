@@ -19,17 +19,15 @@ test("Multisig Plugin Test - Publish, Approve, and Execute Proposal", async ({
     .getByRole("button", { name: "Proposal", exact: true })
     .or(page.getByRole("link", { name: "Proposal", exact: true }))
     .click();
-  await page.getByPlaceholder("Type a title").click();
   await page
-    .getByPlaceholder("Type a title")
+    .getByLabel("Proposal title")
     .fill("Publish, Approve, and Execute Proposal");
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Action" }).click();
   await page.getByRole("option", { name: "Transfer" }).click();
-  await page.getByPlaceholder("ENS or 0x …").click();
   await page
-    .getByPlaceholder("ENS or 0x …")
-    .fill("0x8D0FE64D5f18c99f6aa309d5e503dCc298784865");
+    .getByLabel("Recipient")
+    .fill("0x2dd2cbe4578186c4e94d631b93140b8d958859fe");
   await page.getByRole("button", { name: "Select" }).click();
   await page.getByRole("button", { name: "Select" }).click({ force: true });
   await page.getByRole("button", { name: /USDC/ }).click();
