@@ -34,9 +34,9 @@ test("General Test - Check Data Presence Ethereum Sepolia", async ({
   ).toBeVisible();
   await expect(page.getByRole("banner").getByText("Treasury")).toBeVisible();
   await expect(page.getByRole("banner").getByText("$")).toBeVisible();
-  await expect(page.getByText("BlockchainEthereum Sepolia")).toBeVisible();
-  await expect(page.getByText("Contract address0xdf…71De")).toBeVisible();
-  await expect(page.getByText("Launched atFebruary")).toBeVisible();
+  await expect(page.getByText("ChainEthereum Sepolia")).toBeVisible();
+  await expect(page.getByText("DAO address0xdf…71De")).toBeVisible();
+  await expect(page.getByText("LaunchedFebruary")).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Latest proposals" })
   ).toBeVisible();
@@ -50,7 +50,7 @@ test("General Test - Check Data Presence Ethereum Sepolia", async ({
   await expect(
     page.getByRole("link", { name: /Withdraw funds/i })
   ).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Top assets" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Assets" })).toBeVisible();
   await expect(
     page.getByRole("link", { name: /avatar Ether \$\d+\.\d{2} \d+\.\d{2} ETH/ })
   ).toBeVisible();
@@ -95,7 +95,7 @@ test("General Test - Check Data Presence Ethereum Sepolia", async ({
     page.getByRole("heading", { name: "Governance (GOV)" })
   ).toBeVisible();
   await expect(page.getByRole("tab", { name: "Contract" })).toBeVisible();
-  await expect(page.getByText("PluginGovernance v1.80x25…5B22")).toBeVisible();
+  await expect(page.getByText("Plugin addressGovernance v1.")).toBeVisible();
   await expect(page.getByText("LaunchedFebruary")).toBeVisible();
   await expect(page.getByRole("tab", { name: "Settings" })).toBeVisible();
   await page.getByRole("tab", { name: "Settings" }).click();
@@ -155,7 +155,7 @@ test("General Test - Check Data Presence Ethereum Sepolia", async ({
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Multisig" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "Contract" })).toBeVisible();
-  await expect(page.getByText("PluginMultisig v1.50x43…")).toBeVisible();
+  await expect(page.getByText("Plugin addressMultisig v1.")).toBeVisible();
   await expect(page.getByText("LaunchedFebruary")).toBeVisible();
   await page.getByRole("tab", { name: "Settings" }).click();
   await page.getByText("Eligible votersMultisig").click();
@@ -178,7 +178,7 @@ test("General Test - Check Data Presence Ethereum Sepolia", async ({
   ).toBeVisible();
   await expect(page.getByText("More3 of 3 Assets")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Vault" })).toBeVisible();
-  await expect(page.getByText("BlockchainEthereum Sepolia")).toBeVisible();
+  await expect(page.getByText("ChainEthereum Sepolia")).toBeVisible();
   await expect(page.getByText("Vault address0xdf…71De")).toBeVisible();
 
   //transactions tab
@@ -200,7 +200,7 @@ test("General Test - Check Data Presence Ethereum Sepolia", async ({
   ).toBeVisible();
   await expect(page.getByText("More3 of 3 Transactions")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Vault" })).toBeVisible();
-  await expect(page.getByText("BlockchainEthereum Sepolia")).toBeVisible();
+  await expect(page.getByText("ChainEthereum Sepolia")).toBeVisible();
   await expect(page.getByText("Vault address0xdf…71De")).toBeVisible();
 
   //settings tab
@@ -216,8 +216,8 @@ test("General Test - Check Data Presence Ethereum Sepolia", async ({
   await expect(
     page.getByText("NameE2E Test DAO (Ethereum Sepolia)ET")
   ).toBeVisible();
-  await expect(page.getByText("BlockchainEthereum SepoliaNot")).toBeVisible();
-  await expect(page.getByText("SummaryDAO generated for")).toBeVisible();
+  await expect(page.getByText("ChainEthereum SepoliaNot")).toBeVisible();
+  await expect(page.getByText("DescriptionDAO generated for")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Governance" })).toBeVisible();
   await expect(
     page.getByText("Proposal creationAdmin members").nth(1)

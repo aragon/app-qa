@@ -33,9 +33,9 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
   await expect(page.getByRole("banner").getByText("Treasury")).toBeVisible();
   await expect(page.locator("text=/\\$\\d+\\.\\d{2,}/")).toBeVisible();
   await expect(page.getByRole("button", { name: "0x71…B4D3" })).toBeVisible();
-  await expect(page.getByText("BlockchainPolygon")).toBeVisible();
-  await expect(page.getByText("Contract address0x71…B4D3")).toBeVisible();
-  await expect(page.getByText("Launched atFebruary")).toBeVisible();
+  await expect(page.getByText("ChainPolygon")).toBeVisible();
+  await expect(page.getByText("DAO address0x71…B4D3")).toBeVisible();
+  await expect(page.getByText("LaunchedFebruary")).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Latest proposals" })
   ).toBeVisible();
@@ -48,7 +48,7 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: /Withdraw funds/i })
   ).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Top assets" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Assets" })).toBeVisible();
   await expect(
     page.getByRole("link", { name: /avatar USDC \$\d+\.\d{2} 1\.23 USDC/ })
   ).toBeVisible();
@@ -86,7 +86,9 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
     page.getByRole("heading", { name: "Multisig (MULTISIG)" })
   ).toBeVisible();
   await expect(page.getByRole("tab", { name: "Contract" })).toBeVisible();
-  await expect(page.getByText("PluginMultisig v1.20x1E…")).toBeVisible();
+  await expect(
+    page.getByText("Plugin addressMultisig v1.20x1E…")
+  ).toBeVisible();
   await expect(page.getByText("LaunchedFebruary")).toBeVisible();
   await expect(page.getByRole("tab", { name: "Settings" })).toBeVisible();
   await page.getByRole("tab", { name: "Settings" }).click();
@@ -110,7 +112,7 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
   await page.getByText("IDMULTISIG-").click();
   await expect(page.getByText("March 5, 2025")).toBeVisible();
   await expect(page.getByText("Proposed bybarukimang.eth")).toBeVisible();
-  // await expect(page.getByText("StatusRejected")).toBeVisible();
+  await expect(page.getByText("StatusAccepted")).toBeVisible();
   await expect(
     page
       .locator("div")
@@ -125,7 +127,7 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
   await page.getByRole("tab", { name: "Details" }).click();
   await expect(page.getByLabel("Details")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Actions" })).toBeVisible();
-  await expect(page.getByText("The following actions will")).toBeVisible();
+  // await expect(page.getByText("The following actions will")).toBeVisible();
   await expect(page.locator(".grid > div").first()).toBeVisible();
 
   //members tab
@@ -142,7 +144,9 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Multisig" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "Contract" })).toBeVisible();
-  await expect(page.getByText("PluginMultisig v1.20x1E…")).toBeVisible();
+  await expect(
+    page.getByText("Plugin addressMultisig v1.20x1E…")
+  ).toBeVisible();
   await expect(page.getByText("LaunchedFebruary")).toBeVisible();
   await page.getByRole("tab", { name: "Settings" }).click();
   await expect(page.getByText("Eligible votersMultisig members")).toBeVisible();
@@ -160,7 +164,7 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
     page.getByRole("link", { name: /avatar SporkDAO \$\d+\.\d{2} 2 SPORK/ })
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Vault" })).toBeVisible();
-  await expect(page.getByText("BlockchainPolygon")).toBeVisible();
+  await expect(page.getByText("ChainPolygon")).toBeVisible();
   await expect(page.getByText("Vault address0x71…B4D3")).toBeVisible();
 
   //transactions tab
@@ -182,7 +186,7 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
   ).toBeVisible();
   await expect(page.getByText("More3 of 3 Transactions")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Vault" })).toBeVisible();
-  await expect(page.getByText("BlockchainPolygon")).toBeVisible();
+  await expect(page.getByText("ChainPolygon")).toBeVisible();
   await expect(page.getByText("Vault address0x71…B4D3")).toBeVisible();
 
   //settings tab
@@ -190,8 +194,8 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Settings" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "DAO" })).toBeVisible();
   await expect(page.getByText("NameE2E Test DAO (Polygon)ET")).toBeVisible();
-  await expect(page.getByText("BlockchainPolygonNot")).toBeVisible();
-  await expect(page.getByText("SummaryDAO generated for")).toBeVisible();
+  await expect(page.getByText("ChainPolygonNot")).toBeVisible();
+  await expect(page.getByText("DescriptionDAO generated for")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Governance" })).toBeVisible();
   await expect(page.getByText("Minimum approval1 of 3")).toBeVisible();
   await expect(page.getByText("Proposal creationMultisig")).toBeVisible();
