@@ -81,6 +81,7 @@ jobs:
           METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
 
       - name: Run E2E tests
+        id: run_e2e_tests
         run: xvfb-run yarn playwright test --project=chromium
         env:
           TEST_ENV: ${{ env.ENVIRONMENT }}
@@ -96,6 +97,81 @@ jobs:
           name: playwright-report-${{ env.ENVIRONMENT }}
           path: playwright-report/
           retention-days: 30
+
+      - name: Update configs
+        run: |
+          #!/bin/bash
+          set -x
+
+          ############
+          # URL VARS #
+          ############
+          monitor_endpoint_url="https://monitor.aragon.in/victoria/api/v1/import/prometheus"
+          monitor_endpoint_apikey="SECRETVALUE_victoria_metrics_apikey"
+          monitor_metric_name="github_actions"
+          monitor_timestamp=$(date +%s000)
+
+          #######################
+          # Metric (Modify this)#
+          #######################
+
+          #Numeric metric Value. This one will be used for alerting
+          ## 0 ->   everything went correct
+          ## >0 ->  something went bad (probably it will trigger an alert)
+          METRIC_VALUE="${{ steps.run_e2e_tests.outputs.exit_code }}"
+
+          ############################
+          # File with all the labels #
+          ############################
+          cat << EOF > metrics_labels
+
+          # Monitor variables
+          monitor_version="v0.1" #Metric used to differentiate between several metric configs
+
+          # Github metadata
+          github_ref_name="${{ github.ref_name }}" #name of the branch
+          github_ref_sha="${{ github.sha }}" #hash of the branch used by workflow
+          github_workflow_ref="${{github.workflow_ref}}" ##full ref, with repo, workflow path..
+          github_event_name="${{ github.event_name }}" ##Tells you if it was launched using trigger, cron, pr...
+          github_runid="${{github.run_id}}" #Unique workflow run, changes on each execution
+          github_workflow_name="${{ github.workflow }}"
+
+          ########################################
+          # Labels to be specified (Modify this) #
+          ########################################
+
+          # Project Variables
+          environment="${{env.ENVIRONMENT}}" # previ,dev,stg,prod
+          project="app-next" #app-next, backend2, infra...
+          subproject="e2e-test" #To be able to make categories if needed
+
+          #Extras Labels
+          ## Here you can add all the labels you want to use
+          ## Remember to add them to the url. i.e:
+          test_result_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+          test_error_message="Test failed"
+
+          EOF
+
+          ########################################
+          # Pre-processing and sending the query #
+          ########################################
+
+          sed -i 's/#.*//' metrics_labels #remove all commented lines and commentaries
+          sed -i 's/[[:space:]]*$//' metrics_labels # remove all trailing whitespaces from each line
+          sed -i '/^$/d' metrics_labels # remove empty lines
+
+          cat << EOF >curl_test
+          curl -X POST \
+            -H "X-API-Key: SECRETVALUE_victoria_metrics_apikey" \
+            -H "Content-Type: text/plain" \
+            "${monitor_endpoint_url}" \
+            -d "${monitor_metric_name}{$(awk -F= '/^[^#]/ {gsub(/"/, "", $2); printf "%s=\\\"%s\\\", \\\n", $1, $2}' metrics_labels)
+          } ${METRIC_VALUE}"
+
+          EOF
+
+          bash curl_test
 
       - name: Notify Discord
         if: failure()
