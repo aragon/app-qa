@@ -20,7 +20,7 @@ test("Token Plugin Test - Publish, Approve, and Execute Proposal", async ({
     .or(page.getByRole("link", { name: "Proposal", exact: true }))
     .click();
   await page
-    .getByLabel("Recipient")
+    .getByLabel("Summary")
     .fill("0xf2Fe4187dA24181C03CdB3cb59C52Cfc45AF8D9f");
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Action" }).click();
