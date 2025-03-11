@@ -19,16 +19,15 @@ test("General Test - Add Custom Proposal Action", async ({
     .getByRole("button", { name: "Proposal", exact: true })
     .or(page.getByRole("link", { name: "Proposal", exact: true }))
     .click();
-  await page.getByPlaceholder("Type a title").click();
   await page
-    .getByPlaceholder("Type a title")
+    .getByLabel("Proposal title")
     .fill("Create proposal with custom action");
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Custom" }).click();
-  await page.getByPlaceholder("ENS or 0x …").click();
   await page
-    .getByPlaceholder("ENS or 0x …")
+    .getByPlaceholder("ENS or 0x…")
     .fill("0x0b0e0c2e07324fd29e9b21d48af43c9a30f4c5da");
+
   await page.getByRole("button", { name: "Add contract" }).click();
   await page.getByRole("option", { name: "approve" }).first().click();
   await page.getByPlaceholder("address", { exact: true }).click();

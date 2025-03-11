@@ -12,7 +12,7 @@ test("General Test - Add Connect Proposal Action", async ({
 }) => {
   await connectWallet(page, metamask);
   await page.goto(
-    "/dao/ethereum-sepolia-0x1EBc713b156e4eF97e77291dbe9dF9F762D73404/dashboard" //adminPlugin DAO
+    "/dao/ethereum-sepolia-0x2dd2cbe4578186c4e94d631b93140b8d958859fe/dashboard" //multisigPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
   await page.waitForTimeout(3000);
@@ -20,9 +20,8 @@ test("General Test - Add Connect Proposal Action", async ({
     .getByRole("button", { name: "Proposal", exact: true })
     .or(page.getByRole("link", { name: "Proposal", exact: true }))
     .click();
-  await page.getByPlaceholder("Type a title").click();
   await page
-    .getByPlaceholder("Type a title")
+    .getByLabel("Proposal title")
     .fill("Create proposal with connect action");
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Connect" }).click();
@@ -49,8 +48,8 @@ test("General Test - Add Connect Proposal Action", async ({
   );
   console.log("Extracted WalletConnect URI from clipboard:", walletUri);
   await page.bringToFront();
-  await page.getByPlaceholder("wc: …").focus();
-  await page.getByPlaceholder("wc: …").fill(walletUri);
+  await page.getByPlaceholder("wc:…").focus();
+  await page.getByPlaceholder("wc:…").fill(walletUri);
   await page.getByRole("button", { name: "Connect dApp" }).click();
   try {
     if (!(await cowSwapPage.isClosed())) {
@@ -70,7 +69,7 @@ test("General Test - Add Connect Proposal Action", async ({
     await cowSwapPage
       .locator("#input-currency-input")
       .getByPlaceholder("0")
-      .fill("0.01");
+      .fill("0.1");
   }
   await cowSwapPage.getByRole("button", { name: "Swap with WETH" }).click();
   if (await cowSwapPage.getByRole("button", { name: "Swap" }).isVisible()) {
@@ -85,6 +84,7 @@ test("General Test - Add Connect Proposal Action", async ({
   }
   await page.bringToFront();
   await page.getByRole("button", { name: "Add 1 actions" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Publish proposal" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();
   await page.waitForTimeout(3000);
