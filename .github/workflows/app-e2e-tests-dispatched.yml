@@ -87,7 +87,7 @@ jobs:
         id: run_e2e_tests
         run: |
           set -x 
-          echo "run_e2e_tests_exitcode=${{ github.event.inputs.metric_test }}" >> $GITHUB_ENV
+          exit ${{ github.event.inputs.metric_test }}
         #run: xvfb-run yarn playwright test --project=chromium
         #env:
         #  TEST_ENV: ${{ env.ENVIRONMENT }}
@@ -125,8 +125,25 @@ jobs:
           #Numeric metric Value. This one will be used for alerting
           ## 0 ->   everything went correct
           ## >0 ->  something went bad (probably it will trigger an alert)
-          METRIC_VALUE="${{ env.run_e2e_tests_exitcode }}"
-          #METRIC_VALUE="${{ github.event.inputs.metric_test }}"
+          case "${{ steps.run_e2e_tests.outcome }}" in
+            "success")
+              METRIC_VALUE=0
+              ;;
+            "failure")
+              METRIC_VALUE=1
+              ;;
+            "cancelled")
+              METRIC_VALUE=1
+              ;;
+            "skipped")
+              METRIC_VALUE=1
+              ;;
+            *)
+              METRIC_VALUE=1
+              ;;
+          esac
+
+
           ############################
           # File with all the labels #
           ############################
@@ -155,7 +172,7 @@ jobs:
           #Extras Labels
           ## Here you can add all the labels you want to use
           ## Remember to add them to the url. i.e:
-          test_result_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+          test_result_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           test_error_message="Test failed"
 
           EOF
