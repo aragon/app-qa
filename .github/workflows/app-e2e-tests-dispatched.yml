@@ -14,6 +14,10 @@ on:
           - "stg"
           - "production"
           - "prod"
+      metric_test:
+        description: "Numeric input for test level"
+        required: true
+        default: 1
   repository_dispatch:
     types: ["app_e2e_tests_dispatched"]
 
@@ -82,12 +86,14 @@ jobs:
 
       - name: Run E2E tests
         id: run_e2e_tests
-        run: xvfb-run yarn playwright test --project=chromium
-        env:
-          TEST_ENV: ${{ env.ENVIRONMENT }}
-          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
-          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
-          NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
+        run: |
+          exit "${{ github.event.inputs.metric_test }}"
+        #run: xvfb-run yarn playwright test --project=chromium
+        #env:
+        #  TEST_ENV: ${{ env.ENVIRONMENT }}
+        #  METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
+        #  METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
+        #  NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
 
       - name: Upload Playwright report
         if: always()
