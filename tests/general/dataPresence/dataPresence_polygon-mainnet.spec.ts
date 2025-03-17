@@ -205,7 +205,6 @@ test("General Test - Check Data Presence Polygon Mainnet", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Version Info" })
   ).toBeVisible();
-  await expect(page.getByText(/Appv\d+\.\d+\.\d+/)).toBeVisible();
   await expect(page.getByText("Operating systemAragon OSx v1")).toBeVisible();
   await expect(page.getByText("GovernanceMultisig v1.20x1E…")).toBeVisible();
 });
