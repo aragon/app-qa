@@ -5,6 +5,7 @@ export async function connectWallet(page: Page, metamask: MetaMask) {
   await page.getByRole("button", { name: "Connect" }).click();
   await page.waitForTimeout(3000);
   await page.getByRole("button", { name: "Connect" }).click();
+  await page.getByTestId("wui-checkbox").locator("span").click();
   await page
     .locator("wui-text")
     .filter({ hasText: "MetaMask" })
