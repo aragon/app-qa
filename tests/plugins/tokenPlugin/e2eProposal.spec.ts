@@ -27,7 +27,7 @@ test("Token Plugin Test - Publish, Approve, and Execute Proposal", async ({
   await page.getByRole("option", { name: "Transfer" }).click();
   await page
     .getByLabel("Recipient")
-    .fill("0xf2Fe4187dA24181C03CdB3cb59C52Cfc45AF8D9f");
+    .fill("0xe29a587359a0c055a66ae3562632436bd8e6e9a0");
   await page.getByRole("button", { name: "Select" }).click();
   await page.getByRole("button", { name: "Select" }).click({ force: true });
   await page.getByRole("button", { name: /ETH/ }).click();

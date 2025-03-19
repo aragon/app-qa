@@ -11,7 +11,7 @@ test("Admin Plugin Test - Publish, and Execute Proposal", async ({
 }) => {
   await connectWallet(page, metamask);
   await page.goto(
-    "/dao/ethereum-sepolia-0x8D0FE64D5f18c99f6aa309d5e503dCc298784865/dashboard" //adminPlugin DAO
+    "/dao/ethereum-sepolia-0x4Dff745Ea1Ba6021b166E3D77bE2714C8e2d4f10/dashboard" //adminPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
   await page.waitForTimeout(3000);
@@ -25,12 +25,12 @@ test("Admin Plugin Test - Publish, and Execute Proposal", async ({
   await page.getByRole("option", { name: "Transfer" }).click();
   await page
     .getByLabel("Recipient")
-    .fill("0x8D0FE64D5f18c99f6aa309d5e503dCc298784865");
+    .fill("0x4Dff745Ea1Ba6021b166E3D77bE2714C8e2d4f10");
   await page.getByRole("button", { name: "Select" }).click();
   await page.getByRole("button", { name: "Select" }).click({ force: true });
   await page.getByRole("button", { name: /USDC/ }).click();
   await page.getByPlaceholder("0", { exact: true }).click();
-  await page.getByPlaceholder("0", { exact: true }).fill("0.1234");
+  await page.getByPlaceholder("0", { exact: true }).fill("0.01234");
   await page.getByRole("button", { name: "Publish proposal" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();
   await page.waitForTimeout(3000);

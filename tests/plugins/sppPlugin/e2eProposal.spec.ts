@@ -11,7 +11,7 @@ test("Spp Plugin Test - Publish, Approve, and Execute Proposal", async ({
 }) => {
   await connectWallet(page, metamask);
   await page.goto(
-    "/dao/ethereum-sepolia-0xf2Fe4187dA24181C03CdB3cb59C52Cfc45AF8D9f/dashboard" //sppPlugin DAO
+    "/dao/ethereum-sepolia-0x3177D5C67D33897fDd8FeC0579f4139ebF043412/dashboard" //sppPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
   await page.waitForTimeout(3000);
@@ -30,7 +30,7 @@ test("Spp Plugin Test - Publish, Approve, and Execute Proposal", async ({
   await page.getByRole("option", { name: "Transfer" }).click();
   await page
     .getByLabel("Recipient")
-    .fill("0xf2Fe4187dA24181C03CdB3cb59C52Cfc45AF8D9f");
+    .fill("0x3177D5C67D33897fDd8FeC0579f4139ebF043412");
   await page.getByRole("button", { name: "Select" }).click();
   await page.getByRole("button", { name: "Select" }).click({ force: true });
   await page.getByRole("button", { name: /ETH/ }).click();
