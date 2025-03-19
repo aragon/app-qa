@@ -22,7 +22,7 @@ test("General Test - Check Data Presence Ethereum Sepolia", async ({
   await expect(
     page
       .locator("div")
-      .filter({ hasText: /^9Proposals$/ }) //bug, should be 5
+      .filter({ hasText: /^5Proposals$/ })
       .locator("div")
   ).toBeVisible();
   await expect(page.getByRole("banner").getByText("Members")).toBeVisible();
