@@ -11,7 +11,7 @@ test("Multisig Plugin Test - Publish, Approve, and Execute Proposal", async ({
 }) => {
   await connectWallet(page, metamask);
   await page.goto(
-    "/dao/ethereum-sepolia-0x2dd2cbe4578186c4e94d631b93140b8d958859fe/dashboard" //multisigPlugin DAO
+    "/dao/ethereum-sepolia-0x9ef1877684605b94c8c1fee6b7c2de0c9e0c6a27/dashboard" //multisigPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
   await page.waitForTimeout(3000);

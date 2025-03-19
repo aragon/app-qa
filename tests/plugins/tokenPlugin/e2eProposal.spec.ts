@@ -11,7 +11,7 @@ test("Token Plugin Test - Publish, Approve, and Execute Proposal", async ({
 }) => {
   await connectWallet(page, metamask);
   await page.goto(
-    "/dao/ethereum-sepolia-0x71f0d013564499431d3b58e6cc97d041a6e31595/dashboard" //tokenPlugin DAO
+    "/dao/ethereum-sepolia-0xe29a587359a0c055a66ae3562632436bd8e6e9a0/dashboard" //tokenPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
   await page.waitForTimeout(3000);
