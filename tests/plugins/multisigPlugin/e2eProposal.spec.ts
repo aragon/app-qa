@@ -27,7 +27,7 @@ test("Multisig Plugin Test - Publish, Approve, and Execute Proposal", async ({
   await page.getByRole("option", { name: "Transfer" }).click();
   await page
     .getByLabel("Recipient")
-    .fill("0x2dd2cbe4578186c4e94d631b93140b8d958859fe");
+    .fill("0x9ef1877684605b94c8c1fee6b7c2de0c9e0c6a27");
   await page.getByRole("button", { name: "Select" }).click();
   await page.getByRole("button", { name: "Select" }).click({ force: true });
   await page.getByRole("button", { name: /USDC/ }).click();

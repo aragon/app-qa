@@ -11,7 +11,7 @@ test("General Test - Add Custom Proposal Action", async ({
 }) => {
   await connectWallet(page, metamask);
   await page.goto(
-    "/dao/ethereum-sepolia-0x1EBc713b156e4eF97e77291dbe9dF9F762D73404/dashboard" //adminPlugin DAO
+    "/dao/ethereum-sepolia-0xb724AcB4e77313F138BD87Bc17f39efb92Cf5863/dashboard" //adminPlugin DAO
   );
   await page.getByRole("link", { name: "Proposals" }).click();
   await page.waitForTimeout(3000);
