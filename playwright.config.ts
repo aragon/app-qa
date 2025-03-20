@@ -4,12 +4,12 @@ import { defineConfig, devices } from "@playwright/test";
 const ENV_URLS = {
   local: "http://localhost:3000",
   preview: process.env.PREVIEW_URL,
-  development: "https://dev.app-next.aragon.org",
-  dev: "https://dev.app-next.aragon.org",
-  staging: "https://stg.app-next.aragon.org/",
-  stg: "https://stg.app-next.aragon.org/",
-  production: "https://app-next.aragon.org",
-  prd: "https://app-next.aragon.org",
+  development: "https://dev.app.aragon.org",
+  dev: "https://dev.app.aragon.org",
+  staging: "https://stg.app.aragon.org/",
+  stg: "https://stg.app.aragon.org/",
+  production: "https://app.aragon.org",
+  prd: "https://app.aragon.org",
 };
 
 // Define or get environment variable

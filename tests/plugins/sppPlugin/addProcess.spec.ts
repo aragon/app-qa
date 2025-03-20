@@ -11,7 +11,7 @@ test("Spp Plugin Test - Create Governance Process", async ({
 }) => {
   await connectWallet(page, metamask);
   await page.goto(
-    "/dao/ethereum-sepolia-0x9b42704949b98CE4C3b7484D3Fe2694807768942/dashboard" //spp dao
+    "/dao/ethereum-sepolia-0x3177D5C67D33897fDd8FeC0579f4139ebF043412/dashboard" //spp dao
   );
   await page.getByRole("button", { name: "Add Governance" }).click();
   await page.getByRole("link", { name: "Get started" }).click();

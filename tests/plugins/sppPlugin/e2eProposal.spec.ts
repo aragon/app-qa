@@ -20,7 +20,7 @@ test("Spp Plugin Test - Publish, Approve, and Execute Proposal", async ({
     .or(page.getByRole("link", { name: "Proposal", exact: true }))
     .click();
   await page.waitForTimeout(3000);
-  await page.getByRole("button", { name: "End To End ETE" }).click();
+  await page.getByRole("button", { name: "End To End ETE" }).first().click();
   await page.getByRole("button", { name: "Create" }).click();
   await page
     .getByLabel("Proposal title")
@@ -33,7 +33,7 @@ test("Spp Plugin Test - Publish, Approve, and Execute Proposal", async ({
     .fill("0x3177D5C67D33897fDd8FeC0579f4139ebF043412");
   await page.getByRole("button", { name: "Select" }).click();
   await page.getByRole("button", { name: "Select" }).click({ force: true });
-  await page.getByRole("button", { name: /ETH/ }).click();
+  await page.getByRole("button", { name: /USDC/ }).click();
   await page.getByPlaceholder("0", { exact: true }).click();
   await page.getByPlaceholder("0", { exact: true }).fill("0.01234");
   await page.getByRole("button", { name: "Next" }).click();
@@ -44,15 +44,13 @@ test("Spp Plugin Test - Publish, Approve, and Execute Proposal", async ({
   await page.waitForTimeout(3000);
   await page.getByRole("link", { name: "View proposal" }).click();
   await page.waitForTimeout(10000);
-  await page.getByRole("tab", { name: "End To End" }).click();
+  await page.getByRole("tab", { name: "End To End" }).first().click();
   await page
     .getByRole("link", { name: /Publish, Approve, and Execute Proposal/ })
     .first()
     .click();
   await page.waitForTimeout(3000);
-  await page.getByRole("button", { name: "Vote on proposal" }).click();
-  await page.getByLabel("Yes").click();
-  await page.getByRole("button", { name: "Submit vote" }).click();
+  await page.getByRole("button", { name: "Approve proposal" }).click();
   await page.getByRole("button", { name: "Approve transaction" }).click();
   await page.waitForTimeout(3000);
   await metamask.confirmTransaction();
