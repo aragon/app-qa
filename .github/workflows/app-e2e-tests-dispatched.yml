@@ -4,15 +4,15 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'The environment to run the E2E tests for'
+        description: "The environment to run the E2E tests for"
         required: true
         type: choice
         options:
-          - 'development'
-          - 'staging'
-          - 'production'
+          - "development"
+          - "staging"
+          - "production"
   repository_dispatch:
-    types: ['app_e2e_tests_dispatched']
+    types: ["app_e2e_tests_dispatched"]
 
 env:
   ENVIRONMENT: ${{ github.event.inputs.environment || github.event.client_payload.environment || 'development' }}
@@ -26,7 +26,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Checkout app-qa repository
         uses: actions/checkout@v4

@@ -1,16 +1,16 @@
-name: 'Dispatch'
-description: 'This action triggers the E2E tests on the defined environment'
+name: "Dispatch"
+description: "This action triggers the E2E tests on the defined environment"
 
 inputs:
   environment:
-    description: 'The environment to run the E2E tests for'
+    description: "The environment to run the E2E tests for"
     required: true
   opToken:
-    description: '1Password token used to retrieve the required secrets'
+    description: "1Password token used to retrieve the required secrets"
     required: true
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Load secrets
       id: load-secrets
