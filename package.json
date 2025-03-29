@@ -10,7 +10,7 @@
   "scripts": {
     "e2e": "playwright test --ui",
     "e2e:debug": "playwright test --debug",
-    "setup": "synpress ./tests/helpers",
+    "setup": "synpress ./src/helpers",
     "prettify": "prettier . --check",
     "prettify:fix": "prettier . --write",
     "prepare": "husky"

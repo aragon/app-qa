@@ -1,9 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 
 // Environment-specific base URLs
-const ENV_URLS = {
+const ENV_URLS: Record<string, string> = {
     local: 'http://localhost:3000',
-    preview: process.env.PREVIEW_URL,
+    preview: process.env.PREVIEW_URL!,
     development: 'https://dev.app.aragon.org',
     dev: 'https://dev.app.aragon.org',
     staging: 'https://stg.app.aragon.org/',
@@ -21,7 +21,7 @@ if (!baseURL) {
 }
 
 export default defineConfig({
-    testDir: './tests',
+    testDir: './src',
     fullyParallel: true,
     forbidOnly: !!process.env.CI,
     retries: process.env.CI ? 0 : 0,
