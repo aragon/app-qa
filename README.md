@@ -6,85 +6,72 @@ The `app-qa` repository is responsible for running end-to-end (E2E) tests agains
 
 Before setting up the project, ensure you have the following installed:
 
-- [Node.js](https://nodejs.org/) (Latest LTS version recommended)
-- [Yarn](https://yarnpkg.com/) (Or npm, if preferred)
-- [Git](https://git-scm.com/)
+-   [Node.js](https://nodejs.org/) (Latest LTS version recommended)
+-   [Yarn](https://yarnpkg.com/) (Or npm, if preferred)
+-   [Git](https://git-scm.com/)
 
 ## Getting Started
 
 Follow these steps to set up and run E2E tests locally:
 
-1. **Clone the repository:**
+1. **Install dependencies:**
 
-   ```bash
-   git clone <repository-url>
-   cd <project-directory>
-   ```
+    ```bash
+    yarn install
+    ```
 
-2. **Install dependencies:**
+2. **Set up environment variables:**
 
-   ```bash
-   yarn install
-   ```
+    Create a `.env` file in the root directory using `.env.example` as a template. Ensure it includes the necessary variables:
 
-3. **Set up environment variables:**
+    ```bash
+    cp .env.example .env
+    ```
 
-   Create a `.env` file in the root directory using `.env.example` as a template. Ensure it includes the necessary variables:
+    Required environment variables:
 
-   ```bash
-   cp .env.example .env
-   ```
+    ```bash
+    METAMASK_SEED_PHRASE=<your-seed-phrase>
+    METAMASK_PASSWORD=<your-password>
+    ```
 
-   Required environment variables:
+3. **Build Synpress cache (required for MetaMask integration):**
 
-   ```bash
-   METAMASK_SEED_PHRASE=<your-seed-phrase>
-   METAMASK_PASSWORD=<your-password>
-   ```
-
-4. **Install Playwright dependencies:**
-
-   ```bash
-   yarn playwright install --with-deps
-   ```
-
-5. **Build Synpress cache (required for MetaMask integration):**
-
-   ```bash
-   npx synpress ./tests/helpers/
-   ```
+    ```bash
+    yarn setup
+    ```
 
 ## Running E2E Tests
 
 Ensure your MetaMask wallet has sufficient funds before running tests.
 
-- **Run all tests:**
+-   **Run all tests:**
 
-  ```bash
-  yarn e2e
-  ```
+    ```bash
+    yarn e2e
+    ```
 
-- **Run tests on a specific browser (e.g., Firefox):**
+-   **Run tests on a specific browser (e.g., Firefox):**
 
-  ```bash
-  yarn e2e --project=firefox
-  ```
+    ```bash
+    yarn e2e --project=firefox
+    ```
 
-- **Define the test environment before running tests (e.g., Development):**
+-   **Define the test environment before running tests (e.g., Development):**
 
-  ```bash
-  TEST_ENV=development yarn e2e
-  ```
+    ```bash
+    TEST_ENV=development yarn e2e
+    ```
 
-- **View more options in the Playwright configuration file:** [`playwright.config.js`](./playwright.config.ts)
+-   **View more options in the Playwright configuration file:** [`playwright.config.js`](./playwright.config.ts)
 
 ## Documentation
 
 The E2E testing framework utilizes the following tools:
 
-- [Playwright](https://playwright.dev/)
-- [Synpress](https://synpress.io/)
-- [MetaMask](https://metamask.io/)
+-   [Playwright](https://playwright.dev/)
+-   [Synpress](https://synpress.io/)
+-   [MetaMask](https://metamask.io/)
 
 For more details, refer to the [Playwright Documentation](https://playwright.dev/docs/intro) and [Synpress Documentation](https://docs.synpress.io/docs/introduction).
 

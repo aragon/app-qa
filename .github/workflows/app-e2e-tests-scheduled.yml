@@ -3,7 +3,7 @@ name: App E2E Tests - Scheduled
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0,12 * * *" # Runs at 12:00 AM and 12:00 PM
+    - cron: '0 0,12 * * *' # Runs at 12:00 AM and 12:00 PM
 
 jobs:
   test:
@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
 
       - name: Checkout app-qa Repository
         uses: actions/checkout@v4

@@ -1,23 +1,14 @@
-import { defineWalletSetup } from "@synthetixio/synpress";
-import { MetaMask } from "@synthetixio/synpress/playwright";
-import "dotenv/config";
+import { defineWalletSetup } from '@synthetixio/synpress';
+import { MetaMask } from '@synthetixio/synpress/playwright';
+import 'dotenv/config';
 
 const SEED_PHRASE = process.env.METAMASK_SEED_PHRASE!;
 const PASSWORD = process.env.METAMASK_PASSWORD!;
 
 export default defineWalletSetup(PASSWORD, async (context, walletPage) => {
-  const metamask = new MetaMask(context, walletPage, PASSWORD);
+    const metamask = new MetaMask(context, walletPage, PASSWORD);
 
-  await metamask.importWallet(SEED_PHRASE);
+    await metamask.importWallet(SEED_PHRASE);
 
-  // await metamask.addNetwork("Arbitrum");
-  // await metamask.addNetwork({
-  //   name: "Arbitrum One",
-  //   rpcUrl: "https://arb1.arbitrum.io/rpc",
-  //   chainId: 42161,
-  //   symbol: "ETH",
-  //   blockExplorerUrl: "https://arbiscan.io",
-  // });
-
-  await metamask.switchNetwork("Sepolia", true);
+    await metamask.switchNetwork('Sepolia', true);
 });

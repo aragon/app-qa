@@ -1,23 +1,34 @@
 {
-  "name": "e2e-tests",
+  "name": "app-qa",
   "version": "1.0.0",
-  "main": "index.js",
-  "repository": "https://github.com/Barukimang/e2e-tests.git",
-  "author": "Barukimang <barukimang@gmail.com>",
-  "license": "MIT",
+  "description": "E2E test suite for Aragon App",
+  "author": "Aragon Association",
+  "homepage": "https://github.com/aragon/app-qa#readme",
+  "private": true,
+  "license": "GPL-3.0",
   "type": "module",
+  "scripts": {
+    "e2e": "playwright test --ui",
+    "e2e:debug": "playwright test --debug",
+    "setup": "synpress ./tests/helpers"
+  },
   "devDependencies": {
     "@playwright/test": "^1.45.3",
     "@synthetixio/synpress": "^4.0.3",
     "@types/node": "^22.5.5",
+    "dotenv": "^16.4.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2"
   },
-  "scripts": {
-    "e2e": "playwright test --ui"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aragon/app-qa.git"
   },
-  "dependencies": {
-    "dotenv": "^16.4.5"
+  "bugs": {
+    "url": "https://github.com/aragon/app-qa/issues"
   },
-  "packageManager": "yarn@4.6.0"
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "yarn@4.7.0"
 }
