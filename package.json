@@ -12,13 +12,16 @@
     "e2e:debug": "playwright test --debug",
     "setup": "synpress ./tests/helpers",
     "prettify": "prettier . --check",
-    "prettify:fix": "prettier . --write"
+    "prettify:fix": "prettier . --write",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@playwright/test": "^1.45.3",
     "@synthetixio/synpress": "^4.0.3",
     "@types/node": "^22.5.5",
     "dotenv": "^16.4.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "ts-node": "^10.9.2",
