@@ -4,6 +4,7 @@ const eslint = require('@eslint/js');
 const tsEslint = require('typescript-eslint');
 
 const importPlugin = require('eslint-plugin-import');
+const playwright = require('eslint-plugin-playwright');
 
 const tsConfig = require('./tsconfig.json');
 
@@ -31,7 +32,9 @@ const config = tsEslint.config(
                 node: true,
             },
         },
+        plugins: { ...playwright.configs['flat/recommended'].plugins },
     },
+
     {
         ignores: tsConfig.exclude,
     },
@@ -52,6 +55,7 @@ const config = tsEslint.config(
             '@typescript-eslint/consistent-type-imports': ['warn', { fixStyle: 'inline-type-imports' }],
             '@typescript-eslint/consistent-type-exports': ['warn', { fixMixedExportsWithInlineTypeSpecifier: true }],
             'import/no-cycle': 'warn',
+            ...playwright.configs['flat/recommended'].rules,
         },
     },
     // Rules for JavaScript files
@@ -61,13 +65,6 @@ const config = tsEslint.config(
         rules: {
             ...tsEslint.configs.disableTypeChecked.rules,
             '@typescript-eslint/no-require-imports': 'off',
-        },
-    },
-    // Rules for test files
-    {
-        files: ['**/*.test.ts', '**/*.test.tsx'],
-        rules: {
-            '@typescript-eslint/unbound-method': 'off',
         },
     },
 );
