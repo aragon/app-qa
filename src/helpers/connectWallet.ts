@@ -1,5 +1,5 @@
-import { Page } from '@playwright/test';
-import { MetaMask } from '@synthetixio/synpress/playwright';
+import type { Page } from '@playwright/test';
+import type { MetaMask } from '@synthetixio/synpress/playwright';
 
 export async function connectWallet(page: Page, metamask: MetaMask) {
     await page.getByRole('button', { name: 'Connect' }).click();

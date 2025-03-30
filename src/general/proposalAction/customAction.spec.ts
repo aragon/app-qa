@@ -32,5 +32,5 @@ test('General Test - Add Custom Proposal Action', async ({ page, metamask }) => 
     await page.waitForTimeout(3000);
     await metamask.confirmTransaction();
     await page.waitForTimeout(3000);
-    await page.getByRole('link', { name: 'View proposal' });
+    await page.getByRole('link', { name: 'View proposal' }).isVisible();
 });

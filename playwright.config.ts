@@ -13,7 +13,7 @@ const ENV_URLS: Record<string, string> = {
 };
 
 // Define or get environment variable
-const ENV = process.env.TEST_ENV || 'development';
+const ENV = process.env.TEST_ENV ?? 'development';
 const baseURL = ENV_URLS[ENV];
 
 if (!baseURL) {

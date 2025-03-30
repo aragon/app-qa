@@ -30,18 +30,13 @@ test('General Test - Add Connect Proposal Action', async ({ page, context, metam
     await cowSwapPage.getByTitle('Connect your wallet').getByRole('button').click();
     await cowSwapPage.getByTitle('Connect your wallet').getByRole('button').click();
     const walletUri = await cowSwapPage.evaluate(() => navigator.clipboard.readText());
-    console.log('Extracted WalletConnect URI from clipboard:', walletUri);
     await page.bringToFront();
     await page.getByPlaceholder('wc:…').focus();
     await page.getByPlaceholder('wc:…').fill(walletUri);
     await page.getByRole('button', { name: 'Connect dApp' }).click();
-    try {
-        if (!(await cowSwapPage.isClosed())) {
-            await cowSwapPage.bringToFront();
-            await cowSwapPage.locator('.styled__CloseButton-sc-szverx-1').click();
-        }
-    } catch (error) {
-        console.warn('Close button not found or page already closed');
+    if (!cowSwapPage.isClosed()) {
+        await cowSwapPage.bringToFront();
+        await cowSwapPage.locator('.styled__CloseButton-sc-szverx-1').click();
     }
     if (await cowSwapPage.getByRole('button', { name: 'Max' }).isVisible()) {
         await cowSwapPage.getByRole('button', { name: 'Max' }).click();
@@ -66,5 +61,5 @@ test('General Test - Add Connect Proposal Action', async ({ page, context, metam
     await page.waitForTimeout(3000);
     await metamask.confirmTransaction();
     await page.waitForTimeout(3000);
-    await page.getByRole('link', { name: 'View proposal' });
+    await page.getByRole('link', { name: 'View proposal' }).isVisible();
 });
