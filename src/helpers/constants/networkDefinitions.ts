@@ -44,6 +44,7 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         needsSetup: false,
         testConfig: {
             createDao: false,
+            testDaoId: undefined,
         },
     },
     [Network.ETHEREUM_SEPOLIA]: {
@@ -61,9 +62,10 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         ...polygon,
         name: 'Polygon',
         network: Network.POLYGON_MAINNET,
-        needsSetup: false,
+        needsSetup: true,
         testConfig: {
             createDao: false,
+            testDaoId: undefined,
         },
     },
     [Network.ZKSYNC_MAINNET]: {
@@ -74,15 +76,16 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         needsSetup: false,
         testConfig: {
             createDao: false,
+            testDaoId: undefined,
         },
     },
     [Network.ZKSYNC_SEPOLIA]: {
         ...zksyncSepoliaTestnet,
         name: 'zkSync Sepolia',
         network: Network.ZKSYNC_SEPOLIA,
-        needsSetup: false,
+        needsSetup: true,
         testConfig: {
-            createDao: false,
+            createDao: true,
             testDaoId: 'zksync-sepolia-0x553dE42f7A43cD3cED91CDf0069cfc5a08Cc42f0',
         },
     },

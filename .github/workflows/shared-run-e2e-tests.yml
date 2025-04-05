@@ -30,10 +30,7 @@ jobs:
       - name: Setup Playwright
         run: yarn setup:playwright
       - name: Setup Synpress
-        run: xvfb-run yarn setup:synpress --debug
-        env:
-          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
-          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
+        run: xvfb-run yarn setup:synpress
 
       - name: Run E2E tests
         run: xvfb-run yarn test
