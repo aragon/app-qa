@@ -50,7 +50,7 @@ jobs:
             synpress-
       - name: Setup Synpress
         if: steps.synpress-cache.outputs.cache-hit != 'true'
-        run: xvfb-run yarn setup:synpress
+        run: xvfb-run npx synpress ./src/setup
 
       - name: Run E2E tests
         run: xvfb-run yarn test
