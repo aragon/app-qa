@@ -62,7 +62,7 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         ...polygon,
         name: 'Polygon',
         network: Network.POLYGON_MAINNET,
-        needsSetup: true,
+        needsSetup: false,
         testConfig: {
             createDao: false,
             testDaoId: undefined,
