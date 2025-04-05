@@ -1,6 +1,6 @@
 import { defineWalletSetup } from '@synthetixio/synpress';
 import { MetaMask } from '@synthetixio/synpress/playwright';
-// import 'dotenv/config';
+import 'dotenv/config';
 import { networkDefinitions } from '../helpers';
 
 const SEED_PHRASE = process.env.METAMASK_SEED_PHRASE!;
