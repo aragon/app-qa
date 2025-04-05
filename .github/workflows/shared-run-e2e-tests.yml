@@ -30,7 +30,7 @@ jobs:
       - name: Setup Playwright
         run: yarn setup:playwright
       - name: Setup Synpress
-        run: xvfb-run yarn setup:synpress
+        run: xvfb-run yarn setup:synpress --debug
 
       - name: Run E2E tests
         run: xvfb-run yarn test
