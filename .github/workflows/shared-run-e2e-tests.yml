@@ -8,10 +8,6 @@ on:
         required: true
         type: string
 
-env:
-  METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
-  METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -26,15 +22,15 @@ jobs:
         uses: actions/checkout@v4.2.2
       - name: Install dependencies
         run: yarn install --immutable
+
       - name: Prepare secrets
         run: |
           echo "METAMASK_SEED_PHRASE=${{secrets.METAMASK_SEED_PHRASE}}" >> .env
           echo "METAMASK_PASSWORD=${{secrets.METAMASK_PASSWORD}}" >> .env
-
-      - name: Setup Playwright
-        run: yarn setup:playwright
       - name: Setup Synpress
         run: xvfb-run yarn setup:synpress
+      - name: Setup Playwright
+        run: yarn setup:playwright
 
       - name: Run E2E tests
         run: xvfb-run yarn test
