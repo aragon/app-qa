@@ -8,6 +8,7 @@ const PASSWORD = process.env.METAMASK_PASSWORD!;
 const walletSetup = defineWalletSetup(PASSWORD, async (context, walletPage) => {
     const metamask = new MetaMask(context, walletPage, PASSWORD);
     await metamask.importWallet(SEED_PHRASE);
+    console.log(PASSWORD);
 
     /*
     const walletSetupList = Object.values(networkDefinitions).filter((network) => network.needsSetup);

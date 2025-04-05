@@ -27,30 +27,13 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Restore Playwright cache
-        id: playwright-cache
-        uses: actions/cache@v4.2.3
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('playwright.config.ts') }}
-          restore-keys: |
-            playwright-${{ runner.os }}-
-            playwright-
       - name: Setup Playwright
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: yarn setup:playwright
-      - name: Restore Synpress cache
-        id: synpress-cache
-        uses: actions/cache@v4.2.3
-        with:
-          path: .cache-synpress
-          key: synpress-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('package.json') }}
-          restore-keys: |
-            synpress-${{ runner.os }}-
-            synpress-
       - name: Setup Synpress
-        if: steps.synpress-cache.outputs.cache-hit != 'true'
-        run: xvfb-run npx synpress ./src/setup --debug
+        run: xvfb-run yarn setup:synpress --debug
+        env:
+          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
+          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
 
       - name: Run E2E tests
         run: xvfb-run yarn test
