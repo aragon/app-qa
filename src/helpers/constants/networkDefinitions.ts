@@ -83,9 +83,9 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         ...zksyncSepoliaTestnet,
         name: 'zkSync Sepolia',
         network: Network.ZKSYNC_SEPOLIA,
-        needsSetup: true,
+        needsSetup: false,
         testConfig: {
-            createDao: true,
+            createDao: false,
             testDaoId: 'zksync-sepolia-0x553dE42f7A43cD3cED91CDf0069cfc5a08Cc42f0',
         },
     },

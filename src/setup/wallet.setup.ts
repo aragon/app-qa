@@ -6,8 +6,6 @@ import { networkDefinitions } from '../helpers';
 const SEED_PHRASE = process.env.METAMASK_SEED_PHRASE!;
 const PASSWORD = process.env.METAMASK_PASSWORD!;
 
-console.log({ SEED_PHRASE, PASSWORD });
-
 const walletSetup = defineWalletSetup(PASSWORD, async (context, walletPage) => {
     const extensionId = await getExtensionId(context, 'MetaMask');
     const metamask = new MetaMask(context, walletPage, PASSWORD, extensionId);
