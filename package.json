@@ -19,12 +19,12 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@playwright/test": "^1.45.3",
-    "@synthetixio/synpress": "^4.0.3",
-    "@types/node": "^22.5.5",
-    "dotenv": "^16.4.5",
-    "eslint": "^9.23.0",
-    "eslint-import-resolver-typescript": "^4.2.7",
+    "@playwright/test": "^1.51.1",
+    "@synthetixio/synpress": "^4.0.10",
+    "@types/node": "^22.14.0",
+    "dotenv": "^16.4.7",
+    "eslint": "^9.24.0",
+    "eslint-import-resolver-typescript": "^4.3.1",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-playwright": "^2.2.0",
     "husky": "^9.1.7",
@@ -32,8 +32,8 @@
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.2",
-    "typescript-eslint": "^8.28.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.29.0",
     "viem": "^2.25.0"
   },
   "repository": {
@@ -46,5 +46,5 @@
   "engines": {
     "node": ">=22.0.0"
   },
-  "packageManager": "yarn@4.7.0"
+  "packageManager": "yarn@4.8.1"
 }
