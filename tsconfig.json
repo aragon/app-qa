@@ -12,7 +12,10 @@
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
-    "target": "ES2017"
+    "target": "ESNext",
+    "paths": {
+      "@/setup": ["./src/setup"]
+    }
   },
   "exclude": ["node_modules", ".cache-synpress/**/*", ".yarn/**/*", "playwright-report/**/*", "test-results/**/*"],
   "include": ["*.config.js", "*.config.ts", "*.config.cjs", "src"]

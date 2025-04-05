@@ -52,19 +52,25 @@ Ensure your MetaMask wallet has sufficient funds before running tests.
 - **Run all tests:**
 
     ```bash
-    yarn e2e
+    yarn test
     ```
 
 - **Run tests on a specific browser (e.g., Firefox):**
 
     ```bash
-    yarn e2e --project=firefox
+    yarn test --project=firefox
     ```
 
-- **Define the test environment before running tests (e.g., Development):**
+- **Run tests on a specific environment (e.g., Staging):**
 
     ```bash
-    TEST_ENV=development yarn e2e
+    TEST_ENV=staging yarn test
+    ```
+
+- **Run tests on a custom URL:**
+
+    ```bash
+    TEST_ENV=custom CUSTOM_URL=https://custom.app.aragon.org yarn test
     ```
 
 - **View more options in the Playwright configuration file:** [`playwright.config.js`](./playwright.config.ts)
