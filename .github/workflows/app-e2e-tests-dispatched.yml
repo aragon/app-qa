@@ -18,7 +18,14 @@ env:
   ENVIRONMENT: ${{ github.event.inputs.environment || github.event.client_payload.environment || 'development' }}
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      env: ${{ env.ENVIRONMENT }}
+    steps:
+      - run: echo "Running tests on ${{ env.ENVIRONMENT }}"
   test:
+    needs: setup
     uses: ./.github/workflows/shared-run-e2e-tests.yml
     with:
-      env: ${{ env.ENVIRONMENT }}
+      env: ${{ needs.setup.output.env }}
