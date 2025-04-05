@@ -3,116 +3,15 @@ name: App E2E Tests - Scheduled
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0,12 * * *" # Runs at 12:00 AM and 12:00 PM
+    # Runs at 12:00 AM and 12:00 PM
+    - cron: "0 0,12 * * *"
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
+  build:
+    uses: ./.github/workflows/shared-build.yml
     strategy:
-      matrix:
-        environment: [development, production] # Test in multiple environments
       fail-fast: false
-
-    steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Checkout app-qa Repository
-        uses: actions/checkout@v4
-        with:
-          path: ./
-
-      - name: Cache Node.js modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: app-qa-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-node-20
-          restore-keys: |
-            app-qa-${{ runner.os }}-
-            app-qa-
-            node_modules
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('playwright.config.ts') }}
-          restore-keys: |
-            playwright-${{ runner.os }}-
-            playwright-
-
-      - name: Install Playwright Browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true' # Only run if cache is not found
-        run: npx playwright install chromium --with-deps
-
-      - name: Cache Synpress dependencies
-        id: synpress-cache
-        uses: actions/cache@v3
-        with:
-          path: .cache-synpress
-          key: synpress-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('package.json') }}
-          restore-keys: |
-            synpress-${{ runner.os }}-
-            synpress-
-
-      - name: Build Synpress Depencies
-        if: steps.synpress-cache.outputs.cache-hit != 'true'
-        run: xvfb-run npx synpress ./tests/helpers/
-        env:
-          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
-          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
-
-      - name: Run E2E tests
-        run: xvfb-run yarn playwright test --project=chromium
-        env:
-          TEST_ENV: ${{ matrix.environment }}
-          METAMASK_SEED_PHRASE: ${{ secrets.METAMASK_SEED_PHRASE }}
-          METAMASK_PASSWORD: ${{ secrets.METAMASK_PASSWORD }}
-          NEXT_SECRET_IPFS_JWT: ${{ secrets.NEXT_SECRET_IPFS_JWT }}
-
-      - name: Upload Playwright Report
-        if: always()
-        id: upload_report
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report-${{ matrix.environment }}
-          path: playwright-report/
-          retention-days: 30
-
-      - name: Notify Discord
-        if: failure()
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          ARTIFACT_URL: ${{ steps.upload_report.outputs.artifact-url }}
-        run: |
-          echo "Sending Discord failure notification..."
-          cat <<EOF > payload.json
-          {
-            "embeds": [{
-              "title": "❌ E2E Tests Failed",
-              "color": 15158332,
-              "fields": [
-                { "name": "Repository", "value": "${{ github.repository }}", "inline": false },
-                { "name": "Workflow", "value": "${{ github.workflow }}", "inline": false },
-                { "name": "Branch", "value": "${{ github.ref }}", "inline": false },
-                { "name": "Environment", "value": "${{ matrix.environment }}", "inline": false },
-                { "name": "Artifact Download URL", "value": "[Download Playwright Report]($ARTIFACT_URL)", "inline": false },
-                { "name": "Details", "value": "[View Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false }
-              ],
-              "timestamp": "$(date --utc +%FT%TZ)"
-            }]
-          }
-          EOF
-
-          curl -X POST -H "Content-Type: application/json" -d @payload.json $DISCORD_WEBHOOK_URL
-          echo "Discord notification sent."
-
-      - name: Cleanup temporary files
-        run: rm -rf ./app-next/node_modules ./build ./tmp
+      matrix:
+        environment: [development, production]
+    with:
+      env: ${{ matrix.environment }}
