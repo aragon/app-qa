@@ -41,6 +41,7 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         ...mainnet,
         name: 'Ethereum',
         network: Network.ETHEREUM_MAINNET,
+        needsSetup: false,
         testConfig: {
             createDao: false,
         },
@@ -50,6 +51,7 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         name: 'Ethereum Sepolia',
         network: Network.ETHEREUM_SEPOLIA,
         metamaskName: 'Sepolia',
+        needsSetup: false,
         testConfig: {
             createDao: true,
             testDaoId: 'ethereum-sepolia-0xcd197F9b9D9b5f9D7DB797cd3E4EC021669eEc81',
@@ -59,7 +61,7 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         ...polygon,
         name: 'Polygon',
         network: Network.POLYGON_MAINNET,
-        needsSetup: true,
+        needsSetup: false,
         testConfig: {
             createDao: false,
         },
@@ -69,7 +71,7 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         name: 'zkSync',
         network: Network.ZKSYNC_MAINNET,
         // TODO: check why an error is thrown when trying to setup zksync chain
-        // needsSetup: true,
+        needsSetup: false,
         testConfig: {
             createDao: false,
         },
@@ -78,9 +80,9 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         ...zksyncSepoliaTestnet,
         name: 'zkSync Sepolia',
         network: Network.ZKSYNC_SEPOLIA,
-        needsSetup: true,
+        needsSetup: false,
         testConfig: {
-            createDao: true,
+            createDao: false,
             testDaoId: 'zksync-sepolia-0x553dE42f7A43cD3cED91CDf0069cfc5a08Cc42f0',
         },
     },
