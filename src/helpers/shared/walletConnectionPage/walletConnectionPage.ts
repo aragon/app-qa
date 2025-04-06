@@ -1,13 +1,8 @@
 import type { MetaMask } from '@synthetixio/synpress/playwright';
-import { networkDefinitions } from '../../constants';
-import type { Network } from '../../types';
 import { Page } from '../page';
 
 export class WalletConnectionPage extends Page {
-    connectWallet = async (metamask: MetaMask, network: Network) => {
-        const { name, testnet, metamaskName } = networkDefinitions[network];
-        const networkName = metamaskName ?? name;
-
+    connectWallet = async (metamask: MetaMask) => {
         await this.openConnectDialog();
         await this.openWeb3ConnectDialog();
         await this.approveTemsOfCondition();
@@ -15,8 +10,6 @@ export class WalletConnectionPage extends Page {
         await this.selectWallet('MetaMask');
 
         await metamask.connectToDapp();
-        await metamask.approveSwitchNetwork();
-        await metamask.switchNetwork(networkName, testnet);
     };
 
     private openConnectDialog = () => this.page.getByRole('button', { name: 'Connect' }).click();

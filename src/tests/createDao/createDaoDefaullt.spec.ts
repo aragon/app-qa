@@ -1,5 +1,5 @@
 import { expect, test } from '@/setup';
-import { CreateDaoPage, DaoDashboardPage, daoUtils, networkDefinitions, testUtils } from '../../helpers';
+import { CreateDaoPage, DaoDashboardPage, daoUtils, metamaskUtils, networkDefinitions, testUtils } from '../../helpers';
 
 const networks = Object.values(networkDefinitions).filter(({ testConfig }) => testConfig.createDao);
 
@@ -8,13 +8,13 @@ networks.forEach(({ network }) => {
         const newDao = daoUtils.generateTestDao({ network, includeTimestamp: true });
         const createDaoPage = await new CreateDaoPage({ page }).navigate();
 
-        await createDaoPage.connectWallet(metamask, network);
+        await createDaoPage.connectWallet(metamask);
         await createDaoPage.selectNetwork(newDao.network);
         await createDaoPage.nextStep();
         await createDaoPage.insertMetadata(newDao);
         await createDaoPage.submit();
         await createDaoPage.transactionDialog.approveTransaction();
-        await metamask.confirmTransaction();
+        await metamaskUtils.confirmTransaction(metamask, network);
         await createDaoPage.transactionDialog.navigateSuccessLink();
 
         const daoDashboardPage = new DaoDashboardPage({ page });

@@ -62,7 +62,7 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         ...polygon,
         name: 'Polygon',
         network: Network.POLYGON_MAINNET,
-        needsSetup: false,
+        needsSetup: true,
         testConfig: {
             createDao: false,
             testDaoId: undefined,
@@ -72,8 +72,7 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         ...zksync,
         name: 'zkSync',
         network: Network.ZKSYNC_MAINNET,
-        // TODO: check why an error is thrown when trying to setup zksync chain
-        needsSetup: false,
+        needsSetup: true,
         testConfig: {
             createDao: false,
             testDaoId: undefined,
@@ -83,9 +82,9 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         ...zksyncSepoliaTestnet,
         name: 'zkSync Sepolia',
         network: Network.ZKSYNC_SEPOLIA,
-        needsSetup: false,
+        needsSetup: true,
         testConfig: {
-            createDao: false,
+            createDao: true,
             testDaoId: 'zksync-sepolia-0x553dE42f7A43cD3cED91CDf0069cfc5a08Cc42f0',
         },
     },
