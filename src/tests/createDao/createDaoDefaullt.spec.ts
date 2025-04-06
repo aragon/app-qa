@@ -20,6 +20,7 @@ networks.forEach(({ network }) => {
         const daoDashboardPage = new DaoDashboardPage({ page });
         await page.waitForURL('**/dashboard');
         await testUtils.refreshUntilVisible(page, daoDashboardPage.getDaoTitle(newDao.name));
-        await expect(daoDashboardPage.getDaoTitle(newDao.name)).toBeVisible();
+
+        expect(await daoDashboardPage.assertDaoMetadata(expect, newDao)).toBeTruthy();
     });
 });

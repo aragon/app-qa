@@ -56,6 +56,7 @@ const config = tsEslint.config(
             '@typescript-eslint/consistent-type-exports': ['warn', { fixMixedExportsWithInlineTypeSpecifier: true }],
             'import/no-cycle': 'warn',
             ...playwright.configs['flat/recommended'].rules,
+            'playwright/no-standalone-expect': 'off',
         },
     },
     // Rules for JavaScript files
