@@ -14,13 +14,13 @@ jobs:
     timeout-minutes: 60
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
       - name: Setup Node.js
         uses: actions/setup-node@v4.2.0
         with:
           node-version: 22
           cache: "yarn"
-      - name: Checkout repository
-        uses: actions/checkout@v4.2.2
       - name: Install dependencies
         run: yarn install --immutable
       - name: Prepare secrets
