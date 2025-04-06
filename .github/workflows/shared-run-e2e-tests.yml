@@ -27,22 +27,30 @@ jobs:
           echo "METAMASK_SEED_PHRASE=${{secrets.METAMASK_SEED_PHRASE}}" >> .env
           echo "METAMASK_PASSWORD=${{secrets.METAMASK_PASSWORD}}" >> .env
 
-      - name: Get installed Playwright version
-        id: playwright-version
-        run: echo "version=$(yarn why --json @playwright/test | grep -h 'workspace:.' | jq --raw-output '.children[].locator' | sed -e 's/@playwright\/test@.*://')" >> $GITHUB_OUTPUT
       - name: Restore Playwright cache
         uses: actions/cache@v4.2.3
         id: playwright-cache
         with:
           path: "~/.cache/ms-playwright"
-          key: "${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}"
+          key: "playwright-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('playwright.config.ts') }}"
           restore-keys: |
-            ${{ runner.os }}-playwright-
+            playwright-
+            playwright-${{ runner.os }}
       - name: Setup Playwright
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: yarn setup:playwright
 
+      - name: Restore Synpress cache
+        uses: actions/cache@v4.2.3
+        id: synpress-cache
+        with:
+          path: ".cache-synpress"
+          key: "synpress-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('./src/setup/wallet.setup.ts') }}"
+          restore-keys: |
+            synpress-
+            synpress-${{ runner.os }}
       - name: Setup Synpress
+        if: steps.synpress-cache.outputs.cache-hit != 'true'
         run: xvfb-run yarn setup:synpress
 
       - name: Run E2E tests
