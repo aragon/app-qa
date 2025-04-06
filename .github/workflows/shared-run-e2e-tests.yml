@@ -18,6 +18,7 @@ jobs:
         uses: actions/setup-node@v4.2.0
         with:
           node-version: 22
+          cache: "yarn"
       - name: Checkout repository
         uses: actions/checkout@v4.2.2
       - name: Install dependencies
@@ -31,21 +32,21 @@ jobs:
         uses: actions/cache@v4.2.3
         id: playwright-cache
         with:
-          path: "~/.cache/ms-playwright"
-          key: "playwright-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('playwright.config.ts') }}"
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('playwright.config.ts') }}
           restore-keys: |
             playwright-
             playwright-${{ runner.os }}
       - name: Setup Playwright
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: yarn setup:playwright
+        run: yarn setup:playwright --only-shell
 
       - name: Restore Synpress cache
         uses: actions/cache@v4.2.3
         id: synpress-cache
         with:
-          path: ".cache-synpress"
-          key: "synpress-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('./src/setup/wallet.setup.ts') }}"
+          path: .cache-synpress
+          key: synpress-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('./src/setup/wallet.setup.ts') }}
           restore-keys: |
             synpress-
             synpress-${{ runner.os }}
