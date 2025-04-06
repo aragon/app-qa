@@ -45,7 +45,7 @@ jobs:
         uses: actions/cache@v4.2.3
         id: synpress-cache
         with:
-          path: .cache-synpress
+          path: ${{ github.workspace }}/.cache-synpress
           key: synpress-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-${{ hashFiles('./src/setup/wallet.setup.ts') }}
           restore-keys: |
             synpress-
