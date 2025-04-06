@@ -29,7 +29,7 @@ jobs:
 
       - name: Get installed Playwright version
         id: playwright-version
-        run: echo "::set-output name=version::$(yarn why --json @playwright/test | grep -h 'workspace:.' | jq --raw-output '.children[].locator' | sed -e 's/@playwright\/test@.*://')"
+        run: echo "version=$(yarn why --json @playwright/test | grep -h 'workspace:.' | jq --raw-output '.children[].locator' | sed -e 's/@playwright\/test@.*://')" >> $GITHUB_OUTPUT
       - name: Restore Playwright cache
         uses: actions/cache@v4.2.3
         id: playwright-cache
