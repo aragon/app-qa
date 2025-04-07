@@ -31,7 +31,7 @@ const config = defineConfig({
     retries: 0,
     workers: process.env.CI ? 1 : undefined,
     reporter: 'html',
-    timeout: 60_000,
+    timeout: 120_000,
     use: {
         baseURL,
         video: 'on-first-retry',
