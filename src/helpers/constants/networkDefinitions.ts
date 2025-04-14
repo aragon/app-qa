@@ -1,5 +1,5 @@
 import type { Chain } from 'viem';
-import { mainnet, polygon, sepolia, zksync, zksyncSepoliaTestnet } from 'viem/chains';
+import { arbitrum, base, mainnet, peaq, polygon, sepolia, zksync, zksyncSepoliaTestnet } from 'viem/chains';
 import { Network } from '../types';
 
 export interface INetworkTestConfig {
@@ -44,7 +44,7 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         needsSetup: false,
         testConfig: {
             createDao: false,
-            testDaoId: undefined,
+            testDaoId: 'ethereum-mainnet-0xA20FBC97b9F09D19a1ccF31ce3627dB44f6252bB',
         },
     },
     [Network.ETHEREUM_SEPOLIA]: {
@@ -65,7 +65,27 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         needsSetup: true,
         testConfig: {
             createDao: false,
-            testDaoId: undefined,
+            testDaoId: 'polygon-mainnet-0x82B9A5f7283b6FC8668B8a1Fb7f3e4ea1B35E3a7',
+        },
+    },
+    [Network.BASE_MAINNET]: {
+        ...base,
+        name: 'Base',
+        network: Network.BASE_MAINNET,
+        needsSetup: true,
+        testConfig: {
+            createDao: false,
+            testDaoId: 'base-mainnet-0x8116711B74748672e7946befC14AD43Cf8F15ec4',
+        },
+    },
+    [Network.ARBITRUM_MAINNET]: {
+        ...arbitrum,
+        name: 'Arbitrum',
+        network: Network.ARBITRUM_MAINNET,
+        needsSetup: true,
+        testConfig: {
+            createDao: false,
+            testDaoId: 'arbitrum-mainnet-0x1b5B61f33e2d012A848C7E3c50d3238CA486e10e',
         },
     },
     [Network.ZKSYNC_MAINNET]: {
@@ -75,7 +95,7 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         needsSetup: true,
         testConfig: {
             createDao: false,
-            testDaoId: undefined,
+            testDaoId: 'zksync-mainnet-0x4890d3899c3E960B9e64d848FdEf503243F5B470',
         },
     },
     [Network.ZKSYNC_SEPOLIA]: {
@@ -86,6 +106,16 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         testConfig: {
             createDao: true,
             testDaoId: 'zksync-sepolia-0x553dE42f7A43cD3cED91CDf0069cfc5a08Cc42f0',
+        },
+    },
+    [Network.PEAQ_MAINNET]: {
+        ...peaq,
+        name: 'Peaq',
+        network: Network.PEAQ_MAINNET,
+        needsSetup: true,
+        testConfig: {
+            createDao: false,
+            testDaoId: undefined,
         },
     },
 };
