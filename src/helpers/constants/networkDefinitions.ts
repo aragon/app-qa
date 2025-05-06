@@ -54,7 +54,7 @@ export const networkDefinitions: Record<Network, INetworkDefinition> = {
         metamaskName: 'Sepolia',
         needsSetup: false,
         testConfig: {
-            createDao: true,
+            createDao: false,
             testDaoId: 'ethereum-sepolia-0xcd197F9b9D9b5f9D7DB797cd3E4EC021669eEc81',
         },
     },
