@@ -24,6 +24,8 @@ export class DaoPage extends WalletConnectionPage {
 
     getDaoUrl = () => {
         invariant(this.daoId != null, 'DaoPage: DAO ID is required to navigate to the DAO page');
-        return `/dao/${this.daoId}${this.path}`;
+        const [network, networkType, address] = this.daoId.split('-');
+
+        return `/dao/${network}-${networkType}/${address}/${this.path}`;
     };
 }
