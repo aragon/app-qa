@@ -21,7 +21,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@playwright/test": "1.52.0",
+    "@playwright/test": "1.51.1",
     "@synthetixio/synpress": "^4.1.0",
     "@types/node": "^22.15.29",
     "dotenv": "^16.5.0",
