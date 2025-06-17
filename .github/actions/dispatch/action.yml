@@ -19,7 +19,7 @@ runs:
         export-env: false
       env:
         OP_SERVICE_ACCOUNT_TOKEN: ${{ inputs.opToken }}
-        GH_APP_QA: op://apikeys_production/gh-app-qa/credential
+        GH_APP_QA: op://kv_app-next_qa/gh-app-qa/credential
 
     - name: Trigger E2E tests
       shell: bash
