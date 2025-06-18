@@ -63,7 +63,7 @@ export class CreateDaoPage extends WizardPage {
 
     private getNameField = () => this.getFieldByLabel('DAO name');
 
-    private getLogoField = () => this.getFieldByLabel('Logo');
+    private getLogoField = () => this.page.getByLabel('Logo').nth(0);
 
     private getDescriptionField = () => this.getFieldByLabel('Description');
 
