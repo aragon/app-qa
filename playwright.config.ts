@@ -26,19 +26,27 @@ if (!baseURL) {
 
 const config = defineConfig({
     testDir: './src',
-    fullyParallel: true,
+    fullyParallel: false,
     forbidOnly: !!process.env.CI,
     retries: 0,
-    workers: process.env.CI ? 1 : undefined,
+    workers: 1,
     reporter: 'html',
     timeout: 120_000,
     use: {
         baseURL,
+        headless: true,
         video: 'on-first-retry',
         trace: 'on-first-retry',
         screenshot: 'only-on-failure',
     },
-    projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'], baseURL } }],
+    projects: [{ 
+        name: 'chromium', 
+        use: { 
+            ...devices['Desktop Chrome'], 
+            baseURL,
+            headless: true,
+        } 
+    }],
 });
 
 export default config;
